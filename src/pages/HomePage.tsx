@@ -1,7 +1,6 @@
 
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Play, TestTube } from "lucide-react";
 
 const notifications = [
   { name: "Sarah", state: "California" },
@@ -48,16 +47,14 @@ const HomePage: FC = () => {
       <div className="flex-1 flex flex-col items-center justify-center gap-4">
         <button
           onClick={() => navigate("/login")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center gap-2"
+          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center"
         >
           Get Started
-          <Play className="w-5 h-5" />
         </button>
         <button
           onClick={() => navigate("/science")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center gap-2"
+          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center"
         >
-          <TestTube className="w-5 h-5" />
           The Science
         </button>
       </div>
