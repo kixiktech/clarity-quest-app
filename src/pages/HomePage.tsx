@@ -1,44 +1,52 @@
 
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+// Define our user notifications data
+const notifications = [
+  { name: "Sarah", state: "California" },
+  { name: "Michael", state: "New York" },
+  { name: "Emma", state: "Texas" },
+  { name: "James", state: "Florida" },
+  { name: "Olivia", state: "Washington" },
+  { name: "William", state: "Oregon" },
+  { name: "Ava", state: "Colorado" },
+  { name: "Alexander", state: "Arizona" },
+  { name: "Sophia", state: "Nevada" },
+  { name: "Benjamin", state: "Utah" },
+  { name: "Isabella", state: "Idaho" },
+  { name: "Lucas", state: "Montana" },
+  { name: "Mia", state: "Wyoming" },
+  { name: "Henry", state: "New Mexico" },
+  { name: "Charlotte", state: "Oklahoma" },
+  { name: "Sebastian", state: "Kansas" },
+  { name: "Amelia", state: "Nebraska" },
+  { name: "Jack", state: "Iowa" },
+  { name: "Harper", state: "Minnesota" },
+  { name: "Daniel", state: "Wisconsin" }
+];
 
 const HomePage: FC = () => {
   const navigate = useNavigate();
+  const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
+  const [showNotification, setShowNotification] = useState(true);
   
   useEffect(() => {
-    // Debug background image loading
-    const img = new Image();
-    img.src = '/lovable-uploads/72dd038d-18de-4f21-a2e1-6ac99978fca5.png';
-    img.onload = () => console.log('Background image loaded successfully');
-    img.onerror = (e) => console.error('Background image failed to load:', e);
+    // Rotate through notifications every 2 seconds
+    const intervalId = setInterval(() => {
+      setShowNotification(false);
+      setTimeout(() => {
+        setCurrentNotificationIndex((prev) => (prev + 1) % notifications.length);
+        setShowNotification(true);
+      }, 300); // Brief delay before showing next notification
+    }, 2000);
 
-    // Debug body styles
-    console.log('Body background:', document.body.style.backgroundImage);
-    console.log('Body computed style:', window.getComputedStyle(document.body).backgroundImage);
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
-    <div className="h-[100dvh] flex flex-col items-center px-8 pt-20 overflow-hidden relative">
-      {/* Debug element to verify image URL */}
-      <div className="fixed top-0 left-0 w-1 h-1 opacity-0">
-        <img 
-          src="/lovable-uploads/72dd038d-18de-4f21-a2e1-6ac99978fca5.png" 
-          onLoad={() => console.log('Test image loaded')}
-          onError={(e) => console.error('Test image failed:', e)}
-          alt=""
-        />
-      </div>
-
-      <div className="text-center space-y-4">
-        <h1 className="text-5xl text-primary font-semibold tracking-tight">
-          CLARITYQUEST
-        </h1>
-        <p className="text-lg text-primary uppercase tracking-wide">
-          unlock your mind. visualize with purpose.
-        </p>
-      </div>
-
-      <div className="flex-1 flex flex-col items-center justify-center gap-4 -mt-20">
+    <div className="h-[100dvh] flex flex-col items-center justify-center px-8 relative">
+      <div className="flex-1 flex flex-col items-center justify-center gap-4">
         <button
           onClick={() => navigate("/login")}
           className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase"
@@ -53,10 +61,16 @@ const HomePage: FC = () => {
         </button>
       </div>
 
-      <div className="glass rounded-lg p-4 max-w-[280px] mb-8 animate-fade-in opacity-0" style={{ animationDelay: "1s" }}>
+      <div 
+        className={`glass rounded-lg p-4 max-w-[280px] mb-8 transition-opacity duration-300 ${
+          showNotification ? "opacity-100" : "opacity-0"
+        }`}
+      >
         <p className="text-sm text-foreground/70">
-          <span className="text-primary font-medium">Sarah from California</span> just
-          completed a meditation session
+          <span className="text-primary font-medium">
+            {notifications[currentNotificationIndex].name} from {notifications[currentNotificationIndex].state}
+          </span>{" "}
+          just completed a visualization session
         </p>
       </div>
     </div>
