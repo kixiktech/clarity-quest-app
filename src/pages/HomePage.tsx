@@ -8,7 +8,7 @@ const HomePage: FC = () => {
   useEffect(() => {
     // Debug background image loading
     const img = new Image();
-    img.src = '/lovable-uploads/2d55cc49-adfd-4ca9-986b-02308c2a0bc7.png';
+    img.src = '/lovable-uploads/72dd038d-18de-4f21-a2e1-6ac99978fca5.png';
     img.onload = () => console.log('Background image loaded successfully');
     img.onerror = (e) => console.error('Background image failed to load:', e);
 
@@ -22,7 +22,7 @@ const HomePage: FC = () => {
       {/* Debug element to verify image URL */}
       <div className="fixed top-0 left-0 w-1 h-1 opacity-0">
         <img 
-          src="/lovable-uploads/2d55cc49-adfd-4ca9-986b-02308c2a0bc7.png" 
+          src="/lovable-uploads/72dd038d-18de-4f21-a2e1-6ac99978fca5.png" 
           onLoad={() => console.log('Test image loaded')}
           onError={(e) => console.error('Test image failed:', e)}
           alt=""
