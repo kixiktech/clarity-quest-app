@@ -1,6 +1,7 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Play, Flask } from "lucide-react";
+import { Play, TestTube } from "lucide-react";
 
 const notifications = [
   { name: "Sarah", state: "California" },
@@ -56,7 +57,7 @@ const HomePage: FC = () => {
           onClick={() => navigate("/science")}
           className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center gap-2"
         >
-          <Flask className="w-5 h-5" />
+          <TestTube className="w-5 h-5" />
           The Science
         </button>
       </div>
