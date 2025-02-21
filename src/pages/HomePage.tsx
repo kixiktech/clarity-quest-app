@@ -1,8 +1,7 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Play, Flask } from "lucide-react";
 
-// Define our user notifications data
 const notifications = [
   { name: "Sarah", state: "California" },
   { name: "Michael", state: "New York" },
@@ -32,16 +31,12 @@ const HomePage: FC = () => {
   const [isEntering, setIsEntering] = useState(true);
   
   useEffect(() => {
-    // Rotate through notifications every 4 seconds
     const intervalId = setInterval(() => {
-      // Start exit animation
       setIsEntering(false);
-      
-      // After exit animation, update index and start enter animation
       setTimeout(() => {
         setCurrentNotificationIndex((prev) => (prev + 1) % notifications.length);
         setIsEntering(true);
-      }, 500); // Half of the transition duration
+      }, 500);
     }, 4000);
 
     return () => clearInterval(intervalId);
@@ -52,14 +47,16 @@ const HomePage: FC = () => {
       <div className="flex-1 flex flex-col items-center justify-center gap-4">
         <button
           onClick={() => navigate("/login")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase"
+          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center gap-2"
         >
           Get Started
+          <Play className="w-5 h-5" />
         </button>
         <button
           onClick={() => navigate("/science")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase"
+          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center gap-2"
         >
+          <Flask className="w-5 h-5" />
           The Science
         </button>
       </div>
