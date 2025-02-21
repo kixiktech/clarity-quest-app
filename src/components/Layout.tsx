@@ -8,9 +8,8 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <main className="pt-20">{children}</main>
+    <div className="min-h-screen bg-background overflow-hidden">
+      {children}
     </div>
   );
 };
