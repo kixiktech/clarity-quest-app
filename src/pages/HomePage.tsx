@@ -29,17 +29,20 @@ const notifications = [
 const HomePage: FC = () => {
   const navigate = useNavigate();
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
-  const [showNotification, setShowNotification] = useState(true);
+  const [isEntering, setIsEntering] = useState(true);
   
   useEffect(() => {
-    // Rotate through notifications every 2 seconds
+    // Rotate through notifications every 4 seconds
     const intervalId = setInterval(() => {
-      setShowNotification(false);
+      // Start exit animation
+      setIsEntering(false);
+      
+      // After exit animation, update index and start enter animation
       setTimeout(() => {
         setCurrentNotificationIndex((prev) => (prev + 1) % notifications.length);
-        setShowNotification(true);
-      }, 300); // Brief delay before showing next notification
-    }, 2000);
+        setIsEntering(true);
+      }, 500); // Half of the transition duration
+    }, 4000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -62,9 +65,14 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`glass rounded-lg p-4 max-w-[280px] mb-8 transition-opacity duration-300 ${
-          showNotification ? "opacity-100" : "opacity-0"
+        className={`glass rounded-lg p-4 max-w-[280px] mb-8 transition-all duration-500 transform ${
+          isEntering 
+            ? "translate-x-0 opacity-100" 
+            : "translate-x-full opacity-0"
         }`}
+        style={{
+          transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)"
+        }}
       >
         <p className="text-sm text-foreground/70">
           <span className="text-primary font-medium">
