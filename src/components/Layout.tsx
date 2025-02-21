@@ -1,6 +1,5 @@
 
 import { FC, ReactNode } from "react";
-import Navbar from "./Navbar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -8,7 +7,7 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
+    <div className="min-h-[100dvh] bg-transparent overflow-hidden">
       {children}
     </div>
   );

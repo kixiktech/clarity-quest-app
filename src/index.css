@@ -51,10 +51,13 @@
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
-    background-image: url('/lovable-uploads/f12a07aa-6add-4d34-ab92-953b6e1ac730.png');
+    background-image: url('/lovable-uploads/2d55cc49-adfd-4ca9-986b-02308c2a0bc7.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
   }
 
   ::selection {
