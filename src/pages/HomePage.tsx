@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
@@ -47,8 +48,7 @@ const HomePage: FC = () => {
       <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-16 gap-4">
         <h1 className="text-2xl font-serif font-bold text-primary relative
           drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]
-          after:absolute after:inset-0 after:-z-10 after:translate-y-[2px] after:text-black/50 after:blur-sm
-          shadow-[0_0_20px_rgba(255,184,0,0.3)]"
+          after:absolute after:inset-0 after:-z-10 after:translate-y-[2px] after:text-black/50 after:blur-sm"
         >
           ClarityQuest
         </h1>
@@ -63,7 +63,7 @@ const HomePage: FC = () => {
         </p>
       </div>
       
-      <div className="flex flex-col items-center justify-center gap-6">
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 my-auto">
         <button
           onClick={() => navigate("/login")}
           className="w-64 py-3 rounded-xl bg-gradient-to-b from-primary/90 to-primary text-primary-foreground font-medium text-lg uppercase
