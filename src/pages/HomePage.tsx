@@ -46,13 +46,31 @@ const HomePage: FC = () => {
   return (
     <BackgroundImage>
       <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-16 gap-4">
-        <h1 className="text-4xl md:text-5xl font-bold text-[#F97316]">
-          ClarityQuest
+        <h1 className="text-2xl font-serif font-bold text-primary relative
+          shadow-[0_0_20px_rgba(255,184,0,0.3)]
+          before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent
+          after:absolute after:inset-0 after:-z-10 after:translate-y-[2px] after:bg-black/50 after:blur-sm
+          px-6 py-2 rounded-lg
+          border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
+          bg-gradient-to-b from-primary/90 to-primary"
+        >
+          <span className="relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+            ClarityQuest
+          </span>
         </h1>
-        <p className="text-lg md:text-xl text-white/90 text-center max-w-md">
-          Unlock the power of your mind.
-          <br />
-          Visualize with purpose.
+        <p className="text-lg md:text-xl relative
+          shadow-[0_0_20px_rgba(255,184,0,0.3)]
+          before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent
+          after:absolute after:inset-0 after:-z-10 after:translate-y-[2px] after:bg-black/50 after:blur-sm
+          px-6 py-2 rounded-lg text-center
+          border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
+          bg-gradient-to-b from-primary/90 to-primary"
+        >
+          <span className="relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
+            Unlock the power of your mind.
+            <br />
+            Visualize with purpose.
+          </span>
         </p>
       </div>
       
