@@ -1,10 +1,22 @@
 
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 
 const SciencePage: FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="science-page min-h-screen w-full bg-background overflow-auto">
-      <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16 animate-fade-in">
+      <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16 animate-fade-in relative">
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute left-4 top-8 sm:left-6 lg:left-8 p-2 rounded-full hover:bg-foreground/10 transition-colors"
+          aria-label="Go back"
+        >
+          <ArrowLeft className="w-6 h-6 text-primary" />
+        </button>
+
         <div className="text-center space-y-6">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
             The Science Behind{" "}
