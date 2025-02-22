@@ -81,37 +81,32 @@ const VoiceTextInput: FC<VoiceTextInputProps> = ({ onSubmit, placeholder }) => {
   };
 
   return (
-    <div className="w-full max-w-2xl space-y-4">
+    <div className="w-full max-w-2xl space-y-3">
       <div className="relative">
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={placeholder}
-          className="min-h-[200px] p-4 text-lg bg-white/5 border-white/10 rounded-xl"
+          className="min-h-[120px] p-3 text-base sm:text-lg bg-white/5 border-white/10 rounded-xl resize-none"
         />
       </div>
 
-      <div className="flex gap-4 justify-center">
+      <div className="flex gap-3 justify-center">
         <Button
           onClick={toggleListening}
-          className={`w-48 py-6 rounded-xl font-medium text-lg relative overflow-hidden group
+          className={`py-2 px-4 rounded-xl font-medium text-base relative overflow-hidden group
             hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
-            before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
-            before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
-            after:absolute after:inset-0 after:rounded-xl after:shadow-[0_0_15px_rgba(255,184,0,0.5),inset_0_0_15px_rgba(255,184,0,0.5)] 
-            after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
-            hover:scale-105 active:scale-95
             ${isListening ? 'bg-destructive hover:bg-destructive/90' : 'bg-primary hover:bg-primary/90'}`}
         >
           {isListening ? (
             <>
-              <MicOff className="mr-2 h-5 w-5" />
-              <span className="relative z-10">Stop Recording</span>
+              <MicOff className="mr-2 h-4 w-4" />
+              <span className="relative z-10">Stop</span>
             </>
           ) : (
             <>
-              <Mic className="mr-2 h-5 w-5" />
-              <span className="relative z-10">Start Recording</span>
+              <Mic className="mr-2 h-4 w-4" />
+              <span className="relative z-10">Record</span>
             </>
           )}
         </Button>
@@ -119,15 +114,10 @@ const VoiceTextInput: FC<VoiceTextInputProps> = ({ onSubmit, placeholder }) => {
         <Button
           onClick={handleSubmit}
           disabled={!text.trim()}
-          className="w-48 py-6 rounded-xl bg-primary text-primary-foreground font-medium text-lg relative overflow-hidden group
-            hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
-            before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
-            before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
-            after:absolute after:inset-0 after:rounded-xl after:shadow-[0_0_15px_rgba(255,184,0,0.5),inset_0_0_15px_rgba(255,184,0,0.5)] 
-            after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
-            hover:scale-105 active:scale-95"
+          className="py-2 px-4 rounded-xl bg-primary text-primary-foreground font-medium text-base relative overflow-hidden group
+            hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out"
         >
-          <Send className="mr-2 h-5 w-5" />
+          <Send className="mr-2 h-4 w-4" />
           <span className="relative z-10">Submit</span>
         </Button>
       </div>
