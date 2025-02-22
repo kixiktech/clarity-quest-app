@@ -45,7 +45,7 @@ const HomePage: FC = () => {
   return (
     <div 
       style={{
-        backgroundImage: `url('/lovable-uploads/3ef14f22-dab6-4aae-aa39-604cb61a375f.png')`
+        backgroundImage: `url('/lovable-uploads/db1d941d-0e3d-49cc-8959-66706532460e.png')`
       }}
       className="h-[100dvh] w-full bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between items-center px-6 py-8"
     >
