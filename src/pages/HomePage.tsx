@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
@@ -72,7 +73,7 @@ const HomePage: FC = () => {
 
   return (
     <BackgroundImage>
-      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-8 sm:pt-16">
+      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-6 sm:pt-12">
         <img 
           src="/lovable-uploads/3d7b9f60-a195-43f0-b963-e6e084999749.png" 
           alt="ClarityQuest"
@@ -80,7 +81,7 @@ const HomePage: FC = () => {
         />
       </div>
       
-      <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6 -mt-12 sm:-mt-20">
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6">
         <button
           onClick={() => navigate("/login")}
           className="w-[240px] sm:w-64 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-base sm:text-lg uppercase
@@ -109,7 +110,7 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-2 sm:p-3 w-[280px] sm:w-64 transition-all duration-500 transform ${
+        className={`fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 transition-all duration-500 transform ${
           isEntering 
             ? "translate-y-0 opacity-100" 
             : "translate-y-full opacity-0"
