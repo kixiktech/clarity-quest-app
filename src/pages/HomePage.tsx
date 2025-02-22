@@ -1,4 +1,3 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -44,10 +43,7 @@ const HomePage: FC = () => {
 
   return (
     <div 
-      style={{
-        backgroundImage: `url('/lovable-uploads/db1d941d-0e3d-49cc-8959-66706532460e.png')`
-      }}
-      className="h-[100dvh] w-full bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between items-center px-6 py-8"
+      className="h-[100dvh] w-full bg-[url('/lovable-uploads/db1d941d-0e3d-49cc-8959-66706532460e.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between items-center px-6 py-8"
     >
       <div className="flex-none h-[10%]" />
       
