@@ -52,12 +52,14 @@ const HomePage: FC = () => {
 
   return (
     <div 
-      className="min-h-screen w-full bg-[url('/lovable-uploads/a7a2bc36-ea9a-40dd-8a23-bcc6d2fce294.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center px-8 relative"
+      className="h-[100dvh] w-full bg-[url('/lovable-uploads/a7a2bc36-ea9a-40dd-8a23-bcc6d2fce294.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between items-center px-6 py-8"
     >
-      <div className="flex-1 flex flex-col items-center justify-center gap-8">
+      <div className="flex-none h-[10%]" /> {/* Top spacer */}
+      
+      <div className="flex flex-col items-center justify-center gap-6">
         <button
           onClick={() => navigate("/login")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
+          className="w-64 py-3 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
             hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
             before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
             before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
@@ -67,9 +69,10 @@ const HomePage: FC = () => {
         >
           <span className="relative z-10">Get Started</span>
         </button>
+        
         <button
           onClick={() => navigate("/science")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
+          className="w-64 py-3 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
             hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
             before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
             before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
@@ -82,7 +85,7 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`glass rounded-lg p-4 max-w-[280px] mb-8 transition-all duration-500 transform ${
+        className={`glass rounded-lg p-3 max-w-[280px] transition-all duration-500 transform ${
           isEntering 
             ? "translate-x-0 opacity-100" 
             : "translate-x-full opacity-0"
