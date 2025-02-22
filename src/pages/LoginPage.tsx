@@ -57,21 +57,34 @@ const LoginPage: FC = () => {
             className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
           />
 
+          <Input
+            type="password"
+            placeholder="Password"
+            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+          />
+
           {isSignUp && (
-            <Select>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white">
-                <SelectValue placeholder="Select Country" />
-              </SelectTrigger>
-              <SelectContent className="max-h-[300px]">
-                <SelectGroup>
-                  {countries.map((country) => (
-                    <SelectItem key={country.code} value={country.code}>
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <>
+              <Input
+                type="password"
+                placeholder="Confirm Password"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+              />
+              <Select>
+                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                  <SelectValue placeholder="Select Country" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[300px]">
+                  <SelectGroup>
+                    {countries.map((country) => (
+                      <SelectItem key={country.code} value={country.code}>
+                        {country.name}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </>
           )}
 
           <Button className="w-full">
