@@ -46,7 +46,7 @@ const HomePage: FC = () => {
     <div 
       className="h-[100dvh] flex flex-col items-center justify-center px-8 relative"
       style={{
-        backgroundImage: "url('/lovable-uploads/d818c8a1-7623-4e53-aa95-3dabf3493bd7.png')",
+        backgroundImage: "url('/lovable-uploads/a2acce42-9b66-4237-8e57-3e8b7e1c792a.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
