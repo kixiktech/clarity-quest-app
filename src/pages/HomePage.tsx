@@ -1,4 +1,3 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -42,45 +41,37 @@ const HomePage: FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-  // Add console log to debug image loading
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => console.log('Image loaded successfully');
-    img.onerror = () => console.log('Error loading image');
-    img.src = '/lovable-uploads/a7a2bc36-ea9a-40dd-8a23-bcc6d2fce294.png';
-  }, []);
-
   return (
     <div 
-      className="h-[100dvh] w-full bg-[url('/lovable-uploads/a7a2bc36-ea9a-40dd-8a23-bcc6d2fce294.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between items-center px-6 py-8"
+      className="h-[100dvh] w-full bg-[url('/lovable-uploads/3ef14f22-dab6-4aae-aa39-604cb61a375f.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between items-center px-6 py-8"
     >
-      <div className="flex-none h-[10%]" /> {/* Top spacer */}
+      <div className="flex-none h-[10%]" />
       
       <div className="flex flex-col items-center justify-center gap-6">
         <button
           onClick={() => navigate("/login")}
-          className="w-64 py-3 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
-            hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
-            before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
-            before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
-            after:absolute after:inset-0 after:rounded-full after:shadow-[0_0_15px_rgba(255,184,0,0.5),inset_0_0_15px_rgba(255,184,0,0.5)] 
-            after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
-            hover:scale-105 active:scale-95"
+          className="w-64 py-3 rounded-xl bg-gradient-to-b from-primary/90 to-primary text-primary-foreground font-medium text-lg uppercase
+            shadow-[0_0_20px_rgba(255,184,0,0.3)] relative overflow-hidden
+            border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
+            before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent before:rounded-xl
+            after:absolute after:inset-0 after:-z-10 after:translate-y-[3px] after:bg-black/50 after:blur-sm after:rounded-xl
+            transform active:translate-y-[2px] active:after:translate-y-[1px] transition-all duration-100
+            hover:shadow-[0_0_30px_rgba(255,184,0,0.5)] hover:scale-[1.02]"
         >
-          <span className="relative z-10">Get Started</span>
+          <span className="relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">Get Started</span>
         </button>
         
         <button
           onClick={() => navigate("/science")}
-          className="w-64 py-3 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
-            hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
-            before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
-            before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
-            after:absolute after:inset-0 after:rounded-full after:shadow-[0_0_15px_rgba(255,184,0,0.5),inset_0_0_15px_rgba(255,184,0,0.5)] 
-            after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
-            hover:scale-105 active:scale-95"
+          className="w-64 py-3 rounded-xl bg-gradient-to-b from-primary/90 to-primary text-primary-foreground font-medium text-lg uppercase
+            shadow-[0_0_20px_rgba(255,184,0,0.3)] relative overflow-hidden
+            border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
+            before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent before:rounded-xl
+            after:absolute after:inset-0 after:-z-10 after:translate-y-[3px] after:bg-black/50 after:blur-sm after:rounded-xl
+            transform active:translate-y-[2px] active:after:translate-y-[1px] transition-all duration-100
+            hover:shadow-[0_0_30px_rgba(255,184,0,0.5)] hover:scale-[1.02]"
         >
-          <span className="relative z-10">The Science</span>
+          <span className="relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">The Science</span>
         </button>
       </div>
 
