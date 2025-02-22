@@ -1,10 +1,17 @@
 
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 
 const SciencePage: FC = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.classList.add('science-page');
+    return () => {
+      document.body.classList.remove('science-page');
+    };
+  }, []);
 
   return (
     <div className="min-h-screen w-full bg-background">
