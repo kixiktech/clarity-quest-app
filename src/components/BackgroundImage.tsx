@@ -12,7 +12,8 @@ const BackgroundImage: FC<BackgroundImageProps> = ({ children }) => {
   useEffect(() => {
     // Preload the image
     const img = new Image();
-    img.src = '/lovable-uploads/f2cd3af8-80a3-4528-8489-5720ae9f86ba.png';
+    // Using an Unsplash image as fallback since the upload failed
+    img.src = 'https://images.unsplash.com/photo-1500673922987-e212871fec22';
     
     img.onload = () => {
       setImageLoaded(true);
@@ -28,7 +29,7 @@ const BackgroundImage: FC<BackgroundImageProps> = ({ children }) => {
     <div 
       className="relative min-h-[100dvh] w-full flex flex-col justify-between items-center px-6 py-8 bg-background transition-opacity duration-500"
       style={{
-        backgroundImage: `url('/lovable-uploads/f2cd3af8-80a3-4528-8489-5720ae9f86ba.png')`,
+        backgroundImage: `url('https://images.unsplash.com/photo-1500673922987-e212871fec22')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
