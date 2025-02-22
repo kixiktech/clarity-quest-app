@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -59,10 +60,9 @@
     /* Set up the background with just the image */
     background-image: url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");
     
-    /* Background properties */
+    /* Background properties - removed fixed attachment */
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
     background-repeat: no-repeat;
     width: 100%;
   }

@@ -119,10 +119,10 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`glass rounded-lg p-3 max-w-[280px] transition-all duration-500 transform ${
+        className={`fixed bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-3 max-w-[280px] transition-all duration-500 transform ${
           isEntering 
-            ? "translate-x-0 opacity-100" 
-            : "translate-x-full opacity-0"
+            ? "translate-y-0 opacity-100" 
+            : "translate-y-full opacity-0"
         }`}
         style={{
           transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)"
