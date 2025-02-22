@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -41,12 +42,17 @@ const HomePage: FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  // Add console log to debug image loading
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => console.log('Image loaded successfully');
+    img.onerror = () => console.log('Error loading image');
+    img.src = '/lovable-uploads/db111871-da77-42f2-86fb-a2a2e45ac78b.png';
+  }, []);
+
   return (
     <div 
-      className="min-h-screen w-full bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center px-8 relative"
-      style={{
-        backgroundImage: `url(${window.location.origin}/lovable-uploads/db111871-da77-42f2-86fb-a2a2e45ac78b.png)`
-      }}
+      className="min-h-screen w-full bg-[url('/lovable-uploads/db111871-da77-42f2-86fb-a2a2e45ac78b.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center px-8 relative"
     >
       <div className="flex-1 flex flex-col items-center justify-center gap-4">
         <button
