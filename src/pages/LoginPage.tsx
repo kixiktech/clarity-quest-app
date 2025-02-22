@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Facebook, Github, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Facebook, Github, X } from "lucide-react";
 import countries from "@/lib/countries";
 
 const LoginPage: FC = () => {
@@ -27,14 +27,24 @@ const LoginPage: FC = () => {
         <div className="absolute bottom-1/3 right-1/3 w-[400px] h-[400px] bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      {/* Back button */}
-      <button 
-        onClick={() => navigate("/")}
-        className="absolute top-4 left-4 text-white/70 hover:text-white transition-colors flex items-center gap-2 z-10"
-      >
-        <ArrowLeft className="w-5 h-5" />
-        Back
-      </button>
+      {/* Navigation buttons */}
+      <div className="absolute top-4 left-4 right-4 flex justify-between items-center z-10">
+        <button 
+          onClick={() => navigate("/")}
+          className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          Back
+        </button>
+
+        <Button
+          onClick={() => navigate("/intro-questions")}
+          className="gap-2 text-white/70 hover:text-white transition-colors flex items-center"
+        >
+          Skip for now
+          <ArrowRight className="w-5 h-5" />
+        </Button>
+      </div>
 
       {/* Main card */}
       <div className="w-full max-w-md bg-black/30 backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-white/10 relative z-10">
