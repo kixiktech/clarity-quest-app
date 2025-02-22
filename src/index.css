@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -55,7 +56,7 @@
     min-height: -webkit-fill-available;
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
-    background-image: url('/lovable-uploads/72dd038d-18de-4f21-a2e1-6ac99978fca5.png') !important;
+    background-image: url('/lovable-uploads/c9e14262-210a-4f08-9291-7ef1a8886f55.png') !important;
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
