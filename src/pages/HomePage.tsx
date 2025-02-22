@@ -54,18 +54,30 @@ const HomePage: FC = () => {
     <div 
       className="min-h-screen w-full bg-[url('/lovable-uploads/db111871-da77-42f2-86fb-a2a2e45ac78b.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center px-8 relative"
     >
-      <div className="flex-1 flex flex-col items-center justify-center gap-4">
+      <div className="flex-1 flex flex-col items-center justify-center gap-8">
         <button
           onClick={() => navigate("/login")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center"
+          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
+            hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
+            before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
+            before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
+            after:absolute after:inset-0 after:rounded-full after:shadow-[0_0_15px_rgba(255,184,0,0.5),inset_0_0_15px_rgba(255,184,0,0.5)] 
+            after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
+            hover:scale-105 active:scale-95"
         >
-          Get Started
+          <span className="relative z-10">Get Started</span>
         </button>
         <button
           onClick={() => navigate("/science")}
-          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden button-shine flex items-center justify-center"
+          className="w-64 py-4 rounded-full bg-primary text-primary-foreground font-medium text-lg uppercase relative overflow-hidden group
+            hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
+            before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
+            before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
+            after:absolute after:inset-0 after:rounded-full after:shadow-[0_0_15px_rgba(255,184,0,0.5),inset_0_0_15px_rgba(255,184,0,0.5)] 
+            after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
+            hover:scale-105 active:scale-95"
         >
-          The Science
+          <span className="relative z-10">The Science</span>
         </button>
       </div>
 
