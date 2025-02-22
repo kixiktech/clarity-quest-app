@@ -56,11 +56,6 @@
     min-height: -webkit-fill-available;
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
-    background-image: url('/lovable-uploads/c9e14262-210a-4f08-9291-7ef1a8886f55.png') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
-    background-attachment: fixed !important;
   }
 
   #root {

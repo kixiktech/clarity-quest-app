@@ -43,7 +43,16 @@ const HomePage: FC = () => {
   }, []);
 
   return (
-    <div className="h-[100dvh] flex flex-col items-center justify-center px-8 relative">
+    <div 
+      className="h-[100dvh] flex flex-col items-center justify-center px-8 relative"
+      style={{
+        backgroundImage: "url('/lovable-uploads/6b40b65e-3bc4-4395-aceb-4181ae4c751d.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}
+    >
       <div className="flex-1 flex flex-col items-center justify-center gap-4">
         <button
           onClick={() => navigate("/login")}
