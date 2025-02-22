@@ -73,20 +73,22 @@ const HomePage: FC = () => {
 
   return (
     <BackgroundImage>
-      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-16 gap-4">
-        <h1 className="text-2xl font-serif font-bold text-primary relative
+      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-16 gap-6">
+        <img 
+          src="/lovable-uploads/3d7b9f60-a195-43f0-b963-e6e084999749.png" 
+          alt="ClarityQuest"
+          className="w-[500px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
+        />
+        <p className="text-base md:text-lg text-center font-mono tracking-wider
+          text-white relative
           drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]
           after:absolute after:inset-0 after:-z-10 after:translate-y-[2px] after:text-black/50 after:blur-sm"
         >
-          ClarityQuest
-        </h1>
-        <p className="text-base md:text-lg text-primary relative text-center
-          drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]
-          after:absolute after:inset-0 after:-z-10 after:translate-y-[2px] after:text-black/50 after:blur-sm"
-        >
-          Unlock the power of your mind.
+          HACK YOUR BRAIN.
           <br />
-          Visualize with purpose.
+          UNLOCK THE FULL POTENTIAL OF YOUR MIND.
+          <br />
+          VISUALIZE WITH PURPOSE.
         </p>
       </div>
       
