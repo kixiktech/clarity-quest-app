@@ -90,7 +90,7 @@ const HomePage: FC = () => {
         </p>
       </div>
       
-      <div className="flex-1 flex flex-col items-center justify-center gap-6 my-auto">
+      <div className="flex-1 flex flex-col items-center justify-center gap-6 -mt-20">
         <button
           onClick={() => navigate("/login")}
           className="w-64 py-3 rounded-xl bg-gradient-to-b from-primary/90 to-primary text-primary-foreground font-medium text-lg uppercase
@@ -119,7 +119,7 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`fixed bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-3 max-w-[280px] transition-all duration-500 transform ${
+        className={`fixed bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-3 w-[90%] max-w-[400px] transition-all duration-500 transform ${
           isEntering 
             ? "translate-y-0 opacity-100" 
             : "translate-y-full opacity-0"
