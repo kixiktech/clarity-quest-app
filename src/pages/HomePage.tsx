@@ -119,7 +119,7 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`fixed bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-3 w-[90%] max-w-[400px] transition-all duration-500 transform ${
+        className={`fixed bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-3 w-64 transition-all duration-500 transform ${
           isEntering 
             ? "translate-y-0 opacity-100" 
             : "translate-y-full opacity-0"
