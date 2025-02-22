@@ -7,7 +7,7 @@ const SciencePage: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="science-page min-h-screen w-full bg-background overflow-auto">
+    <div className="min-h-screen w-full bg-background">
       <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16 animate-fade-in relative">
         <button
           onClick={() => navigate(-1)}
