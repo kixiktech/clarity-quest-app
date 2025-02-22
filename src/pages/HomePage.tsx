@@ -1,4 +1,3 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
@@ -73,29 +72,18 @@ const HomePage: FC = () => {
 
   return (
     <BackgroundImage>
-      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-16 gap-6">
+      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-8 sm:pt-16">
         <img 
           src="/lovable-uploads/3d7b9f60-a195-43f0-b963-e6e084999749.png" 
           alt="ClarityQuest"
-          className="w-[500px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
+          className="w-[280px] sm:w-[400px] md:w-[500px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
         />
-        <p className="text-base md:text-lg text-center font-mono tracking-wider
-          text-white relative
-          drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]
-          after:absolute after:inset-0 after:-z-10 after:translate-y-[2px] after:text-black/50 after:blur-sm"
-        >
-          HACK YOUR BRAIN.
-          <br />
-          UNLOCK THE FULL POTENTIAL OF YOUR MIND.
-          <br />
-          VISUALIZE WITH PURPOSE.
-        </p>
       </div>
       
-      <div className="flex-1 flex flex-col items-center justify-center gap-6 -mt-20">
+      <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6 -mt-12 sm:-mt-20">
         <button
           onClick={() => navigate("/login")}
-          className="w-64 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-lg uppercase
+          className="w-[240px] sm:w-64 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-base sm:text-lg uppercase
             shadow-[0_0_20px_rgba(14,165,233,0.3)] relative overflow-hidden
             border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
             before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent before:rounded-xl
@@ -108,7 +96,7 @@ const HomePage: FC = () => {
         
         <button
           onClick={() => navigate("/science")}
-          className="w-64 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-lg uppercase
+          className="w-[240px] sm:w-64 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-base sm:text-lg uppercase
             shadow-[0_0_20px_rgba(14,165,233,0.3)] relative overflow-hidden
             border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
             before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent before:rounded-xl
@@ -121,7 +109,7 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`fixed bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-3 w-64 transition-all duration-500 transform ${
+        className={`fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-2 sm:p-3 w-[280px] sm:w-64 transition-all duration-500 transform ${
           isEntering 
             ? "translate-y-0 opacity-100" 
             : "translate-y-full opacity-0"
@@ -130,7 +118,7 @@ const HomePage: FC = () => {
           transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)"
         }}
       >
-        <p className="text-sm text-foreground/70">
+        <p className="text-xs sm:text-sm text-foreground/70">
           <span className="text-primary font-medium">
             {notifications[currentNotificationIndex].name} from {notifications[currentNotificationIndex].country}
           </span>{" "}
