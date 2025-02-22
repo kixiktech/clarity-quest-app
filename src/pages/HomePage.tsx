@@ -47,7 +47,7 @@ const HomePage: FC = () => {
       style={{
         height: "100dvh",
         width: "100%",
-        backgroundImage: "url('/lovable-uploads/3df96eab-c00b-4ce7-9189-a6cb619685b0.png')",
+        backgroundImage: "url('/lovable-uploads/501c7c67-510c-4d34-a4a9-349c88eca7c5.png')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
