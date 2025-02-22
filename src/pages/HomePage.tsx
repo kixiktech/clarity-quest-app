@@ -1,6 +1,6 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import BackgroundImage from "../components/BackgroundImage";
 
 const notifications = [
   { name: "Sarah", state: "California" },
@@ -43,17 +43,7 @@ const HomePage: FC = () => {
   }, []);
 
   return (
-    <div 
-      className="relative min-h-[100dvh] w-full flex flex-col justify-between items-center px-6 py-8"
-      style={{
-        backgroundImage: `url('/lovable-uploads/834bdd6f-02f9-494e-8c6d-4d18709d5eb5.png')`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
-        backgroundColor: 'hsl(var(--background))'
-      }}
-    >
+    <BackgroundImage>
       <div className="flex-none h-[10%]" />
       
       <div className="flex flex-col items-center justify-center gap-6">
@@ -101,7 +91,7 @@ const HomePage: FC = () => {
           just completed a visualization session
         </p>
       </div>
-    </div>
+    </BackgroundImage>
   );
 };
 
