@@ -47,12 +47,12 @@ const HomePage: FC = () => {
     const img = new Image();
     img.onload = () => console.log('Image loaded successfully');
     img.onerror = () => console.log('Error loading image');
-    img.src = '/lovable-uploads/db111871-da77-42f2-86fb-a2a2e45ac78b.png';
+    img.src = '/lovable-uploads/a7a2bc36-ea9a-40dd-8a23-bcc6d2fce294.png';
   }, []);
 
   return (
     <div 
-      className="min-h-screen w-full bg-[url('/lovable-uploads/db111871-da77-42f2-86fb-a2a2e45ac78b.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center px-8 relative"
+      className="min-h-screen w-full bg-[url('/lovable-uploads/a7a2bc36-ea9a-40dd-8a23-bcc6d2fce294.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col items-center justify-center px-8 relative"
     >
       <div className="flex-1 flex flex-col items-center justify-center gap-8">
         <button
