@@ -71,6 +71,11 @@ const HomePage: FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const handleGetStarted = () => {
+    // Navigate to login with sign up mode
+    navigate("/login?mode=signup");
+  };
+
   return (
     <BackgroundImage>
       <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-6 sm:pt-12">
@@ -83,7 +88,7 @@ const HomePage: FC = () => {
       
       <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6">
         <button
-          onClick={() => navigate("/login")}
+          onClick={handleGetStarted}
           className="w-[240px] sm:w-64 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-base sm:text-lg uppercase
             shadow-[0_0_20px_rgba(14,165,233,0.3)] relative overflow-hidden
             border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
