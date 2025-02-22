@@ -1,9 +1,8 @@
-
 import { FC } from "react";
 
 const SciencePage: FC = () => {
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="science-page min-h-screen w-full bg-background overflow-auto">
       <div className="max-w-4xl mx-auto space-y-12 animate-fade-in">
         <div className="text-center space-y-4">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
