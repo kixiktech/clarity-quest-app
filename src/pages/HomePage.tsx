@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
@@ -44,7 +45,16 @@ const HomePage: FC = () => {
 
   return (
     <BackgroundImage>
-      <div className="flex-none h-[10%]" />
+      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-16 gap-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-[#F97316]">
+          ClarityQuest
+        </h1>
+        <p className="text-lg md:text-xl text-white/90 text-center max-w-md">
+          Unlock the power of your mind.
+          <br />
+          Visualize with purpose.
+        </p>
+      </div>
       
       <div className="flex flex-col items-center justify-center gap-6">
         <button
