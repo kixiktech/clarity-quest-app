@@ -8,20 +8,33 @@ interface BackgroundImageProps {
 
 const BackgroundImage: FC<BackgroundImageProps> = ({ children }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [useBackupImage, setUseBackupImage] = useState(false);
+  
+  const primaryImageUrl = '/lovable-uploads/c70bf7b9-f04e-4051-8590-091140fa6340.png';
+  const backupImageUrl = 'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb';
 
   useEffect(() => {
     // Preload the image
     const img = new Image();
-    // Using an Unsplash image as fallback since the upload failed
-    img.src = 'https://images.unsplash.com/photo-1500673922987-e212871fec22';
+    img.src = primaryImageUrl;
     
     img.onload = () => {
       setImageLoaded(true);
     };
     
     img.onerror = () => {
-      toast.error("Background image failed to load");
-      console.error("Background image failed to load");
+      console.error("Primary image failed to load, switching to backup");
+      setUseBackupImage(true);
+      // Load backup image
+      const backupImg = new Image();
+      backupImg.src = backupImageUrl;
+      backupImg.onload = () => {
+        setImageLoaded(true);
+      };
+      backupImg.onerror = () => {
+        toast.error("Failed to load background image");
+        console.error("Backup image also failed to load");
+      };
     };
   }, []);
 
@@ -29,7 +42,7 @@ const BackgroundImage: FC<BackgroundImageProps> = ({ children }) => {
     <div 
       className="relative min-h-[100dvh] w-full flex flex-col justify-between items-center px-6 py-8 bg-background transition-opacity duration-500"
       style={{
-        backgroundImage: `url('https://images.unsplash.com/photo-1500673922987-e212871fec22')`,
+        backgroundImage: `url('${useBackupImage ? backupImageUrl : primaryImageUrl}')`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
