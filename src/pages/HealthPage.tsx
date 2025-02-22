@@ -15,8 +15,11 @@ const HealthPage: FC = () => {
       title: "All Responses Saved",
       description: "Thank you for sharing your goals! We'll now create personalized visualization sessions for you.",
     });
-    // Navigate to the next page (you can update this based on your app flow)
     navigate("/");
+  };
+
+  const handleButtonClick = () => {
+    handleSubmit("");
   };
 
   return (
@@ -48,7 +51,7 @@ const HealthPage: FC = () => {
 
           <div className="flex justify-center mt-8">
             <Button
-              onClick={handleSubmit}
+              onClick={handleButtonClick}
               className="gap-2 py-6 px-8 rounded-xl bg-primary text-primary-foreground font-medium text-lg relative overflow-hidden group
                 hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
                 before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
