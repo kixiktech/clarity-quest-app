@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
@@ -55,6 +56,23 @@
     min-height: -webkit-fill-available;
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;
+    
+    /* Set up the background with multiple layers */
+    background-image: 
+      /* Layer 1: Gradient overlay for readability */
+      linear-gradient(to bottom,
+        rgba(0, 0, 0, 0.4),
+        rgba(0, 0, 0, 0.6)
+      ),
+      /* Layer 2: The actual background image */
+      url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");
+    
+    /* Background properties */
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    width: 100%;
   }
 
   #root {
