@@ -19,7 +19,7 @@ const LoginPage: FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
 
   return (
-    <div className="min-h-screen w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-8 relative overflow-hidden">
+    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-8 relative overflow-hidden">
       {/* Animated background glow effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -107,7 +107,7 @@ const LoginPage: FC = () => {
             <div className="w-full border-t border-white/10"></div>
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background text-white/50 px-2">Or continue with</span>
+            <span className="bg-[#1A1F2C] text-white/50 px-2">Or continue with</span>
           </div>
         </div>
 
