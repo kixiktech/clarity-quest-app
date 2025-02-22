@@ -11,7 +11,7 @@ const BackgroundImage: FC<BackgroundImageProps> = ({ children }) => {
   const [useBackupImage, setUseBackupImage] = useState(false);
   
   const primaryImageUrl = '/lovable-uploads/c70bf7b9-f04e-4051-8590-091140fa6340.png';
-  const backupImageUrl = 'https://images.unsplash.com/photo-1470813740244-df37b8c1edcb';
+  const backupImageUrl = 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05';
 
   useEffect(() => {
     // Preload the image
