@@ -93,13 +93,13 @@ const HomePage: FC = () => {
       <div className="flex-1 flex flex-col items-center justify-center gap-6 -mt-20">
         <button
           onClick={() => navigate("/login")}
-          className="w-64 py-3 rounded-xl bg-gradient-to-r from-primary/90 to-purple-500 text-white font-medium text-lg uppercase
-            shadow-[0_0_20px_rgba(155,135,245,0.3)] relative overflow-hidden
+          className="w-64 py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-lg uppercase
+            shadow-[0_0_20px_rgba(14,165,233,0.3)] relative overflow-hidden
             border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
             before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent before:rounded-xl
             after:absolute after:inset-0 after:-z-10 after:translate-y-[3px] after:bg-black/50 after:blur-sm after:rounded-xl
             transform active:translate-y-[2px] active:after:translate-y-[1px] transition-all duration-100
-            hover:shadow-[0_0_30px_rgba(155,135,245,0.5)] hover:scale-[1.02]"
+            hover:shadow-[0_0_30px_rgba(14,165,233,0.5)] hover:scale-[1.02]"
         >
           <span className="relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">Get Started</span>
         </button>
