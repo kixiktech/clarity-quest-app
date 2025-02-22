@@ -44,7 +44,16 @@ const HomePage: FC = () => {
 
   return (
     <div 
-      className="h-[100dvh] w-full bg-[url('/lovable-uploads/3df96eab-c00b-4ce7-9189-a6cb619685b0.png')] bg-cover bg-center bg-no-repeat bg-fixed flex flex-col justify-between items-center px-6 py-8"
+      style={{
+        height: "100dvh",
+        width: "100%",
+        backgroundImage: "url('/lovable-uploads/3df96eab-c00b-4ce7-9189-a6cb619685b0.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        backgroundAttachment: "fixed"
+      }}
+      className="flex flex-col justify-between items-center px-6 py-8"
     >
       <div className="flex-none h-[10%]" />
       
