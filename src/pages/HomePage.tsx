@@ -1,28 +1,57 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
 
 const notifications = [
-  { name: "Sarah", state: "California" },
-  { name: "Michael", state: "New York" },
-  { name: "Emma", state: "Texas" },
-  { name: "James", state: "Florida" },
-  { name: "Olivia", state: "Washington" },
-  { name: "William", state: "Oregon" },
-  { name: "Ava", state: "Colorado" },
-  { name: "Alexander", state: "Arizona" },
-  { name: "Sophia", state: "Nevada" },
-  { name: "Benjamin", state: "Utah" },
-  { name: "Isabella", state: "Idaho" },
-  { name: "Lucas", state: "Montana" },
-  { name: "Mia", state: "Wyoming" },
-  { name: "Henry", state: "New Mexico" },
-  { name: "Charlotte", state: "Oklahoma" },
-  { name: "Sebastian", state: "Kansas" },
-  { name: "Amelia", state: "Nebraska" },
-  { name: "Jack", state: "Iowa" },
-  { name: "Harper", state: "Minnesota" },
-  { name: "Daniel", state: "Wisconsin" }
+  { name: "John", country: "United States" },
+  { name: "Michael", country: "United States" },
+  { name: "Emma", country: "United States" },
+  { name: "Hiroshi", country: "Japan" },
+  { name: "Wei", country: "China" },
+  { name: "Liam", country: "United States" },
+  { name: "Sophia", country: "Germany" },
+  { name: "William", country: "United States" },
+  { name: "Arjun", country: "India" },
+  { name: "Lucas", country: "France" },
+  { name: "Kim", country: "South Korea" },
+  { name: "Alexander", country: "United States" },
+  { name: "Mia", country: "United States" },
+  { name: "Sebastian", country: "Sweden" },
+  { name: "Felipe", country: "Brazil" },
+  { name: "Isabella", country: "United States" },
+  { name: "Jack", country: "United States" },
+  { name: "Harper", country: "Netherlands" },
+  { name: "Noah", country: "United States" },
+  { name: "Daniel", country: "Germany" },
+  { name: "Johan", country: "Norway" },
+  { name: "Mateo", country: "Spain" },
+  { name: "Mats", country: "Denmark" },
+  { name: "Angelo", country: "Italy" },
+  { name: "Aiden", country: "United States" },
+  { name: "Ethan", country: "United States" },
+  { name: "Madison", country: "Australia" },
+  { name: "Viktor", country: "Switzerland" },
+  { name: "Rafael", country: "Portugal" },
+  { name: "Elijah", country: "United States" },
+  { name: "Tariq", country: "Pakistan" },
+  { name: "Logan", country: "United States" },
+  { name: "Grace", country: "United States" },
+  { name: "David", country: "Canada" },
+  { name: "Mikhail", country: "Russia" },
+  { name: "Santiago", country: "Chile" },
+  { name: "Hugo", country: "Belgium" },
+  { name: "Jakob", country: "Czech Republic" },
+  { name: "Joseph", country: "United States" },
+  { name: "Victoria", country: "United States" },
+  { name: "Lily", country: "South Africa" },
+  { name: "Elias", country: "Finland" },
+  { name: "Nguyen", country: "Vietnam" },
+  { name: "Juan", country: "Mexico" },
+  { name: "Emir", country: "Malaysia" },
+  { name: "Omar", country: "United Arab Emirates" },
+  { name: "Amadou", country: "Nigeria" },
+  { name: "Diego", country: "Argentina" }
 ];
 
 const HomePage: FC = () => {
@@ -101,7 +130,7 @@ const HomePage: FC = () => {
       >
         <p className="text-sm text-foreground/70">
           <span className="text-primary font-medium">
-            {notifications[currentNotificationIndex].name} from {notifications[currentNotificationIndex].state}
+            {notifications[currentNotificationIndex].name} from {notifications[currentNotificationIndex].country}
           </span>{" "}
           just completed a visualization session
         </p>
