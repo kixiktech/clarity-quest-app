@@ -1,21 +1,22 @@
+
 import { FC } from "react";
 
 const SciencePage: FC = () => {
   return (
     <div className="science-page min-h-screen w-full bg-background overflow-auto">
-      <div className="max-w-4xl mx-auto space-y-12 animate-fade-in">
-        <div className="text-center space-y-4">
+      <div className="max-w-4xl mx-auto py-16 px-4 sm:px-6 lg:px-8 space-y-16 animate-fade-in">
+        <div className="text-center space-y-6">
           <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
             The Science Behind{" "}
             <span className="animate-text-gradient">Visualization</span>
           </h1>
-          <p className="text-lg text-foreground/70">
+          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
             Discover how guided visualization can rewire your brain for success
           </p>
         </div>
 
-        <div className="space-y-8">
-          <div className="glass rounded-lg p-6 space-y-4">
+        <div className="space-y-12">
+          <div className="glass rounded-lg p-8 space-y-4 hover:shadow-lg transition-shadow duration-300">
             <h2 className="text-2xl font-semibold text-primary">
               Neural Plasticity
             </h2>
@@ -27,7 +28,7 @@ const SciencePage: FC = () => {
             </p>
           </div>
 
-          <div className="glass rounded-lg p-6 space-y-4">
+          <div className="glass rounded-lg p-8 space-y-4 hover:shadow-lg transition-shadow duration-300">
             <h2 className="text-2xl font-semibold text-primary">
               The Mind-Body Connection
             </h2>
@@ -38,7 +39,7 @@ const SciencePage: FC = () => {
             </p>
           </div>
 
-          <div className="glass rounded-lg p-6 space-y-4">
+          <div className="glass rounded-lg p-8 space-y-4 hover:shadow-lg transition-shadow duration-300">
             <h2 className="text-2xl font-semibold text-primary">
               Proven Results
             </h2>
