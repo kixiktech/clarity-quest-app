@@ -15,7 +15,7 @@ const HealthPage: FC = () => {
       title: "All Responses Saved",
       description: "Thank you for sharing your goals! We'll now create personalized visualization sessions for you.",
     });
-    navigate("/");
+    navigate("/processing");
   };
 
   const handleButtonClick = () => {

@@ -16,6 +16,7 @@ import RelationshipsPage from "./pages/RelationshipsPage";
 import PersonalGrowthPage from "./pages/PersonalGrowthPage";
 import ConfidencePage from "./pages/ConfidencePage";
 import HealthPage from "./pages/HealthPage";
+import ProcessingPage from "./pages/ProcessingPage";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
             <Route path="/personal-growth" element={<PersonalGrowthPage />} />
             <Route path="/confidence" element={<ConfidencePage />} />
             <Route path="/health" element={<HealthPage />} />
+            <Route path="/processing" element={<ProcessingPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
