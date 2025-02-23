@@ -68,10 +68,10 @@ const SessionFeedbackPage: FC = () => {
               { rating: "good", icon: Meh, color: "yellow" },
               { rating: "great", icon: Smile, color: "green" }
             ].map(({ rating, icon: Icon, color }) => (
-              <button
+              <div
                 key={rating}
                 onClick={() => handleRatingSelect(rating as FeedbackRating)}
-                className="p-2 transition-all duration-300 hover:scale-110 active:scale-95"
+                className="cursor-pointer p-2 transition-all duration-300 hover:scale-110 active:scale-95"
               >
                 <Icon
                   className={`w-16 h-16 transition-all duration-300 ${
@@ -84,7 +84,7 @@ const SessionFeedbackPage: FC = () => {
                       : "text-gray-400 hover:text-gray-300"
                   }`}
                 />
-              </button>
+              </div>
             ))}
           </div>
 
