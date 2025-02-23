@@ -62,21 +62,20 @@ const SessionFeedbackPage: FC = () => {
           </h1>
 
           {/* Rating Scale */}
-          <div className="flex justify-center items-center gap-12 mb-6">
+          <div className="flex justify-center items-center gap-16 mb-6">
             {[
               { rating: "bad", icon: Frown, color: "red" },
               { rating: "good", icon: Meh, color: "yellow" },
               { rating: "great", icon: Smile, color: "green" }
             ].map(({ rating, icon: Icon, color }) => (
-              <Button
+              <button
                 key={rating}
-                variant="ghost"
                 onClick={() => handleRatingSelect(rating as FeedbackRating)}
-                className="p-2 transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer hover:bg-transparent focus:ring-0 focus:ring-offset-0"
+                className="bg-transparent border-none outline-none cursor-pointer p-4 transition-all duration-300 hover:scale-110 active:scale-95"
               >
                 <Icon
-                  strokeWidth={1.5}
-                  className={`w-16 h-16 transition-all duration-300 pointer-events-none ${
+                  strokeWidth={1.75}
+                  className={`w-24 h-24 md:w-28 md:h-28 transition-all duration-300 ${
                     selectedRating === rating
                       ? color === "red"
                         ? "text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
@@ -86,7 +85,7 @@ const SessionFeedbackPage: FC = () => {
                       : "text-gray-400 hover:text-gray-300"
                   }`}
                 />
-              </Button>
+              </button>
             ))}
           </div>
 
