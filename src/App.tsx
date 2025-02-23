@@ -21,6 +21,7 @@ import CategoryProcessingPage from "./pages/CategoryProcessingPage";
 import SessionCategoriesPage from "./pages/SessionCategoriesPage";
 import FocusInputPage from "./pages/FocusInputPage";
 import VisualizationPage from "./pages/VisualizationPage";
+import SessionFeedbackPage from "./pages/SessionFeedbackPage";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
             <Route path="/session-categories" element={<SessionCategoriesPage />} />
             <Route path="/focus-input" element={<FocusInputPage />} />
             <Route path="/visualization" element={<VisualizationPage />} />
+            <Route path="/session-feedback" element={<SessionFeedbackPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

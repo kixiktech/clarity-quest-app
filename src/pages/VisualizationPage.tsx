@@ -11,7 +11,7 @@ const VisualizationPage: FC = () => {
     <div className="min-h-screen w-full bg-[#0D1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* End Session Button */}
       <Button
-        onClick={() => navigate("/session-complete")}
+        onClick={() => navigate("/session-feedback")}
         variant="ghost"
         className="absolute top-6 right-6 text-white/60 hover:text-white/90 transition-colors"
       >
