@@ -2,6 +2,15 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown } from "lucide-react";
 
 const categories = [
   { title: "Career + Purpose", route: "/focus-input", color: "bg-[#3B82F6]", id: "career" },
@@ -15,8 +24,55 @@ const categories = [
 const SessionCategoriesPage: FC = () => {
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    // Add logout logic here
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#0D1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      {/* Profile Dropdown */}
+      <div className="absolute top-4 left-4 z-50">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button 
+              variant="ghost" 
+              className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10"
+            >
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-medium">
+                J
+              </div>
+              <span className="hidden sm:inline">John Doe</span>
+              <ChevronDown className="h-4 w-4 opacity-50" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 bg-[#1A1F2E] border-[#2A2F3E] text-white">
+            <DropdownMenuLabel className="text-white/60">My Account</DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-white/10" />
+            <DropdownMenuItem className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer">
+              <Settings className="mr-2 h-4 w-4" />
+              <span>Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer">
+              <CreditCard className="mr-2 h-4 w-4" />
+              <span>Subscription Settings</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer">
+              <HelpCircle className="mr-2 h-4 w-4" />
+              <span>Contact Support</span>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-white/10" />
+            <DropdownMenuItem 
+              className="text-red-400 hover:text-red-300 hover:bg-white/10 focus:bg-white/10 cursor-pointer"
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
       {/* Background Glow Effects */}
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
