@@ -72,6 +72,13 @@ const SessionFeedbackPage: FC = () => {
                 key={rating}
                 onClick={() => handleRatingSelect(rating as FeedbackRating)}
                 className="relative touch-manipulation cursor-pointer"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleRatingSelect(rating as FeedbackRating);
+                  }
+                }}
               >
                 <div className="p-3 transition-all duration-300 hover:scale-110 active:scale-95">
                   <Icon
@@ -109,6 +116,7 @@ const SessionFeedbackPage: FC = () => {
           </Button>
           <Button
             onClick={handleSubmit}
+            type="button"
             className={`w-full py-5 text-white font-medium rounded-xl
               transition-all duration-300 hover:scale-105 active:scale-95
               ${selectedRating 
