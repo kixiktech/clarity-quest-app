@@ -33,6 +33,7 @@ const LoginPage: FC = () => {
     confirmPassword: "",
     country: "",
   });
+  const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -198,14 +199,27 @@ const LoginPage: FC = () => {
               <div className="flex items-center justify-between space-x-4 bg-white/10 border border-white/20 rounded-md p-2">
                 <div className="flex items-center space-x-2">
                   <span className="text-white text-sm">Gender</span>
-                  <TooltipProvider delayDuration={0}>
-                    <Tooltip>
+                  <TooltipProvider>
+                    <Tooltip open={showTooltip} onOpenChange={setShowTooltip}>
                       <TooltipTrigger asChild>
-                        <button type="button" onClick={(e) => e.preventDefault()}>
+                        <button 
+                          type="button" 
+                          className="focus:outline-none"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowTooltip(!showTooltip);
+                          }}
+                        >
                           <HelpCircle className="h-4 w-4 text-white/50" />
                         </button>
                       </TooltipTrigger>
-                      <TooltipContent sideOffset={5} className="bg-white text-black p-2 rounded-md shadow-lg max-w-[200px] text-sm z-[100]">
+                      <TooltipContent 
+                        side="top" 
+                        sideOffset={5} 
+                        className="bg-white text-black p-3 rounded-md shadow-lg max-w-[200px] text-sm z-[9999] relative"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <p>We use this information to personalize your visualization sessions, ensuring the scenarios and guidance resonate more deeply with your personal journey.</p>
                       </TooltipContent>
                     </Tooltip>
