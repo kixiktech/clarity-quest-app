@@ -11,13 +11,21 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Facebook, Github, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Facebook, Github, X, HelpCircle } from "lucide-react";
 import countries from "@/lib/countries";
+import { Toggle } from "@/components/ui/toggle";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const LoginPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [gender, setGender] = useState<"male" | "female" | null>(null);
 
   useEffect(() => {
     // Check if we should show sign up form based on URL parameter
@@ -64,32 +72,31 @@ const LoginPage: FC = () => {
 
         <form className="space-y-4">
           {isSignUp && (
-            <Input
-              type="text"
-              placeholder="Full Name"
-              className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-            />
-          )}
-          
-          <Input
-            type="email"
-            placeholder="Email"
-            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-          />
-
-          <Input
-            type="password"
-            placeholder="Password"
-            className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-          />
-
-          {isSignUp && (
             <>
+              <Input
+                type="text"
+                placeholder="Full Name"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+              />
+
+              <Input
+                type="email"
+                placeholder="Email"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+              />
+
+              <Input
+                type="password"
+                placeholder="Password"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+              />
+
               <Input
                 type="password"
                 placeholder="Confirm Password"
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
               />
+
               <Select>
                 <SelectTrigger className="bg-white/10 border-white/20 text-white">
                   <SelectValue placeholder="Select Country" />
@@ -104,6 +111,62 @@ const LoginPage: FC = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+
+              <div className="flex items-center justify-between space-x-4 bg-white/10 border border-white/20 rounded-md p-3">
+                <div className="flex items-center space-x-2">
+                  <span className="text-white">Gender</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <HelpCircle className="h-4 w-4 text-white/50" />
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-[200px]">
+                        <p>We use this information to personalize your visualization sessions, ensuring the scenarios and guidance resonate more deeply with your personal journey.</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                <div className="flex space-x-2">
+                  <Toggle
+                    pressed={gender === "male"}
+                    onPressedChange={() => setGender("male")}
+                    className={`px-3 py-1 rounded-md ${
+                      gender === "male"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-white/5 text-white/70 hover:bg-white/10"
+                    }`}
+                  >
+                    Male
+                  </Toggle>
+                  <Toggle
+                    pressed={gender === "female"}
+                    onPressedChange={() => setGender("female")}
+                    className={`px-3 py-1 rounded-md ${
+                      gender === "female"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-white/5 text-white/70 hover:bg-white/10"
+                    }`}
+                  >
+                    Female
+                  </Toggle>
+                </div>
+              </div>
+            </>
+          )}
+          
+          {!isSignUp && (
+            <>
+              <Input
+                type="email"
+                placeholder="Email"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+              />
+
+              <Input
+                type="password"
+                placeholder="Password"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+              />
             </>
           )}
 
