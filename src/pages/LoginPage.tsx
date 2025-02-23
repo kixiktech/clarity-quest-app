@@ -36,7 +36,7 @@ const LoginPage: FC = () => {
   }, [location]);
 
   return (
-    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-8 relative overflow-y-auto">
+    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-6 relative overflow-y-auto">
       {/* Animated background glow effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -45,59 +45,59 @@ const LoginPage: FC = () => {
       </div>
 
       {/* Navigation buttons */}
-      <div className="fixed top-4 left-4 right-4 flex justify-between items-center z-10">
+      <div className="fixed top-2 left-4 right-4 flex justify-between items-center z-10">
         <button 
           onClick={() => navigate("/")}
-          className="text-white/70 hover:text-white transition-colors flex items-center gap-2"
+          className="text-white/70 hover:text-white transition-colors flex items-center gap-2 text-sm"
         >
-          <ArrowLeft className="w-5 h-5" />
+          <ArrowLeft className="w-4 h-4" />
           Back
         </button>
 
         <Button
           onClick={() => navigate("/intro-questions")}
-          className="gap-2 text-white/70 hover:text-white transition-colors flex items-center"
+          className="gap-2 text-white/70 hover:text-white transition-colors flex items-center text-sm py-1"
         >
           Skip for now
-          <ArrowRight className="w-5 h-5" />
+          <ArrowRight className="w-4 h-4" />
         </Button>
       </div>
 
       {/* Main card */}
-      <div className="w-full max-w-sm bg-black/30 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl border border-white/10 relative z-10 mt-16">
-        <h1 className="text-2xl font-semibold text-white mb-6 text-center">
+      <div className="w-full max-w-sm bg-black/30 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-2xl border border-white/10 relative z-10 mt-12">
+        <h1 className="text-xl font-semibold text-white mb-4 text-center">
           {isSignUp ? "Create Account" : "Welcome Back"}
         </h1>
 
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
           {isSignUp && (
             <>
               <Input
                 type="text"
                 placeholder="Full Name"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="email"
                 placeholder="Email"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="password"
                 placeholder="Password"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="password"
                 placeholder="Confirm Password"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Select>
-                <SelectTrigger className="bg-white/10 border-white/20 text-white">
+                <SelectTrigger className="bg-white/10 border-white/20 text-white h-9">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>
                 <SelectContent className="max-h-[300px]">
@@ -111,9 +111,9 @@ const LoginPage: FC = () => {
                 </SelectContent>
               </Select>
 
-              <div className="flex items-center justify-between space-x-4 bg-white/10 border border-white/20 rounded-md p-3">
+              <div className="flex items-center justify-between space-x-4 bg-white/10 border border-white/20 rounded-md p-2">
                 <div className="flex items-center space-x-2">
-                  <span className="text-white">Gender</span>
+                  <span className="text-white text-sm">Gender</span>
                   <TooltipProvider delayDuration={0}>
                     <Tooltip>
                       <TooltipTrigger asChild>
@@ -131,7 +131,7 @@ const LoginPage: FC = () => {
                   <Toggle
                     pressed={gender === "male"}
                     onPressedChange={() => setGender("male")}
-                    className={`px-3 py-1 rounded-md ${
+                    className={`px-2 py-1 rounded-md text-sm ${
                       gender === "male"
                         ? "bg-primary text-primary-foreground"
                         : "bg-white/5 text-white/70 hover:bg-white/10"
@@ -142,7 +142,7 @@ const LoginPage: FC = () => {
                   <Toggle
                     pressed={gender === "female"}
                     onPressedChange={() => setGender("female")}
-                    className={`px-3 py-1 rounded-md ${
+                    className={`px-2 py-1 rounded-md text-sm ${
                       gender === "female"
                         ? "bg-primary text-primary-foreground"
                         : "bg-white/5 text-white/70 hover:bg-white/10"
@@ -160,23 +160,23 @@ const LoginPage: FC = () => {
               <Input
                 type="email"
                 placeholder="Email"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="password"
                 placeholder="Password"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
             </>
           )}
 
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full h-9">
             {isSignUp ? "Sign Up" : "Log In"}
           </Button>
         </form>
 
-        <div className="relative my-6">
+        <div className="relative my-4">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
           </div>
@@ -185,19 +185,19 @@ const LoginPage: FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          <Button variant="outline" className="bg-white/10 border-white/20">
-            <Github className="h-5 w-5" />
+        <div className="grid grid-cols-3 gap-2">
+          <Button variant="outline" className="bg-white/10 border-white/20 h-8 w-full">
+            <Github className="h-4 w-4" />
           </Button>
-          <Button variant="outline" className="bg-white/10 border-white/20">
-            <Facebook className="h-5 w-5" />
+          <Button variant="outline" className="bg-white/10 border-white/20 h-8 w-full">
+            <Facebook className="h-4 w-4" />
           </Button>
-          <Button variant="outline" className="bg-white/10 border-white/20">
-            <X className="h-5 w-5" />
+          <Button variant="outline" className="bg-white/10 border-white/20 h-8 w-full">
+            <X className="h-4 w-4" />
           </Button>
         </div>
 
-        <p className="mt-6 text-center text-sm text-white/50">
+        <p className="mt-4 text-center text-xs text-white/50">
           {isSignUp ? "Already have an account? " : "Don't have an account? "}
           <button
             type="button"
