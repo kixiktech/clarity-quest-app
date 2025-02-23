@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const categories = [
-  { title: "Career + Purpose", route: "/career", color: "bg-[#3B82F6]" },
-  { title: "Money + Finances", route: "/finances", color: "bg-[#4ADE80]" },
-  { title: "Growth + Mindset", route: "/personal-growth", color: "bg-[#F43F5E]" },
-  { title: "Confidence + Self-Worth", route: "/confidence", color: "bg-[#FFB800]" },
-  { title: "Health + Wellness", route: "/health", color: "bg-[#F97316]" },
-  { title: "Friends + Family", route: "/relationships", color: "bg-[#A78BFA]" }
+  { title: "Career + Purpose", route: "/focus-input", color: "bg-[#3B82F6]", id: "career" },
+  { title: "Money + Finances", route: "/focus-input", color: "bg-[#4ADE80]", id: "finances" },
+  { title: "Growth + Mindset", route: "/focus-input", color: "bg-[#F43F5E]", id: "growth" },
+  { title: "Confidence + Self-Worth", route: "/focus-input", color: "bg-[#FFB800]", id: "confidence" },
+  { title: "Health + Wellness", route: "/focus-input", color: "bg-[#F97316]", id: "health" },
+  { title: "Friends + Family", route: "/focus-input", color: "bg-[#A78BFA]", id: "relationships" }
 ];
 
 const SessionCategoriesPage: FC = () => {
@@ -49,8 +49,10 @@ const SessionCategoriesPage: FC = () => {
           <div className="grid gap-4">
             {categories.map((category) => (
               <Button
-                key={category.route}
-                onClick={() => navigate(category.route)}
+                key={category.id}
+                onClick={() => navigate(category.route, { 
+                  state: { category: category.id }
+                })}
                 className={`w-full h-16 ${category.color} rounded-xl text-lg font-medium tracking-wide
                   relative overflow-hidden transform transition-all duration-100
                   border-2 border-black/20 

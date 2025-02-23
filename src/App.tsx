@@ -18,6 +18,7 @@ import ConfidencePage from "./pages/ConfidencePage";
 import HealthPage from "./pages/HealthPage";
 import ProcessingPage from "./pages/ProcessingPage";
 import SessionCategoriesPage from "./pages/SessionCategoriesPage";
+import FocusInputPage from "./pages/FocusInputPage";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/health" element={<HealthPage />} />
             <Route path="/processing" element={<ProcessingPage />} />
             <Route path="/session-categories" element={<SessionCategoriesPage />} />
+            <Route path="/focus-input" element={<FocusInputPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>
