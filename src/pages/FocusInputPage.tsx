@@ -1,4 +1,3 @@
-
 import { FC, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -12,12 +11,10 @@ const FocusInputPage: FC = () => {
   const { toast } = useToast();
   const [focusText, setFocusText] = useState("");
   
-  // Get the category from the state passed during navigation
   const category = location.state?.category || "session";
 
   const handleSubmit = (text: string) => {
     setFocusText(text);
-    // Store the focus text in localStorage or state management system
     localStorage.setItem("sessionFocus", text);
     toast({
       title: "Focus Area Saved",
@@ -26,7 +23,7 @@ const FocusInputPage: FC = () => {
   };
 
   const handleNavigation = () => {
-    navigate("/processing", {
+    navigate("/category-processing", {
       state: {
         category,
         focus: focusText,

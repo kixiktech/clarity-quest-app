@@ -17,6 +17,7 @@ import PersonalGrowthPage from "./pages/PersonalGrowthPage";
 import ConfidencePage from "./pages/ConfidencePage";
 import HealthPage from "./pages/HealthPage";
 import ProcessingPage from "./pages/ProcessingPage";
+import CategoryProcessingPage from "./pages/CategoryProcessingPage";
 import SessionCategoriesPage from "./pages/SessionCategoriesPage";
 import FocusInputPage from "./pages/FocusInputPage";
 import VisualizationPage from "./pages/VisualizationPage";
@@ -42,6 +43,7 @@ const App = () => (
             <Route path="/confidence" element={<ConfidencePage />} />
             <Route path="/health" element={<HealthPage />} />
             <Route path="/processing" element={<ProcessingPage />} />
+            <Route path="/category-processing" element={<CategoryProcessingPage />} />
             <Route path="/session-categories" element={<SessionCategoriesPage />} />
             <Route path="/focus-input" element={<FocusInputPage />} />
             <Route path="/visualization" element={<VisualizationPage />} />
