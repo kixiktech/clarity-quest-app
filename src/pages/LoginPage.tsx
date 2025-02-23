@@ -1,4 +1,3 @@
-
 import { FC, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -14,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Facebook, Github, X, HelpCircle } from "lucide-react";
 import countries from "@/lib/countries";
 import { Toggle } from "@/components/ui/toggle";
+import { toast } from "sonner";
 import {
   Tooltip,
   TooltipContent,
@@ -26,6 +26,13 @@ const LoginPage: FC = () => {
   const location = useLocation();
   const [isSignUp, setIsSignUp] = useState(false);
   const [gender, setGender] = useState<"male" | "female" | null>(null);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    country: "",
+  });
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -35,16 +42,82 @@ const LoginPage: FC = () => {
     }
   }, [location]);
 
+  const validateEmail = (email: string) => {
+    return email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (isSignUp) {
+      // Validate all fields for sign up
+      if (!formData.fullName.trim()) {
+        toast.error("Please enter your full name");
+        return;
+      }
+
+      if (!formData.email) {
+        toast.error("Please enter your email address");
+        return;
+      }
+
+      if (!validateEmail(formData.email)) {
+        toast.error("Please enter a valid email address");
+        return;
+      }
+
+      if (!formData.password) {
+        toast.error("Please enter a password");
+        return;
+      }
+
+      if (formData.password !== formData.confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+
+      if (!formData.country) {
+        toast.error("Please select your country");
+        return;
+      }
+
+      if (!gender) {
+        toast.error("Please select your gender");
+        return;
+      }
+
+      // If all validations pass, proceed with sign up
+      console.log("Sign up data:", { ...formData, gender });
+    } else {
+      // Validate login fields
+      if (!formData.email) {
+        toast.error("Please enter your email address");
+        return;
+      }
+
+      if (!validateEmail(formData.email)) {
+        toast.error("Please enter a valid email address");
+        return;
+      }
+
+      if (!formData.password) {
+        toast.error("Please enter your password");
+        return;
+      }
+
+      // If all validations pass, proceed with login
+      console.log("Login data:", { email: formData.email, password: formData.password });
+    }
+  };
+
   return (
     <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-6 relative overflow-y-auto">
-      {/* Animated background glow effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse delay-300"></div>
         <div className="absolute bottom-1/3 right-1/3 w-[400px] h-[400px] bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      {/* Navigation buttons */}
       <div className="fixed top-2 left-4 right-4 flex justify-between items-center z-10">
         <button 
           onClick={() => navigate("/")}
@@ -63,40 +136,51 @@ const LoginPage: FC = () => {
         </Button>
       </div>
 
-      {/* Main card */}
       <div className="w-full max-w-sm bg-black/30 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-2xl border border-white/10 relative z-10 mt-12">
         <h1 className="text-xl font-semibold text-white mb-4 text-center">
           {isSignUp ? "Create Account" : "Welcome Back"}
         </h1>
 
-        <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-3" onSubmit={handleSubmit}>
           {isSignUp && (
             <>
               <Input
                 type="text"
                 placeholder="Full Name"
+                required
+                value={formData.fullName}
+                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="email"
                 placeholder="Email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="password"
                 placeholder="Password"
+                required
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="password"
                 placeholder="Confirm Password"
+                required
+                value={formData.confirmPassword}
+                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
-              <Select>
+              <Select required onValueChange={(value) => setFormData({ ...formData, country: value })}>
                 <SelectTrigger className="bg-white/10 border-white/20 text-white h-9">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>
@@ -160,12 +244,18 @@ const LoginPage: FC = () => {
               <Input
                 type="email"
                 placeholder="Email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
 
               <Input
                 type="password"
                 placeholder="Password"
+                required
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
               />
             </>
@@ -201,7 +291,17 @@ const LoginPage: FC = () => {
           {isSignUp ? "Already have an account? " : "Don't have an account? "}
           <button
             type="button"
-            onClick={() => setIsSignUp(!isSignUp)}
+            onClick={() => {
+              setIsSignUp(!isSignUp);
+              setFormData({
+                fullName: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+                country: "",
+              });
+              setGender(null);
+            }}
             className="text-primary hover:text-primary/80 transition-colors"
           >
             {isSignUp ? "Log In" : "Sign Up"}
