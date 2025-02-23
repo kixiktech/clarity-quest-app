@@ -19,7 +19,7 @@ const FinancesPage: FC = () => {
   };
 
   return (
-    <div className="h-[100dvh] w-full bg-background flex flex-col p-4">
+    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex flex-col p-4">
       <div className="flex-none">
         <Button
           onClick={() => navigate("/intro-questions")}
@@ -31,24 +31,28 @@ const FinancesPage: FC = () => {
         </Button>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center items-center gap-4 max-w-4xl mx-auto w-full">
-        <div className="text-center space-y-4 max-w-2xl">
-          <h1 className="text-3xl sm:text-4xl font-bold text-primary">Money & Finances</h1>
+      <div className="flex-1 flex flex-col justify-center items-center gap-6 max-w-4xl mx-auto w-full">
+        <div className="text-center space-y-6 max-w-2xl">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-primary leading-relaxed">Money & Finances</h1>
           
-          <p className="text-base sm:text-lg text-foreground/80">
+          <p className="text-base sm:text-lg text-foreground/80 leading-relaxed">
             Share your financial aspirations and goals. What does financial freedom mean to you? 
             Describe your ideal financial situation and the lifestyle you want to achieve.
           </p>
+
+          <p className="text-sm text-foreground/60 italic">
+            💡 Tip: Try using the voice recording feature! Simply speak about your goals naturally - it's often easier than typing.
+          </p>
         </div>
 
-        <div className="w-full">
+        <div className="w-full max-w-2xl">
           <VoiceTextInput 
             onSubmit={handleSubmit}
             placeholder="Describe your financial goals and aspirations..."
           />
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center mt-4">
           <Button
             onClick={() => navigate("/career")}
             className="gap-2 py-4 px-6 rounded-xl bg-primary text-primary-foreground font-medium text-base sm:text-lg relative overflow-hidden group

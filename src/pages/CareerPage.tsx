@@ -19,7 +19,7 @@ const CareerPage: FC = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-background flex flex-col items-center justify-center p-6">
+    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex flex-col items-center justify-center p-6">
       <div className="max-w-4xl w-full space-y-8">
         <Button
           onClick={() => navigate("/finances")}
@@ -31,12 +31,16 @@ const CareerPage: FC = () => {
         </Button>
 
         <div className="text-center space-y-6">
-          <h1 className="text-4xl font-bold text-primary">Career & Purpose</h1>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-primary leading-relaxed">Career & Purpose</h1>
           
-          <p className="text-xl text-foreground/80 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-foreground/80 leading-relaxed max-w-2xl mx-auto">
             What does your ideal career look like? Share your professional aspirations, 
             the impact you want to make, and how you envision your purpose unfolding 
             through your work.
+          </p>
+
+          <p className="text-sm text-foreground/60 italic">
+            💡 Tip: Try using the voice recording feature! Simply speak about your goals naturally - it's often easier than typing.
           </p>
 
           <div className="mt-8 flex justify-center">
