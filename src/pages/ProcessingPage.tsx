@@ -16,6 +16,7 @@ const ProcessingPage: FC = () => {
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [showCompletion, setShowCompletion] = useState(false);
 
   useEffect(() => {
     const duration = 35000; // 35 seconds
@@ -32,9 +33,10 @@ const ProcessingPage: FC = () => {
 
       if (newProgress >= 100) {
         clearInterval(timer);
+        setShowCompletion(true);
         setTimeout(() => {
-          navigate("/visualization"); // Replace with your next route
-        }, 1000); // Wait 1 second before transitioning
+          navigate("/session-categories");
+        }, 2000); // Wait 2 seconds before transitioning
       }
     }, 50); // Update every 50ms for smooth animation
 
@@ -55,31 +57,44 @@ const ProcessingPage: FC = () => {
         />
       </div>
 
-      {/* Glowing Orb */}
-      <div className="relative mb-12">
-        <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-400 to-cyan-300 opacity-20 blur-2xl animate-pulse" />
-        <div className="absolute inset-0 w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 opacity-40 blur-xl animate-pulse delay-150" />
-        <div className="absolute inset-0 w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 opacity-60 blur-lg animate-pulse delay-300" />
-        <div className="absolute inset-0 w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-400 to-cyan-300 opacity-80 animate-pulse delay-500" />
-      </div>
-
-      {/* Message */}
-      <div className="mb-8 min-h-[2rem] text-center">
-        <p className="text-white/80 text-lg md:text-xl animate-fade-in">
-          {messages[currentMessageIndex]}
-        </p>
-      </div>
-
-      {/* Progress Bar */}
-      <div className="w-full max-w-md">
-        <Progress 
-          value={progress} 
-          className="h-2 bg-white/10"
-        />
-        <div className="mt-2 text-right text-sm text-white/60">
-          {Math.round(progress)}%
+      {showCompletion ? (
+        <div className="text-center animate-fade-in">
+          <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
+            Congratulations!
+          </h2>
+          <p className="text-lg md:text-xl text-white/80">
+            Your custom session categories are complete!
+          </p>
         </div>
-      </div>
+      ) : (
+        <>
+          {/* Glowing Orb */}
+          <div className="relative mb-12">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-400 to-cyan-300 opacity-20 blur-2xl animate-pulse" />
+            <div className="absolute inset-0 w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-500 to-cyan-400 opacity-40 blur-xl animate-pulse delay-150" />
+            <div className="absolute inset-0 w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 opacity-60 blur-lg animate-pulse delay-300" />
+            <div className="absolute inset-0 w-32 h-32 md:w-40 md:h-40 rounded-full bg-gradient-to-br from-blue-400 to-cyan-300 opacity-80 animate-pulse delay-500" />
+          </div>
+
+          {/* Message */}
+          <div className="mb-8 min-h-[2rem] text-center">
+            <p className="text-white/80 text-lg md:text-xl animate-fade-in">
+              {messages[currentMessageIndex]}
+            </p>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="w-full max-w-md">
+            <Progress 
+              value={progress} 
+              className="h-2 bg-white/10"
+            />
+            <div className="mt-2 text-right text-sm text-white/60">
+              {Math.round(progress)}%
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
