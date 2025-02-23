@@ -9,6 +9,7 @@ interface LayoutProps {
 const Layout: FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isSciencePage = location.pathname === "/science";
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     if (isSciencePage) {
@@ -24,7 +25,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="min-h-[100dvh] bg-transparent">
-      {children}
+      {!isHomePage && (
+        <>
+          <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
+          <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)]" />
+        </>
+      )}
+      <div className="relative z-10">
+        {children}
+      </div>
     </div>
   );
 };
