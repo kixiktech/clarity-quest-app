@@ -52,10 +52,10 @@ const FinancesPage: FC = () => {
           />
         </div>
 
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-8">
           <Button
             onClick={() => navigate("/career")}
-            className="gap-2 py-4 px-6 rounded-xl bg-primary text-primary-foreground font-medium text-base sm:text-lg relative overflow-hidden group
+            className="gap-2 py-6 px-8 rounded-xl bg-primary text-primary-foreground font-medium text-lg relative overflow-hidden group
               hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
               before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
               before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
