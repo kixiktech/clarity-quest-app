@@ -68,13 +68,15 @@ const SessionFeedbackPage: FC = () => {
               { rating: "good", icon: Meh, color: "yellow" },
               { rating: "great", icon: Smile, color: "green" }
             ].map(({ rating, icon: Icon, color }) => (
-              <div
+              <Button
                 key={rating}
+                variant="ghost"
                 onClick={() => handleRatingSelect(rating as FeedbackRating)}
-                className="cursor-pointer p-2 transition-all duration-300 hover:scale-110 active:scale-95"
+                className="p-2 transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer hover:bg-transparent focus:ring-0 focus:ring-offset-0"
               >
                 <Icon
-                  className={`w-16 h-16 transition-all duration-300 ${
+                  strokeWidth={1.5}
+                  className={`w-16 h-16 transition-all duration-300 pointer-events-none ${
                     selectedRating === rating
                       ? color === "red"
                         ? "text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
@@ -84,7 +86,7 @@ const SessionFeedbackPage: FC = () => {
                       : "text-gray-400 hover:text-gray-300"
                   }`}
                 />
-              </div>
+              </Button>
             ))}
           </div>
 
