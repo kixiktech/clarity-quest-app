@@ -62,30 +62,32 @@ const SessionFeedbackPage: FC = () => {
           </h1>
 
           {/* Rating Scale */}
-          <div className="flex justify-center items-center gap-16 mb-6">
+          <div className="flex justify-center items-center gap-8 sm:gap-12 mb-6">
             {[
               { rating: "bad", icon: Frown, color: "red" },
               { rating: "good", icon: Meh, color: "yellow" },
               { rating: "great", icon: Smile, color: "green" }
             ].map(({ rating, icon: Icon, color }) => (
-              <button
+              <div
                 key={rating}
                 onClick={() => handleRatingSelect(rating as FeedbackRating)}
-                className="bg-transparent border-none outline-none cursor-pointer p-4 transition-all duration-300 hover:scale-110 active:scale-95"
+                className="relative touch-manipulation cursor-pointer"
               >
-                <Icon
-                  strokeWidth={1.75}
-                  className={`w-24 h-24 md:w-28 md:h-28 transition-all duration-300 ${
-                    selectedRating === rating
-                      ? color === "red"
-                        ? "text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
-                        : color === "yellow"
-                        ? "text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]"
-                        : "text-green-500 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]"
-                      : "text-gray-400 hover:text-gray-300"
-                  }`}
-                />
-              </button>
+                <div className="p-3 transition-all duration-300 hover:scale-110 active:scale-95">
+                  <Icon
+                    strokeWidth={1.75}
+                    className={`w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 ${
+                      selectedRating === rating
+                        ? color === "red"
+                          ? "text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
+                          : color === "yellow"
+                          ? "text-yellow-500 drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]"
+                          : "text-green-500 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]"
+                        : "text-gray-400 hover:text-gray-300"
+                    }`}
+                  />
+                </div>
+              </div>
             ))}
           </div>
 
