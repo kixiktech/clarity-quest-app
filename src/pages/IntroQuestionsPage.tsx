@@ -8,8 +8,8 @@ const IntroQuestionsPage: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-screen w-full bg-background overflow-y-auto">
-      <div className="flex flex-col items-center p-6">
+    <div className="absolute inset-0 bg-background overflow-y-auto">
+      <div className="min-h-full w-full flex flex-col items-center p-6">
         <div className="max-w-2xl w-full space-y-8 text-center py-8 md:py-12">
           <div className="space-y-8">
             <h1 className="text-3xl md:text-4xl font-bold text-primary mb-6">Welcome to Your Journey</h1>
@@ -34,7 +34,7 @@ const IntroQuestionsPage: FC = () => {
             </div>
           </div>
 
-          <div className="pt-8 md:pt-12 pb-4">
+          <div className="pt-8 md:pt-12 pb-8">
             <Button
               onClick={() => navigate("/finances")}
               className="w-64 py-8 rounded-xl bg-primary text-primary-foreground font-medium text-lg relative overflow-hidden group
