@@ -2,7 +2,7 @@
 import { FC, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Frown, Meh, Smile, X } from "lucide-react";
+import { Frown, Meh, Smile, X, Play } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type FeedbackRating = "bad" | "good" | "great" | null;
@@ -43,7 +43,7 @@ const SessionFeedbackPage: FC = () => {
         variant="ghost"
         className="absolute top-6 right-6 text-white/60 hover:text-white/90 transition-colors"
       >
-        <X className="h-5 w-5" />
+        <X className="h-6 w-6" />
       </Button>
 
       {/* Main Content */}
@@ -70,7 +70,7 @@ const SessionFeedbackPage: FC = () => {
             <Button
               key={rating}
               onClick={() => handleRatingSelect(rating as FeedbackRating)}
-              className={`w-20 h-20 rounded-full transition-all duration-300 ${
+              className={`w-24 h-24 rounded-full transition-all duration-300 ${
                 selectedRating === rating
                   ? `scale-110 ${
                       color === "red"
@@ -83,7 +83,7 @@ const SessionFeedbackPage: FC = () => {
               }`}
             >
               <Icon
-                className={`w-10 h-10 transition-colors ${
+                className={`w-14 h-14 transition-colors ${
                   selectedRating === rating ? "text-white" : "text-gray-400"
                 }`}
               />
@@ -103,12 +103,17 @@ const SessionFeedbackPage: FC = () => {
             className="min-w-[200px] py-6 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl
               transition-all duration-300 hover:scale-105 active:scale-95"
           >
+            <Play className="w-5 h-5 mr-2" />
             Replay Session
           </Button>
           <Button
             onClick={handleSubmit}
-            className="min-w-[200px] py-6 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 
-              text-white font-medium rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+            className={`min-w-[200px] py-6 text-white font-medium rounded-xl
+              transition-all duration-300 hover:scale-105 active:scale-95
+              ${selectedRating 
+                ? 'bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 shadow-lg shadow-amber-500/30 animate-pulse-slow'
+                : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+              }`}
           >
             {selectedRating ? "Submit & Finish" : "Skip & Finish"}
           </Button>
