@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.cdnfonts.com/css/press-start-2p');
 @import url('https://fonts.cdnfonts.com/css/arcade-gamer');
-@import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/minecraft');
 
 @tailwind base;
 @tailwind components;
@@ -58,7 +58,7 @@
     min-height: 100vh;
     min-height: -webkit-fill-available;
     @apply bg-background text-foreground antialiased;
-    font-family: 'Pixelify Sans', sans-serif;
+    font-family: 'Minecraft', sans-serif;
     background-image: url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");
     background-size: cover;
     background-position: center;

@@ -20,7 +20,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Pixelify Sans', 'sans-serif'],
+        sans: ['Minecraft', 'sans-serif'],
         arcade: ['Arcade Gamer', 'sans-serif'],
       },
       colors: {
