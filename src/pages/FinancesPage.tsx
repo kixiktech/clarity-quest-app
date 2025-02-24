@@ -31,8 +31,8 @@ const FinancesPage: FC = () => {
         </Button>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center items-center gap-6 max-w-4xl mx-auto w-full">
-        <div className="text-center space-y-6 max-w-2xl">
+      <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full">
+        <div className="text-center space-y-6 max-w-2xl mx-auto mb-6">
           <h1 className="text-2xl sm:text-3xl font-semibold text-primary leading-relaxed">Money & Finances</h1>
           
           <p className="text-base sm:text-lg text-foreground/80 leading-relaxed">
@@ -45,14 +45,14 @@ const FinancesPage: FC = () => {
           </p>
         </div>
 
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-2xl mx-auto mb-6">
           <VoiceTextInput 
             onSubmit={handleSubmit}
             placeholder="Describe your financial goals and aspirations..."
           />
         </div>
 
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-4 mb-6">
           <Button
             onClick={() => navigate("/career")}
             className="gap-2 py-6 px-8 rounded-xl bg-primary text-primary-foreground font-medium text-lg relative overflow-hidden group
