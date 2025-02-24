@@ -54,8 +54,8 @@
     padding: 0;
     min-height: 100vh;
     min-height: -webkit-fill-available;
-    @apply bg-background text-foreground antialiased;
-    font-family: 'Press Start 2P', cursive;
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', sans-serif;
     background-image: url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");
     background-size: cover;
     background-position: center;
@@ -63,32 +63,8 @@
     width: 100%;
   }
 
-  /* Adjust font sizes globally for pixel font readability */
-  h1 {
-    @apply text-lg md:text-2xl leading-[1.8];
-  }
-
-  h2 {
-    @apply text-base md:text-xl leading-[1.8];
-  }
-
-  h3 {
-    @apply text-sm md:text-lg leading-[1.8];
-  }
-
-  p, span, a, button, input, textarea {
-    @apply text-xs md:text-sm leading-[1.8];
-  }
-
-  /* Override button text sizes */
-  button {
-    @apply text-xs md:text-sm;
-  }
-
-  /* Input and textarea specific adjustments */
-  input, textarea {
-    @apply text-xs md:text-sm;
-    line-height: 1.5;
+  .pixel-font {
+    font-family: 'Press Start 2P', cursive;
   }
 
   #root {
@@ -165,7 +141,7 @@
 /* Responsive text scaling */
 @responsive {
   .text-scale {
-    font-size: clamp(0.65rem, 1vw + 0.5rem, 1rem);
+    font-size: clamp(1rem, 2vw + 0.5rem, 1.5rem);
   }
 }
 
