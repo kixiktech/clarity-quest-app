@@ -1,3 +1,4 @@
+
 import { FC, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -44,32 +45,32 @@ const FocusInputPage: FC = () => {
         </Button>
       </div>
 
-      <div className="flex-1 flex flex-col justify-center items-center gap-8 max-w-4xl mx-auto w-full">
-        <div className="text-center space-y-6 max-w-2xl">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-primary leading-relaxed">
+      <div className="flex-1 flex flex-col justify-start items-center gap-4 max-w-4xl mx-auto w-full pt-4">
+        <div className="text-center space-y-4 max-w-2xl">
+          <h1 className="text-xl sm:text-2xl font-semibold text-primary leading-relaxed px-4">
             Anything specific you would like to focus on during this session?
           </h1>
           
-          <p className="text-base sm:text-lg text-foreground/80 leading-relaxed">
+          <p className="text-sm sm:text-base text-foreground/80 leading-relaxed px-4">
             Share any particular aspects, challenges, or goals you'd like to address in this visualization session.
           </p>
 
-          <p className="text-sm text-foreground/60 italic">
+          <p className="text-xs sm:text-sm text-foreground/60 italic px-4">
             💡 Tip: Try using the voice recording feature! Simply speak naturally about what you'd like to focus on.
           </p>
         </div>
 
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-2xl px-4">
           <VoiceTextInput 
             onSubmit={handleSubmit}
             placeholder="Describe what you'd like to focus on during this session..."
           />
         </div>
 
-        <div className="flex justify-center mt-4">
+        <div className="flex justify-center mt-2">
           <Button
             onClick={handleNavigation}
-            className="gap-2 py-6 px-8 rounded-xl bg-primary text-primary-foreground font-medium text-lg relative overflow-hidden group
+            className="gap-2 py-4 px-6 rounded-xl bg-primary text-primary-foreground font-medium text-base relative overflow-hidden group
               hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
               before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
               before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
