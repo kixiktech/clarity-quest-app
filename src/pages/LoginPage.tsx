@@ -1,3 +1,4 @@
+
 import { FC, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -8,6 +9,7 @@ import countries from "@/lib/countries";
 import { Toggle } from "@/components/ui/toggle";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+
 const LoginPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,6 +23,7 @@ const LoginPage: FC = () => {
     country: ""
   });
   const [showTooltip, setShowTooltip] = useState(false);
+
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const mode = searchParams.get('mode');
@@ -28,9 +31,11 @@ const LoginPage: FC = () => {
       setIsSignUp(true);
     }
   }, [location]);
+
   const validateEmail = (email: string) => {
     return email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isSignUp) {
@@ -64,11 +69,7 @@ const LoginPage: FC = () => {
         return;
       }
 
-      // If all validations pass, proceed with sign up
-      console.log("Sign up data:", {
-        ...formData,
-        gender
-      });
+      console.log("Sign up data:", { ...formData, gender });
     } else {
       // Validate login fields
       if (!formData.email) {
@@ -84,14 +85,15 @@ const LoginPage: FC = () => {
         return;
       }
 
-      // If all validations pass, proceed with login
       console.log("Login data:", {
         email: formData.email,
         password: formData.password
       });
     }
   };
-  return <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-6 relative overflow-y-auto">
+
+  return (
+    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-6 relative overflow-y-auto">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse delay-300"></div>
@@ -110,60 +112,80 @@ const LoginPage: FC = () => {
         </Button>
       </div>
 
-      <div className="w-full max-w-sm bg-black/30 backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-2xl border border-white/10 relative z-10 mt-12">
-        <h1 className="text-xl font-semibold text-white mb-4 text-center">
+      <div className="w-full max-w-[320px] bg-black/30 backdrop-blur-xl rounded-2xl p-3 sm:p-4 shadow-2xl border border-white/10 relative z-10 mt-10">
+        <h1 className="text-xl font-semibold text-white mb-3 text-center">
           {isSignUp ? "Create Account" : "Welcome Back"}
         </h1>
 
-        <form className="space-y-3" onSubmit={handleSubmit}>
-          {isSignUp && <>
-              <Input type="text" placeholder="Full Name" required value={formData.fullName} onChange={e => setFormData({
-            ...formData,
-            fullName: e.target.value
-          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
+        <form className="space-y-2" onSubmit={handleSubmit}>
+          {isSignUp && (
+            <>
+              <Input 
+                type="text" 
+                placeholder="Full Name" 
+                required 
+                value={formData.fullName} 
+                onChange={e => setFormData({ ...formData, fullName: e.target.value })} 
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
+              />
 
-              <Input type="email" placeholder="Email" required value={formData.email} onChange={e => setFormData({
-            ...formData,
-            email: e.target.value
-          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
+              <Input 
+                type="email" 
+                placeholder="Email" 
+                required 
+                value={formData.email} 
+                onChange={e => setFormData({ ...formData, email: e.target.value })} 
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
+              />
 
-              <Input type="password" placeholder="Password" required value={formData.password} onChange={e => setFormData({
-            ...formData,
-            password: e.target.value
-          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
+              <Input 
+                type="password" 
+                placeholder="Password" 
+                required 
+                value={formData.password} 
+                onChange={e => setFormData({ ...formData, password: e.target.value })} 
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
+              />
 
-              <Input type="password" placeholder="Confirm Password" required value={formData.confirmPassword} onChange={e => setFormData({
-            ...formData,
-            confirmPassword: e.target.value
-          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
+              <Input 
+                type="password" 
+                placeholder="Confirm Password" 
+                required 
+                value={formData.confirmPassword} 
+                onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })} 
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
+              />
 
-              <Select required onValueChange={value => setFormData({
-            ...formData,
-            country: value
-          })}>
-                <SelectTrigger className="bg-white/10 border-white/20 text-white h-9">
+              <Select required onValueChange={value => setFormData({ ...formData, country: value })}>
+                <SelectTrigger className="bg-white/10 border-white/20 text-white h-8">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>
-                <SelectContent className="max-h-[300px]">
+                <SelectContent className="max-h-[200px]">
                   <SelectGroup>
-                    {countries.map(country => <SelectItem key={country.code} value={country.code}>
+                    {countries.map(country => (
+                      <SelectItem key={country.code} value={country.code}>
                         {country.name}
-                      </SelectItem>)}
+                      </SelectItem>
+                    ))}
                   </SelectGroup>
                 </SelectContent>
               </Select>
 
-              <div className="flex items-center justify-between space-x-4 bg-white/10 border border-white/20 rounded-md p-2">
+              <div className="flex items-center justify-between space-x-4 bg-white/10 border border-white/20 rounded-md p-1.5">
                 <div className="flex items-center space-x-2">
-                  <span className="text-white text-xl">Gender</span>
+                  <span className="text-white text-lg">Gender</span>
                   <TooltipProvider>
                     <Tooltip open={showTooltip} onOpenChange={setShowTooltip}>
                       <TooltipTrigger asChild>
-                        <button type="button" className="focus:outline-none" onClick={e => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setShowTooltip(!showTooltip);
-                    }}>
+                        <button 
+                          type="button" 
+                          className="focus:outline-none" 
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setShowTooltip(!showTooltip);
+                          }}
+                        >
                           <HelpCircle className="h-4 w-4 text-white/50" />
                         </button>
                       </TooltipTrigger>
@@ -174,34 +196,53 @@ const LoginPage: FC = () => {
                   </TooltipProvider>
                 </div>
                 <div className="flex space-x-2">
-                  <Toggle pressed={gender === "male"} onPressedChange={() => setGender("male")} className={`px-2 py-1 rounded-md text-sm ${gender === "male" ? "bg-primary text-primary-foreground" : "bg-white/5 text-white/70 hover:bg-white/10"}`}>
+                  <Toggle 
+                    pressed={gender === "male"} 
+                    onPressedChange={() => setGender("male")} 
+                    className={`px-2 py-0.5 rounded-md text-sm ${gender === "male" ? "bg-primary text-primary-foreground" : "bg-white/5 text-white/70 hover:bg-white/10"}`}
+                  >
                     Male
                   </Toggle>
-                  <Toggle pressed={gender === "female"} onPressedChange={() => setGender("female")} className={`px-2 py-1 rounded-md text-sm ${gender === "female" ? "bg-primary text-primary-foreground" : "bg-white/5 text-white/70 hover:bg-white/10"}`}>
+                  <Toggle 
+                    pressed={gender === "female"} 
+                    onPressedChange={() => setGender("female")} 
+                    className={`px-2 py-0.5 rounded-md text-sm ${gender === "female" ? "bg-primary text-primary-foreground" : "bg-white/5 text-white/70 hover:bg-white/10"}`}
+                  >
                     Female
                   </Toggle>
                 </div>
               </div>
-            </>}
+            </>
+          )}
           
-          {!isSignUp && <>
-              <Input type="email" placeholder="Email" required value={formData.email} onChange={e => setFormData({
-            ...formData,
-            email: e.target.value
-          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
+          {!isSignUp && (
+            <>
+              <Input 
+                type="email" 
+                placeholder="Email" 
+                required 
+                value={formData.email} 
+                onChange={e => setFormData({ ...formData, email: e.target.value })} 
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
+              />
 
-              <Input type="password" placeholder="Password" required value={formData.password} onChange={e => setFormData({
-            ...formData,
-            password: e.target.value
-          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
-            </>}
+              <Input 
+                type="password" 
+                placeholder="Password" 
+                required 
+                value={formData.password} 
+                onChange={e => setFormData({ ...formData, password: e.target.value })} 
+                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
+              />
+            </>
+          )}
 
-          <Button type="submit" className="w-full h-9">
+          <Button type="submit" className="w-full h-8">
             {isSignUp ? "Sign Up" : "Log In"}
           </Button>
         </form>
 
-        <div className="relative my-4">
+        <div className="relative my-3">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-white/10"></div>
           </div>
@@ -211,34 +252,40 @@ const LoginPage: FC = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-2">
-          <Button variant="outline" className="bg-white/10 border-white/20 h-8 w-full">
+          <Button variant="outline" className="bg-white/10 border-white/20 h-7 w-full">
             <Github className="h-4 w-4" />
           </Button>
-          <Button variant="outline" className="bg-white/10 border-white/20 h-8 w-full">
+          <Button variant="outline" className="bg-white/10 border-white/20 h-7 w-full">
             <Facebook className="h-4 w-4" />
           </Button>
-          <Button variant="outline" className="bg-white/10 border-white/20 h-8 w-full">
+          <Button variant="outline" className="bg-white/10 border-white/20 h-7 w-full">
             <X className="h-4 w-4" />
           </Button>
         </div>
 
-        <p className="mt-4 text-center text-xs text-white/50">
+        <p className="mt-3 text-center text-xs text-white/50">
           {isSignUp ? "Already have an account? " : "Don't have an account? "}
-          <button type="button" onClick={() => {
-          setIsSignUp(!isSignUp);
-          setFormData({
-            fullName: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-            country: ""
-          });
-          setGender(null);
-        }} className="text-primary hover:text-primary/80 transition-colors">
+          <button 
+            type="button" 
+            onClick={() => {
+              setIsSignUp(!isSignUp);
+              setFormData({
+                fullName: "",
+                email: "",
+                password: "",
+                confirmPassword: "",
+                country: ""
+              });
+              setGender(null);
+            }} 
+            className="text-primary hover:text-primary/80 transition-colors"
+          >
             {isSignUp ? "Log In" : "Sign Up"}
           </button>
         </p>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default LoginPage;
