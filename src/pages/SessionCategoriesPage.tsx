@@ -1,3 +1,4 @@
+
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -84,7 +85,7 @@ const SessionCategoriesPage: FC = () => {
       </div>
 
       {/* Title */}
-      <h1 className="md:text-5xl font-bold text-center text-white mb-16 mt-12 relative z-10 [text-shadow:_0_0_30px_rgb(255_255_255_/_40%)] tracking-wide text-xs">
+      <h1 className="font-['Press_Start_2P'] md:text-5xl font-bold text-center text-white mb-16 mt-12 relative z-10 [text-shadow:_0_0_30px_rgb(255_255_255_/_40%)] tracking-wide text-xs">
         choose your focus:
       </h1>
 
