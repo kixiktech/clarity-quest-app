@@ -1,5 +1,7 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.cdnfonts.com/css/press-start-2p');
+@import url('https://fonts.cdnfonts.com/css/arcade-gamer');
 
 @tailwind base;
 @tailwind components;
@@ -65,6 +67,10 @@
 
   .pixel-font {
     font-family: 'Press Start 2P', cursive;
+  }
+
+  .arcade-font {
+    font-family: 'Arcade Gamer', sans-serif;
   }
 
   #root {
