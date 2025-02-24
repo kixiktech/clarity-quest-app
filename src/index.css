@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 @tailwind base;
@@ -46,6 +47,7 @@
   html {
     @apply scroll-smooth;
     height: 100%;
+    font-size: 18px; /* Base font size increased */
   }
 
   body {
@@ -55,11 +57,44 @@
     min-height: -webkit-fill-available;
     @apply bg-background text-foreground antialiased;
     font-family: 'VT323', monospace;
+    font-size: 1.25rem; /* Increased body font size */
     background-image: url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
+  }
+
+  h1 {
+    font-size: 3rem; /* Larger heading size */
+  }
+
+  h2 {
+    font-size: 2.5rem; /* Larger heading size */
+  }
+
+  h3 {
+    font-size: 2rem; /* Larger heading size */
+  }
+
+  h4 {
+    font-size: 1.75rem; /* Larger heading size */
+  }
+
+  h5 {
+    font-size: 1.5rem; /* Larger heading size */
+  }
+
+  h6 {
+    font-size: 1.25rem; /* Larger heading size */
+  }
+
+  p, span, div {
+    font-size: 1.25rem; /* Increased text size */
+  }
+
+  button, input, textarea, select {
+    font-size: 1.25rem; /* Increased form element text size */
   }
 
   .pixel-font {
