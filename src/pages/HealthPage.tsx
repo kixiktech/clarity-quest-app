@@ -64,7 +64,7 @@ const HealthPage: FC = () => {
                 after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
                 hover:scale-105 active:scale-95"
             >
-              Complete Journey
+              Begin Analyzing
               <ArrowRight className="h-5 w-5" />
             </Button>
           </div>
