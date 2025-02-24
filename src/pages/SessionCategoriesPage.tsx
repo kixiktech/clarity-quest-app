@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown } from "lucide-react";
-
 const categories = [{
   title: "Career + Purpose",
   route: "/focus-input",
@@ -35,15 +34,12 @@ const categories = [{
   color: "bg-[#A78BFA]",
   id: "relationships"
 }];
-
 const SessionCategoriesPage: FC = () => {
   const navigate = useNavigate();
   const handleLogout = () => {
     navigate("/");
   };
-
-  return (
-    <div className="min-h-screen w-full bg-[#0D1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+  return <div className="min-h-screen w-full bg-[#0D1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Profile Dropdown */}
       <div className="absolute top-4 left-4 z-50">
         <DropdownMenu>
@@ -88,8 +84,7 @@ const SessionCategoriesPage: FC = () => {
       </div>
 
       {/* Title */}
-      <h1 className="text-xl md:text-5xl font-bold text-center text-white mb-16 mt-12 relative z-10 
-        [text-shadow:_0_0_30px_rgb(255_255_255_/_40%)] tracking-wide font-['Press_Start_2P']">
+      <h1 className="md:text-5xl font-bold text-center text-white mb-16 mt-12 relative z-10 [text-shadow:_0_0_30px_rgb(255_255_255_/_40%)] tracking-wide text-xs">
         choose your focus:
       </h1>
 
@@ -135,8 +130,6 @@ const SessionCategoriesPage: FC = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default SessionCategoriesPage;
