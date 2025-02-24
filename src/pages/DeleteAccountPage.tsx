@@ -6,26 +6,49 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { ArrowLeft, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const DeleteAccountPage: FC = () => {
   const navigate = useNavigate();
   const [reason, setReason] = useState("");
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
+  const [showDialog, setShowDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     if (deleteConfirmation !== "DELETE") {
       toast.error("Please type DELETE to confirm account deletion");
       return;
     }
 
-    toast.success(
-      "We are sorry to see you go. We hope you have a pleasant rest of your day. Keep visualizing! It is the key to unlocking your full potential."
-    );
+    setIsDeleting(true);
 
-    // Add actual account deletion logic here
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+    try {
+      const { error } = await supabase.auth.admin.deleteUser(
+        (await supabase.auth.getUser()).data.user?.id || ''
+      );
+
+      if (error) throw error;
+
+      setShowDialog(true);
+    } catch (error) {
+      toast.error("Failed to delete account. Please try again or contact support.");
+      console.error("Delete account error:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setShowDialog(false);
+    navigate("/");
   };
 
   return (
@@ -82,9 +105,9 @@ const DeleteAccountPage: FC = () => {
             onClick={handleDeleteAccount}
             variant="destructive"
             className="w-full"
-            disabled={deleteConfirmation !== "DELETE"}
+            disabled={deleteConfirmation !== "DELETE" || isDeleting}
           >
-            Permanently Delete Account
+            {isDeleting ? "Deleting Account..." : "Permanently Delete Account"}
           </Button>
         </div>
 
@@ -92,6 +115,20 @@ const DeleteAccountPage: FC = () => {
           Remember: Visualization is a powerful tool. Your journey doesn't have to end here.
         </p>
       </div>
+
+      <Dialog open={showDialog} onOpenChange={handleCloseDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-center">Farewell, brave soul! 🌟</DialogTitle>
+            <DialogDescription className="text-center text-base">
+              We are sorry to see you go. We hope you have a pleasant rest of your day. Keep visualizing! It is the key to unlocking your full potential.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-center mt-4">
+            <Button onClick={handleCloseDialog}>Close</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
