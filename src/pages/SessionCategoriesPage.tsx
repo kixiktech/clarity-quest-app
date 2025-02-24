@@ -2,7 +2,7 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown } from "lucide-react";
+import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown, Trash2 } from "lucide-react";
 
 const categories = [{
   title: "Career + Purpose",
@@ -42,7 +42,6 @@ const SessionCategoriesPage: FC = () => {
     navigate("/");
   };
   return <div className="min-h-screen w-full bg-[#0D1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-      {/* Profile Dropdown */}
       <div className="absolute top-4 left-4 z-50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -74,38 +73,38 @@ const SessionCategoriesPage: FC = () => {
               <LogOut className="mr-2 h-4 w-4" />
               <span>Log out</span>
             </DropdownMenuItem>
+            <DropdownMenuItem 
+              className="text-red-400 hover:text-red-300 hover:bg-white/10 focus:bg-white/10 cursor-pointer"
+              onClick={() => navigate("/delete-account")}
+            >
+              <Trash2 className="mr-2 h-4 w-4" />
+              <span>Delete Account</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
-      {/* Background Glow Effects */}
       <div className="fixed inset-0 overflow-hidden">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-1/3 left-1/3 w-[600px] h-[600px] bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse delay-300"></div>
         <div className="absolute bottom-1/3 right-1/3 w-[700px] h-[700px] bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      {/* Title */}
       <h1 className="font-arcade md:text-5xl font-bold text-center text-white mb-16 mt-12 relative z-10 [text-shadow:_0_0_30px_rgb(255_255_255_/_40%)] tracking-wide text-xs">
         choose your focus:
       </h1>
 
-      {/* 3D Keyboard Container */}
       <div className="relative max-w-md w-full mx-auto">
-        {/* Keyboard Base - Creates 3D effect with gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#8E9196] to-[#403E43] rounded-3xl 
           transform translate-y-1 scale-[1.02] blur-sm opacity-50"></div>
         
-        {/* Main Keyboard Body */}
         <div className="relative bg-gradient-to-br from-[#8E9196] to-[#403E43] rounded-3xl p-6 
           shadow-[inset_0_1px_2px_rgba(255,255,255,0.3),inset_0_-1px_2px_rgba(0,0,0,0.3)]">
           
-          {/* Orange Cable */}
           <div className="absolute -top-16 left-1/2 w-4 h-32 bg-[#FF9F1C] rounded-full 
             transform -translate-x-1/2 origin-bottom rotate-3
             before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/30 before:to-transparent"></div>
 
-          {/* Button Grid */}
           <div className="grid gap-4">
             {categories.map(category => <Button key={category.id} onClick={() => navigate(category.route, {
             state: {
@@ -123,7 +122,6 @@ const SessionCategoriesPage: FC = () => {
               </Button>)}
           </div>
 
-          {/* Green LED Lights */}
           <div className="absolute bottom-4 left-4 flex gap-2">
             {[...Array(3)].map((_, i) => <div key={i} className="w-2 h-2 rounded-full bg-[#4ADE80] animate-pulse
                   shadow-[0_0_8px_#4ADE80] opacity-90" style={{
@@ -134,4 +132,5 @@ const SessionCategoriesPage: FC = () => {
       </div>
     </div>;
 };
+
 export default SessionCategoriesPage;
