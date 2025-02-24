@@ -20,8 +20,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Minecraft', 'sans-serif'],
-        arcade: ['Arcade Gamer', 'sans-serif'],
+        sans: ['VT323', 'monospace'],
+        arcade: ['VT323', 'monospace'],
       },
       colors: {
         border: "hsl(var(--border))",
