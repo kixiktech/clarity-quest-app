@@ -18,11 +18,9 @@ const DeleteAccountPage: FC = () => {
       return;
     }
 
-    toast({
-      title: "Farewell, brave soul! 🌟",
-      description: "We are sorry to see you go. We hope you have a pleasant rest of your day. Keep visualizing! It is the key to unlocking your full potential.",
-      duration: 5000,
-    });
+    toast.success(
+      "We are sorry to see you go. We hope you have a pleasant rest of your day. Keep visualizing! It is the key to unlocking your full potential."
+    );
 
     // Add actual account deletion logic here
     setTimeout(() => {
