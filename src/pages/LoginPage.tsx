@@ -1,26 +1,13 @@
 import { FC, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Facebook, Github, X, HelpCircle } from "lucide-react";
 import countries from "@/lib/countries";
 import { Toggle } from "@/components/ui/toggle";
 import { toast } from "sonner";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 const LoginPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,10 +18,9 @@ const LoginPage: FC = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    country: "",
+    country: ""
   });
   const [showTooltip, setShowTooltip] = useState(false);
-
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const mode = searchParams.get('mode');
@@ -42,77 +28,70 @@ const LoginPage: FC = () => {
       setIsSignUp(true);
     }
   }, [location]);
-
   const validateEmail = (email: string) => {
     return email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     if (isSignUp) {
       // Validate all fields for sign up
       if (!formData.fullName.trim()) {
         toast.error("Please enter your full name");
         return;
       }
-
       if (!formData.email) {
         toast.error("Please enter your email address");
         return;
       }
-
       if (!validateEmail(formData.email)) {
         toast.error("Please enter a valid email address");
         return;
       }
-
       if (!formData.password) {
         toast.error("Please enter a password");
         return;
       }
-
       if (formData.password !== formData.confirmPassword) {
         toast.error("Passwords do not match");
         return;
       }
-
       if (!formData.country) {
         toast.error("Please select your country");
         return;
       }
-
       if (!gender) {
         toast.error("Please select your gender");
         return;
       }
 
       // If all validations pass, proceed with sign up
-      console.log("Sign up data:", { ...formData, gender });
+      console.log("Sign up data:", {
+        ...formData,
+        gender
+      });
     } else {
       // Validate login fields
       if (!formData.email) {
         toast.error("Please enter your email address");
         return;
       }
-
       if (!validateEmail(formData.email)) {
         toast.error("Please enter a valid email address");
         return;
       }
-
       if (!formData.password) {
         toast.error("Please enter your password");
         return;
       }
 
       // If all validations pass, proceed with login
-      console.log("Login data:", { email: formData.email, password: formData.password });
+      console.log("Login data:", {
+        email: formData.email,
+        password: formData.password
+      });
     }
   };
-
-  return (
-    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-6 relative overflow-y-auto">
+  return <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex items-center justify-center px-4 py-6 relative overflow-y-auto">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-r from-primary/20 to-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute top-1/3 left-1/3 w-[300px] h-[300px] bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl animate-pulse delay-300"></div>
@@ -120,18 +99,12 @@ const LoginPage: FC = () => {
       </div>
 
       <div className="fixed top-2 left-4 right-4 flex justify-between items-center z-10">
-        <button 
-          onClick={() => navigate("/")}
-          className="text-white/70 hover:text-white transition-colors flex items-center gap-2 text-sm"
-        >
+        <button onClick={() => navigate("/")} className="text-white/70 hover:text-white transition-colors flex items-center gap-2 text-sm">
           <ArrowLeft className="w-4 h-4" />
           Back
         </button>
 
-        <Button
-          onClick={() => navigate("/intro-questions")}
-          className="gap-2 text-white/70 hover:text-white transition-colors flex items-center text-sm py-1"
-        >
+        <Button onClick={() => navigate("/intro-questions")} className="gap-2 text-white/70 hover:text-white transition-colors flex items-center text-sm py-1">
           Skip for now
           <ArrowRight className="w-4 h-4" />
         </Button>
@@ -143,137 +116,85 @@ const LoginPage: FC = () => {
         </h1>
 
         <form className="space-y-3" onSubmit={handleSubmit}>
-          {isSignUp && (
-            <>
-              <Input
-                type="text"
-                placeholder="Full Name"
-                required
-                value={formData.fullName}
-                onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
-              />
+          {isSignUp && <>
+              <Input type="text" placeholder="Full Name" required value={formData.fullName} onChange={e => setFormData({
+            ...formData,
+            fullName: e.target.value
+          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
 
-              <Input
-                type="email"
-                placeholder="Email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
-              />
+              <Input type="email" placeholder="Email" required value={formData.email} onChange={e => setFormData({
+            ...formData,
+            email: e.target.value
+          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
 
-              <Input
-                type="password"
-                placeholder="Password"
-                required
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
-              />
+              <Input type="password" placeholder="Password" required value={formData.password} onChange={e => setFormData({
+            ...formData,
+            password: e.target.value
+          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
 
-              <Input
-                type="password"
-                placeholder="Confirm Password"
-                required
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
-              />
+              <Input type="password" placeholder="Confirm Password" required value={formData.confirmPassword} onChange={e => setFormData({
+            ...formData,
+            confirmPassword: e.target.value
+          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
 
-              <Select required onValueChange={(value) => setFormData({ ...formData, country: value })}>
+              <Select required onValueChange={value => setFormData({
+            ...formData,
+            country: value
+          })}>
                 <SelectTrigger className="bg-white/10 border-white/20 text-white h-9">
                   <SelectValue placeholder="Select Country" />
                 </SelectTrigger>
                 <SelectContent className="max-h-[300px]">
                   <SelectGroup>
-                    {countries.map((country) => (
-                      <SelectItem key={country.code} value={country.code}>
+                    {countries.map(country => <SelectItem key={country.code} value={country.code}>
                         {country.name}
-                      </SelectItem>
-                    ))}
+                      </SelectItem>)}
                   </SelectGroup>
                 </SelectContent>
               </Select>
 
               <div className="flex items-center justify-between space-x-4 bg-white/10 border border-white/20 rounded-md p-2">
                 <div className="flex items-center space-x-2">
-                  <span className="text-white text-sm">Gender</span>
+                  <span className="text-white text-xl">Gender</span>
                   <TooltipProvider>
                     <Tooltip open={showTooltip} onOpenChange={setShowTooltip}>
                       <TooltipTrigger asChild>
-                        <button 
-                          type="button" 
-                          className="focus:outline-none"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            setShowTooltip(!showTooltip);
-                          }}
-                        >
+                        <button type="button" className="focus:outline-none" onClick={e => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowTooltip(!showTooltip);
+                    }}>
                           <HelpCircle className="h-4 w-4 text-white/50" />
                         </button>
                       </TooltipTrigger>
-                      <TooltipContent 
-                        side="top" 
-                        sideOffset={5} 
-                        className="bg-white text-black p-3 rounded-md shadow-lg max-w-[200px] text-sm z-[9999] relative"
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                      <TooltipContent side="top" sideOffset={5} className="bg-white text-black p-3 rounded-md shadow-lg max-w-[200px] text-sm z-[9999] relative" onClick={e => e.stopPropagation()}>
                         <p>We use this information to personalize your visualization sessions, ensuring the scenarios and guidance resonate more deeply with your personal journey.</p>
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
                 </div>
                 <div className="flex space-x-2">
-                  <Toggle
-                    pressed={gender === "male"}
-                    onPressedChange={() => setGender("male")}
-                    className={`px-2 py-1 rounded-md text-sm ${
-                      gender === "male"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-white/5 text-white/70 hover:bg-white/10"
-                    }`}
-                  >
+                  <Toggle pressed={gender === "male"} onPressedChange={() => setGender("male")} className={`px-2 py-1 rounded-md text-sm ${gender === "male" ? "bg-primary text-primary-foreground" : "bg-white/5 text-white/70 hover:bg-white/10"}`}>
                     Male
                   </Toggle>
-                  <Toggle
-                    pressed={gender === "female"}
-                    onPressedChange={() => setGender("female")}
-                    className={`px-2 py-1 rounded-md text-sm ${
-                      gender === "female"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-white/5 text-white/70 hover:bg-white/10"
-                    }`}
-                  >
+                  <Toggle pressed={gender === "female"} onPressedChange={() => setGender("female")} className={`px-2 py-1 rounded-md text-sm ${gender === "female" ? "bg-primary text-primary-foreground" : "bg-white/5 text-white/70 hover:bg-white/10"}`}>
                     Female
                   </Toggle>
                 </div>
               </div>
-            </>
-          )}
+            </>}
           
-          {!isSignUp && (
-            <>
-              <Input
-                type="email"
-                placeholder="Email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
-              />
+          {!isSignUp && <>
+              <Input type="email" placeholder="Email" required value={formData.email} onChange={e => setFormData({
+            ...formData,
+            email: e.target.value
+          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
 
-              <Input
-                type="password"
-                placeholder="Password"
-                required
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9"
-              />
-            </>
-          )}
+              <Input type="password" placeholder="Password" required value={formData.password} onChange={e => setFormData({
+            ...formData,
+            password: e.target.value
+          })} className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-9" />
+            </>}
 
           <Button type="submit" className="w-full h-9">
             {isSignUp ? "Sign Up" : "Log In"}
@@ -303,27 +224,21 @@ const LoginPage: FC = () => {
 
         <p className="mt-4 text-center text-xs text-white/50">
           {isSignUp ? "Already have an account? " : "Don't have an account? "}
-          <button
-            type="button"
-            onClick={() => {
-              setIsSignUp(!isSignUp);
-              setFormData({
-                fullName: "",
-                email: "",
-                password: "",
-                confirmPassword: "",
-                country: "",
-              });
-              setGender(null);
-            }}
-            className="text-primary hover:text-primary/80 transition-colors"
-          >
+          <button type="button" onClick={() => {
+          setIsSignUp(!isSignUp);
+          setFormData({
+            fullName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            country: ""
+          });
+          setGender(null);
+        }} className="text-primary hover:text-primary/80 transition-colors">
             {isSignUp ? "Log In" : "Sign Up"}
           </button>
         </p>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default LoginPage;
