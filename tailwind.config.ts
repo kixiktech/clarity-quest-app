@@ -94,12 +94,12 @@ export default {
         },
         "banner-pulse": {
           "0%, 100%": {
-            boxShadow: "0 0 20px rgba(234, 179, 8, 0.3)",
-            borderColor: "rgba(234, 179, 8, 0.3)",
+            boxShadow: "0 0 40px rgba(234, 179, 8, 0.4)",
+            borderColor: "rgba(234, 179, 8, 0.4)",
           },
           "50%": {
-            boxShadow: "0 0 30px rgba(234, 179, 8, 0.6)",
-            borderColor: "rgba(234, 179, 8, 0.6)",
+            boxShadow: "0 0 60px rgba(234, 179, 8, 0.7)",
+            borderColor: "rgba(234, 179, 8, 0.7)",
           },
         },
         "slide-in-down": {

@@ -1,4 +1,3 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
@@ -72,7 +71,6 @@ const HomePage: FC = () => {
   }, []);
 
   const handleGetStarted = () => {
-    // Navigate to login with sign up mode
     navigate("/login?mode=signup");
   };
 
@@ -118,7 +116,7 @@ const HomePage: FC = () => {
         className={`fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 transition-all duration-500 transform ${
           isEntering 
             ? "translate-y-0 opacity-100" 
-            : "translate-y-full opacity-0"
+            : "translate-y-[100px] opacity-0"
         }`}
         style={{
           transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)"
