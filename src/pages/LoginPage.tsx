@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Facebook, Github, X, HelpCircle } from "lucide-react";
+import { ArrowLeft, ArrowRight, Facebook, Github, X, HelpCircle, Eye, EyeOff } from "lucide-react";
 import countries from "@/lib/countries";
 import { Toggle } from "@/components/ui/toggle";
 import { toast } from "sonner";
@@ -15,6 +15,8 @@ const LoginPage: FC = () => {
   const location = useLocation();
   const [isSignUp, setIsSignUp] = useState(false);
   const [gender, setGender] = useState<"male" | "female" | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -138,23 +140,49 @@ const LoginPage: FC = () => {
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
               />
 
-              <Input 
-                type="password" 
-                placeholder="Password" 
-                required 
-                value={formData.password} 
-                onChange={e => setFormData({ ...formData, password: e.target.value })} 
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
-              />
+              <div className="relative">
+                <Input 
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password" 
+                  required 
+                  value={formData.password} 
+                  onChange={e => setFormData({ ...formData, password: e.target.value })} 
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8 pr-8"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-white/50" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-white/50" />
+                  )}
+                </button>
+              </div>
 
-              <Input 
-                type="password" 
-                placeholder="Confirm Password" 
-                required 
-                value={formData.confirmPassword} 
-                onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })} 
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
-              />
+              <div className="relative">
+                <Input 
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm Password" 
+                  required 
+                  value={formData.confirmPassword} 
+                  onChange={e => setFormData({ ...formData, confirmPassword: e.target.value })} 
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8 pr-8"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff className="h-4 w-4 text-white/50" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-white/50" />
+                  )}
+                </button>
+              </div>
 
               <Select required onValueChange={value => setFormData({ ...formData, country: value })}>
                 <SelectTrigger className="bg-white/10 border-white/20 text-white h-8">
@@ -226,14 +254,27 @@ const LoginPage: FC = () => {
                 className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
               />
 
-              <Input 
-                type="password" 
-                placeholder="Password" 
-                required 
-                value={formData.password} 
-                onChange={e => setFormData({ ...formData, password: e.target.value })} 
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8"
-              />
+              <div className="relative">
+                <Input 
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password" 
+                  required 
+                  value={formData.password} 
+                  onChange={e => setFormData({ ...formData, password: e.target.value })} 
+                  className="bg-white/10 border-white/20 text-white placeholder:text-white/50 h-8 pr-8"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4 text-white/50" />
+                  ) : (
+                    <Eye className="h-4 w-4 text-white/50" />
+                  )}
+                </button>
+              </div>
             </>
           )}
 
