@@ -92,12 +92,23 @@ export default {
             transform: "translateY(10px)",
           },
         },
+        "banner-pulse": {
+          "0%, 100%": {
+            boxShadow: "0 0 20px rgba(234, 179, 8, 0.3)",
+            borderColor: "rgba(234, 179, 8, 0.3)",
+          },
+          "50%": {
+            boxShadow: "0 0 30px rgba(234, 179, 8, 0.6)",
+            borderColor: "rgba(234, 179, 8, 0.6)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out forwards",
         "fade-out": "fade-out 0.5s ease-out forwards",
+        "banner-pulse": "banner-pulse 2s ease-in-out infinite",
       },
     },
   },
