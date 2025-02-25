@@ -114,11 +114,16 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`fixed top-1/2 left-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 ${
+        className={`fixed bottom-4 sm:bottom-8 left-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 ${
           isEntering 
             ? "animate-slide-in-right" 
             : "animate-slide-out-right"
         }`}
+        style={{
+          transform: `translate(${isEntering ? '-50%, 0' : '100%, 0'})`,
+          transition: 'transform 500ms cubic-bezier(0.4, 0, 0.2, 1), opacity 500ms cubic-bezier(0.4, 0, 0.2, 1)',
+          opacity: isEntering ? 1 : 0,
+        }}
       >
         <p className="text-xs sm:text-sm text-foreground/70">
           <span className="text-primary font-medium">
