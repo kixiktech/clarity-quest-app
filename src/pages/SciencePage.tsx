@@ -187,7 +187,7 @@ const SciencePage: FC = () => {
             Ready to Transform Your Future?
           </h2>
           <Button
-            onClick={() => navigate("/visualization")}
+            onClick={() => navigate("/login?mode=signup")}
             className="px-8 py-6 text-lg bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-300 transform hover:scale-105"
           >
             Start Your Journey Now
