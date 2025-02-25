@@ -102,6 +102,16 @@ export default {
             borderColor: "rgba(234, 179, 8, 0.6)",
           },
         },
+        "slide-in-down": {
+          "0%": {
+            transform: "translateY(-100%)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0)",
+            opacity: "1",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -109,6 +119,7 @@ export default {
         "fade-in": "fade-in 0.5s ease-out forwards",
         "fade-out": "fade-out 0.5s ease-out forwards",
         "banner-pulse": "banner-pulse 2s ease-in-out infinite",
+        "slide-in-down": "slide-in-down 0.5s ease-out forwards",
       },
     },
   },
