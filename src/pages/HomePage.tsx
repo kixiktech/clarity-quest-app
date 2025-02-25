@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
@@ -113,10 +114,10 @@ const HomePage: FC = () => {
       </div>
 
       <div 
-        className={`fixed bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 transition-transform transition-opacity duration-500 ease-in-out ${
+        className={`fixed top-1/2 left-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 ${
           isEntering 
-            ? "translate-y-0 opacity-100" 
-            : "translate-y-[120%] opacity-0"
+            ? "animate-slide-in-right" 
+            : "animate-slide-out-right"
         }`}
       >
         <p className="text-xs sm:text-sm text-foreground/70">
