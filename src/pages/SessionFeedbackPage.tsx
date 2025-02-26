@@ -20,34 +20,45 @@ const SessionFeedbackPage: FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (selectedRating) {
-      setIsSubmitting(true);
-      try {
-        const { error } = await supabase
-          .from('session_feedback')
-          .insert({
-            rating: selectedRating,
-            session_category_id: location.state?.category || 1 // Fallback to category 1 if not provided
-          });
-
-        if (error) throw error;
-
-        toast({
-          title: "Feedback Submitted",
-          description: "Thank you for sharing your experience!",
-        });
-      } catch (error) {
-        console.error('Error submitting feedback:', error);
-        toast({
-          title: "Error",
-          description: "Failed to submit feedback. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsSubmitting(false);
-      }
+    if (!selectedRating) {
+      navigate("/session-categories");
+      return;
     }
-    navigate("/session-categories");
+
+    setIsSubmitting(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+
+      const { error } = await supabase
+        .from("session_feedback")
+        .insert({
+          user_id: user.id,
+          rating: selectedRating,
+          session_category_id: location.state?.category || 1
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Feedback Submitted",
+        description: "Thank you for sharing your experience!",
+      });
+      
+      navigate("/session-categories");
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit feedback. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReplay = () => {
