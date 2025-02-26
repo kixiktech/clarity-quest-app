@@ -57,11 +57,13 @@ const RelationshipsPage: FC = () => {
 
       <div className="flex-1 flex flex-col max-w-4xl mx-auto w-full">
         <div className="text-center space-y-6 max-w-2xl mx-auto mb-6">
-          <h1 className="text-2xl sm:text-3xl font-semibold text-primary leading-relaxed">Friends & Family</h1>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-primary leading-relaxed">Friends, Family & Relationships</h1>
           
           <p className="text-base sm:text-lg text-foreground/80 leading-relaxed">
             How do you envision your ideal relationships? Share your hopes for meaningful 
-            connections, family bonds, and the community you want to build around you.
+            connections with family, friends, and significant others. Whether it's building deeper bonds, 
+            finding love, or nurturing existing relationships, tell us about the connections you want to create 
+            and maintain in your life.
           </p>
 
           <p className="text-sm text-foreground/60 italic">
