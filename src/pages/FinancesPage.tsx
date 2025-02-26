@@ -5,17 +5,41 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import VoiceTextInput from "@/components/VoiceTextInput";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const FinancesPage: FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (text: string) => {
-    toast({
-      title: "Response Saved",
-      description: "Your financial goals have been recorded. Let's move on to the next category.",
-    });
-    navigate("/career");
+  const handleSubmit = async (text: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+
+      const { error } = await supabase.from("user_responses").insert({
+        user_id: user.id,
+        category: "finances",
+        response: text
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Response Saved",
+        description: "Your financial goals have been recorded. Let's move on to the next category.",
+      });
+      navigate("/career");
+    } catch (error) {
+      console.error('Error saving response:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save your response. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
