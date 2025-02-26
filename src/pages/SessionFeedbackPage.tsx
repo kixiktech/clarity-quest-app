@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Frown, Meh, Smile, X, Play } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 type FeedbackRating = "bad" | "good" | "great" | null;
 
@@ -12,17 +13,39 @@ const SessionFeedbackPage: FC = () => {
   const location = useLocation();
   const { toast } = useToast();
   const [selectedRating, setSelectedRating] = useState<FeedbackRating>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRatingSelect = (rating: FeedbackRating) => {
     setSelectedRating(rating);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (selectedRating) {
-      toast({
-        title: "Feedback Submitted",
-        description: "Thank you for sharing your experience!",
-      });
+      setIsSubmitting(true);
+      try {
+        const { error } = await supabase
+          .from('session_feedback')
+          .insert({
+            rating: selectedRating,
+            session_category_id: location.state?.category || 1 // Fallback to category 1 if not provided
+          });
+
+        if (error) throw error;
+
+        toast({
+          title: "Feedback Submitted",
+          description: "Thank you for sharing your experience!",
+        });
+      } catch (error) {
+        console.error('Error submitting feedback:', error);
+        toast({
+          title: "Error",
+          description: "Failed to submit feedback. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
     }
     navigate("/session-categories");
   };
@@ -116,6 +139,7 @@ const SessionFeedbackPage: FC = () => {
           </Button>
           <Button
             onClick={handleSubmit}
+            disabled={isSubmitting}
             type="button"
             className={`w-full py-5 text-white font-medium rounded-xl
               transition-all duration-300 hover:scale-105 active:scale-95
@@ -124,7 +148,7 @@ const SessionFeedbackPage: FC = () => {
                 : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
               }`}
           >
-            {selectedRating ? "Submit & Finish" : "Skip & Finish"}
+            {isSubmitting ? "Submitting..." : (selectedRating ? "Submit & Finish" : "Skip & Finish")}
           </Button>
         </div>
       </div>
