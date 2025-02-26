@@ -23,6 +23,7 @@ import FocusInputPage from "./pages/FocusInputPage";
 import VisualizationPage from "./pages/VisualizationPage";
 import SessionFeedbackPage from "./pages/SessionFeedbackPage";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
+import SettingsPage from "./pages/SettingsPage";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/visualization" element={<VisualizationPage />} />
             <Route path="/session-feedback" element={<SessionFeedbackPage />} />
             <Route path="/delete-account" element={<DeleteAccountPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Layout>

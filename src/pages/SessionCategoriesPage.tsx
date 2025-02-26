@@ -1,4 +1,3 @@
-
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -54,10 +53,6 @@ const SessionCategoriesPage: FC = () => {
             <DropdownMenuLabel className="text-white/60 text-sm">My Account</DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-white/10" />
             <DropdownMenuItem className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer text-sm">
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-white hover:bg-white/10 focus:bg-white/10 cursor-pointer text-sm">
               <CreditCard className="mr-2 h-4 w-4" />
               <span>Subscription Settings</span>
             </DropdownMenuItem>
@@ -80,6 +75,14 @@ const SessionCategoriesPage: FC = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      <Button
+        variant="ghost"
+        className="absolute top-2 sm:top-4 right-2 sm:right-4 text-white/80 hover:text-white hover:bg-white/10"
+        onClick={() => navigate("/settings")}
+      >
+        <Settings className="h-5 w-5" />
+      </Button>
 
       <h1 className="text-3xl sm:text-5xl font-arcade text-center text-white mb-8 sm:mb-16 [text-shadow:_0_0_30px_rgb(255_255_255_/_40%)]">
         choose your focus:
