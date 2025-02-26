@@ -151,9 +151,9 @@ const SessionFeedbackPage: FC = () => {
           <Button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            type="button"
+            variant={selectedRating ? "default" : "secondary"}
             className={`w-full py-5 text-white font-medium rounded-xl
-              transition-all duration-300 hover:scale-105 active:scale-95
+              transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer
               ${selectedRating 
                 ? 'bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 shadow-lg shadow-amber-500/30 animate-pulse-slow'
                 : 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
