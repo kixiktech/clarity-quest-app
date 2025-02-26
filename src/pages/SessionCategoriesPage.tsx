@@ -1,3 +1,4 @@
+
 import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,7 @@ const categories = [
   { id: 3, title: "growth + mindset" },
   { id: 4, title: "confidence + self-worth" },
   { id: 5, title: "health + wellness" },
-  { id: 6, title: "friends + family" }
+  { id: 6, title: "friends + family + relationships" }
 ];
 
 const SessionCategoriesPage: FC = () => {
