@@ -26,7 +26,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <div className="min-h-[100dvh] bg-transparent">
       {/* Mobile Notice Banner - Only shows on screens larger than 768px */}
-      <div className="hidden md:block fixed top-0 left-0 w-full bg-primary/95 backdrop-blur-sm z-50 border-b border-yellow-500/30">
+      <div className="hidden md:block fixed top-0 left-0 w-full bg-primary/95 backdrop-blur-sm z-50 border-b border-yellow-500/30 animate-banner-pulse animate-slide-in-down">
         <div className="container mx-auto px-4 py-3 text-center">
           <p className="text-primary-foreground flex items-center justify-center gap-2">
             <span className="inline-block w-2 h-2 bg-white rounded-full animate-pulse" />
@@ -37,12 +37,11 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
       {!isHomePage && (
         <>
-          <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 -z-10" />
-          <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)] -z-10" />
+          <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
+          <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)]" />
         </>
       )}
-      
-      {/* Main content */}
+      {/* Adjust content padding when banner is visible */}
       <div className="relative z-10 md:pt-12">
         {children}
       </div>

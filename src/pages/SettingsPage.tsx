@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useSubscription } from "@/hooks/useSubscription";
-import { SUBSCRIPTION_PRICES } from "@/lib/stripe";
 import { ArrowLeft } from "lucide-react";
 
 interface UserResponse {
@@ -21,8 +19,6 @@ const SettingsPage: FC = () => {
   const { toast } = useToast();
   const [responses, setResponses] = useState<UserResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const subscription = useSubscription();
 
   useEffect(() => {
     fetchUserResponses();
@@ -59,37 +55,6 @@ const SettingsPage: FC = () => {
       });
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleSubscription = async (priceId: string) => {
-    try {
-      setIsProcessing(true);
-      const response = await fetch(
-        'https://mndwifizvvmscndzzhxv.supabase.co/functions/v1/create-checkout-session',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-          },
-          body: JSON.stringify({ priceId }),
-        }
-      );
-
-      const { sessionUrl, error } = await response.json();
-      if (error) throw new Error(error);
-      
-      window.location.href = sessionUrl;
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
-      toast({
-        title: "Error",
-        description: "Failed to start subscription process. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -133,32 +98,6 @@ const SettingsPage: FC = () => {
         </div>
 
         <div className="space-y-8">
-          <section className="bg-card rounded-lg p-6 shadow-sm">
-            <h2 className="text-xl font-semibold mb-4">Subscription</h2>
-            <div className="space-y-4">
-              <p>Current plan: <span className="font-medium capitalize">{subscription.plan}</span></p>
-              <p>Credits remaining: {subscription.credits}</p>
-              <p>Referral credits: {subscription.referralCredits}</p>
-              
-              {!subscription.isSubscribed && (
-                <div className="flex flex-col sm:flex-row gap-4 mt-6">
-                  <Button
-                    onClick={() => handleSubscription(SUBSCRIPTION_PRICES.monthly.id)}
-                    disabled={isProcessing}
-                  >
-                    Subscribe Monthly (${SUBSCRIPTION_PRICES.monthly.amount / 100})
-                  </Button>
-                  <Button
-                    onClick={() => handleSubscription(SUBSCRIPTION_PRICES.annual.id)}
-                    disabled={isProcessing}
-                  >
-                    Subscribe Annually (${SUBSCRIPTION_PRICES.annual.amount / 100})
-                  </Button>
-                </div>
-              )}
-            </div>
-          </section>
-
           <section>
             <h2 className="text-xl font-semibold mb-4">Your Previous Responses</h2>
             {isLoading ? (

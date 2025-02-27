@@ -1,15 +1,13 @@
 
-import { type Config } from "tailwindcss";
-import { fontFamily } from "tailwindcss/defaultTheme";
-import animate from "tailwindcss-animate";
+import type { Config } from "tailwindcss";
 
-const config: Config = {
+export default {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   prefix: "",
   theme: {
@@ -22,7 +20,7 @@ const config: Config = {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter var", ...fontFamily.sans],
+        sans: ['VT323', 'monospace'],
         arcade: ['VT323', 'monospace'],
       },
       colors: {
@@ -74,29 +72,78 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
-        "pulse-slow": {
-          "0%, 100%": { opacity: "1", transform: "scale(1)" },
-          "50%": { opacity: "0.8", transform: "scale(1.05)" },
-        },
         "fade-in": {
-          from: { opacity: "0", transform: "translateY(10px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+        },
+        "fade-out": {
+          "0%": {
+            opacity: "1",
+            transform: "translateY(0)",
+          },
+          "100%": {
+            opacity: "0",
+            transform: "translateY(10px)",
+          },
+        },
+        "banner-pulse": {
+          "0%, 100%": {
+            boxShadow: "0 0 40px rgba(234, 179, 8, 0.4)",
+            borderColor: "rgba(234, 179, 8, 0.4)",
+          },
+          "50%": {
+            boxShadow: "0 0 60px rgba(234, 179, 8, 0.7)",
+            borderColor: "rgba(234, 179, 8, 0.7)",
+          },
         },
         "slide-in-down": {
-          from: { transform: "translateY(-100%)" },
-          to: { transform: "translateY(0)" },
+          "0%": {
+            transform: "translateY(-100%)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translateY(0)",
+            opacity: "1",
+          },
+        },
+        "slide-in-right": {
+          "0%": {
+            transform: "translate(100%, 0)",
+            opacity: "0",
+          },
+          "100%": {
+            transform: "translate(-50%, 0)",
+            opacity: "1",
+          },
+        },
+        "slide-out-right": {
+          "0%": {
+            transform: "translate(-50%, 0)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "translate(100%, 0)",
+            opacity: "0",
+          },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "pulse-slow": "pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "fade-in": "fade-in 0.5s ease-out",
-        "slide-in-down": "slide-in-down 0.5s ease-out",
+        "fade-in": "fade-in 0.5s ease-out forwards",
+        "fade-out": "fade-out 0.5s ease-out forwards",
+        "banner-pulse": "banner-pulse 2s ease-in-out infinite",
+        "slide-in-down": "slide-in-down 0.5s ease-out forwards",
+        "slide-in-right": "slide-in-right 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+        "slide-out-right": "slide-out-right 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
       },
     },
   },
-  plugins: [animate],
-}
-
-export default config
+  plugins: [require("tailwindcss-animate")],
+} satisfies Config;

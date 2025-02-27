@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 @tailwind base;
@@ -58,6 +57,10 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'VT323', monospace;
     font-size: 1.25rem; /* Increased body font size */
+    background-image: url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     width: 100%;
   }
 
@@ -174,39 +177,6 @@
 
   .button-shine:active {
     transform: scale(0.98);
-  }
-
-  /* Add animation keyframes */
-  @keyframes pulse-slow {
-    0%, 100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.8;
-      transform: scale(1.05);
-    }
-  }
-  
-  .animate-pulse-slow {
-    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  
-  .animate-banner-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  
-  @keyframes slide-in-down {
-    0% {
-      transform: translateY(-100%);
-    }
-    100% {
-      transform: translateY(0);
-    }
-  }
-  
-  .animate-slide-in-down {
-    animation: slide-in-down 0.5s ease-in-out;
   }
 }
 
