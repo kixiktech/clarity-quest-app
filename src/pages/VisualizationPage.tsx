@@ -3,6 +3,7 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import Spline from '@splinetool/react-spline';
 
 const VisualizationPage: FC = () => {
   const navigate = useNavigate();
@@ -24,16 +25,14 @@ const VisualizationPage: FC = () => {
         Take a deep breath
       </p>
 
-      {/* Pulsating Orb */}
-      <div className="relative">
-        {/* Multiple layers for depth effect */}
-        <div className="w-48 h-48 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 opacity-20 blur-2xl animate-pulse-slow" />
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-indigo-400 to-purple-400 opacity-30 blur-xl animate-pulse-slow delay-100" />
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-indigo-300 to-purple-300 opacity-40 blur-lg animate-pulse-slow delay-200" />
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-indigo-200 to-purple-200 opacity-50 animate-pulse-slow delay-300" />
-        
-        {/* Inner glow */}
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-white to-indigo-100 opacity-20 scale-50 blur-xl animate-pulse-slow" />
+      {/* Spline Scene Container */}
+      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="relative w-full h-[300px] sm:h-[300px] md:h-[300px]">
+          <Spline
+            scene="https://prod.spline.design/aolWtgmIui-99n5Q/scene.splinecode" 
+            className="absolute inset-0 w-full h-full"
+          />
+        </div>
       </div>
 
       {/* Bottom Text */}

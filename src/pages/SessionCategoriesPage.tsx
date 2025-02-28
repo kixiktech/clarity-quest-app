@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown, Trash2 } from "lucide-react";
+import Spline from '@splinetool/react-spline';
 import { cn } from "@/lib/utils";
 
 const categories = [
@@ -89,7 +90,7 @@ const SessionCategoriesPage: FC = () => {
         choose your focus:
       </h1>
 
-      <div className="space-y-2 sm:space-y-4 text-left mb-8 sm:mb-16 w-full max-w-md px-4">
+      <div className="space-y-2 sm:space-y-4 text-left mb-8 sm:mb-10 w-full max-w-md px-4">
         {categories.map((category, index) => (
           <div key={category.id} className="flex items-center gap-2 sm:gap-4">
             <span className="text-[#4ADE80] text-lg sm:text-2xl font-arcade">{category.id}.</span>
@@ -98,6 +99,16 @@ const SessionCategoriesPage: FC = () => {
         ))}
       </div>
 
+      {/* Spline Scene Container */}
+      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="relative w-full h-[300px] sm:h-[300px] md:h-[300px]">
+          <Spline
+            scene="https://prod.spline.design/BN7JJD1FckQhdwfK/scene.splinecode" 
+            className="absolute inset-0 w-full h-full"
+          />
+        </div>
+      </div>
+ {/*
       <div className="relative w-full max-w-[280px] sm:max-w-[300px]">
         <div className="absolute inset-0 bg-[#4A4A4A] rounded-2xl transform translate-y-1"></div>
         <div className="relative bg-[#4A4A4A] rounded-2xl p-3 sm:p-4">
@@ -138,7 +149,7 @@ const SessionCategoriesPage: FC = () => {
             />
           ))}
         </div>
-      </div>
+      </div>*/}
     </div>
   );
 };

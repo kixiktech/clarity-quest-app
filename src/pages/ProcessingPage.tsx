@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import Spline from '@splinetool/react-spline';
 
 const messages = [
   "INITIALIZING YOUR UNIQUE JOURNEY...",
@@ -51,6 +52,16 @@ const ProcessingPage: FC = () => {
           alt="ClarityQuest"
           className="w-48 md:w-56 opacity-30"
         />
+      </div>
+
+      {/* Spline Scene Container */}
+      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px]">
+          <Spline
+            scene="https://prod.spline.design/skZMG4xreB6TopXp/scene.splinecode" 
+            className="absolute inset-0 w-full h-full"
+          />
+        </div>
       </div>
 
       {showCompletion ? (

@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
+import Spline from '@splinetool/react-spline';
 
 const notifications = [
   { name: "John", country: "United States" },
@@ -83,6 +84,16 @@ const HomePage: FC = () => {
           alt="ClarityQuest"
           className="w-[280px] sm:w-[400px] md:w-[500px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
         />
+      </div>
+
+      {/* Spline Scene Container */}
+      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px]">
+          <Spline
+            scene="https://prod.spline.design/MC6pPkuT016z7SsZ/scene.splinecode"
+            className="absolute inset-0 w-full h-full"
+          />
+        </div>
       </div>
       
       <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6">
