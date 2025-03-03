@@ -37,8 +37,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
       {!isHomePage && (
         <>
-          <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 -z-10" />
-          <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)] -z-10" />
+          <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
+          <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)]" />
         </>
       )}
       {/* Adjust content padding when banner is visible */}

@@ -9,63 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      referrals: {
-        Row: {
-          created_at: string
-          id: string
-          referred_user_id: string
-          referrer_id: string
-          status: string | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          referred_user_id: string
-          referrer_id: string
-          status?: string | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          referred_user_id?: string
-          referrer_id?: string
-          status?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      session_credits: {
-        Row: {
-          created_at: string
-          credits_remaining: number
-          id: string
-          last_weekly_reset: string
-          referral_credits: number
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          credits_remaining?: number
-          id?: string
-          last_weekly_reset?: string
-          referral_credits?: number
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          credits_remaining?: number
-          id?: string
-          last_weekly_reset?: string
-          referral_credits?: number
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       session_feedback: {
         Row: {
           created_at: string
@@ -86,45 +29,6 @@ export type Database = {
           id?: string
           rating?: string
           session_category_id?: number
-          user_id?: string
-        }
-        Relationships: []
-      }
-      subscriptions: {
-        Row: {
-          created_at: string
-          current_period_end: string | null
-          current_period_start: string | null
-          id: string
-          plan_type: string | null
-          status: string | null
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan_type?: string | null
-          status?: string | null
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          current_period_end?: string | null
-          current_period_start?: string | null
-          id?: string
-          plan_type?: string | null
-          status?: string | null
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
-          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -161,14 +65,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      check_and_reset_weekly_credits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      reset_weekly_credits: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
