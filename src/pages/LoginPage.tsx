@@ -18,9 +18,19 @@ const LoginPage: FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   
-  // Extract referral code from URL if present
+  // Extract referral code from URL if present or from sessionStorage
   const queryParams = new URLSearchParams(location.search);
-  const referralCode = queryParams.get('ref');
+  const referralCodeFromUrl = queryParams.get('ref');
+  const referralCodeFromStorage = sessionStorage.getItem('referralCode');
+  const referralCode = referralCodeFromUrl || referralCodeFromStorage;
+  
+  // Set initial tab based on mode parameter
+  useEffect(() => {
+    const mode = queryParams.get('mode');
+    if (mode === 'signup') {
+      setActiveTab('signup');
+    }
+  }, [queryParams]);
   
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);

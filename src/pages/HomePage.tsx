@@ -1,7 +1,9 @@
 
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
+import { useToast } from "@/hooks/use-toast";
+import { ArrowRight } from "lucide-react";
 
 const notifications = [
   { name: "John", country: "United States" },
@@ -56,10 +58,24 @@ const notifications = [
 
 const HomePage: FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { toast } = useToast();
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
   const [isEntering, setIsEntering] = useState(true);
+  const [showReferralBanner, setShowReferralBanner] = useState(false);
+  
+  // Extract referral code from URL if present
+  const queryParams = new URLSearchParams(location.search);
+  const referralCode = queryParams.get('ref');
   
   useEffect(() => {
+    // Show referral banner if referral code exists
+    if (referralCode) {
+      setShowReferralBanner(true);
+      // Store referral code in sessionStorage to persist through navigation
+      sessionStorage.setItem('referralCode', referralCode);
+    }
+    
     const intervalId = setInterval(() => {
       setIsEntering(false);
       setTimeout(() => {
@@ -69,14 +85,32 @@ const HomePage: FC = () => {
     }, 4000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [referralCode]);
 
   const handleGetStarted = () => {
     navigate("/login?mode=signup");
   };
+  
+  const handleReferralSignup = () => {
+    navigate(`/login?mode=signup&ref=${referralCode}`);
+  };
 
   return (
     <BackgroundImage>
+      {showReferralBanner && (
+        <div className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-3 flex items-center justify-between animate-slideInDown">
+          <div className="flex-1 text-center">
+            <p className="font-medium">You've been invited! Sign up to get a free session.</p>
+          </div>
+          <button 
+            onClick={handleReferralSignup}
+            className="bg-white text-indigo-600 px-3 py-1 rounded-md font-medium flex items-center text-sm hover:bg-opacity-90 transition-colors"
+          >
+            Sign Up <ArrowRight className="ml-1 h-4 w-4" />
+          </button>
+        </div>
+      )}
+      
       <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-6 sm:pt-12">
         <img 
           src="/lovable-uploads/3d7b9f60-a195-43f0-b963-e6e084999749.png" 

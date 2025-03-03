@@ -5,7 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { ArrowLeft, Gift, Share2, Copy, Users, CheckCircle, Award } from "lucide-react";
+import { ArrowLeft, Gift, Share2, Copy, Users, CheckCircle, Award, LogIn } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 const ReferralPage: FC = () => {
@@ -17,6 +17,7 @@ const ReferralPage: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [credits, setCredits] = useState<number>(0);
   const [user, setUser] = useState<any>(null);
+  const [isPreviewMode, setIsPreviewMode] = useState<boolean>(false);
 
   // Fetch user session and generate/retrieve referral code
   useEffect(() => {
@@ -27,12 +28,16 @@ const ReferralPage: FC = () => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (!user) {
-          toast({
-            title: "Not logged in",
-            description: "Please sign in to manage your referrals",
-            variant: "destructive",
-          });
-          navigate("/login");
+          console.log("No user found - entering preview mode");
+          setIsPreviewMode(true);
+          setReferralCode("PREVIEW");
+          setReferrals([
+            { id: 1, created_at: new Date().toISOString(), status: 'completed' },
+            { id: 2, created_at: new Date().toISOString(), status: 'completed' },
+            { id: 3, created_at: new Date().toISOString(), status: 'pending' }
+          ]);
+          setCredits(2);
+          setLoading(false);
           return;
         }
         
@@ -69,6 +74,7 @@ const ReferralPage: FC = () => {
           description: "Failed to load your referral information",
           variant: "destructive",
         });
+        setIsPreviewMode(true);
       } finally {
         setLoading(false);
       }
@@ -78,11 +84,18 @@ const ReferralPage: FC = () => {
   }, [navigate, toast]);
 
   const handleShareLink = () => {
+    if (isPreviewMode) {
+      toast({
+        title: "Preview Mode",
+        description: "Sign in to generate your real referral link",
+      });
+      return;
+    }
     setShowShareDialog(true);
   };
   
   const handleCopyLink = () => {
-    const referralLink = `${window.location.origin}/login?ref=${referralCode}`;
+    const referralLink = `${window.location.origin}?ref=${referralCode}`;
     navigator.clipboard.writeText(referralLink).then(() => {
       toast({
         title: "Link copied!",
@@ -92,7 +105,7 @@ const ReferralPage: FC = () => {
   };
   
   const handleShareViaOptions = async () => {
-    const referralLink = `${window.location.origin}/login?ref=${referralCode}`;
+    const referralLink = `${window.location.origin}?ref=${referralCode}`;
     
     if (navigator.share) {
       try {
@@ -113,6 +126,10 @@ const ReferralPage: FC = () => {
     }
     
     setShowShareDialog(false);
+  };
+
+  const handleLogin = () => {
+    navigate("/login");
   };
 
   // Animation classes for cards
@@ -136,6 +153,21 @@ const ReferralPage: FC = () => {
         </Button>
         <h1 className="text-3xl font-bold text-primary-foreground">Invite Friends</h1>
       </div>
+      
+      {/* Preview Mode Banner (only shown in preview mode) */}
+      {isPreviewMode && (
+        <div className="mb-6 p-4 bg-gradient-to-r from-purple-600/20 to-blue-600/20 backdrop-blur-sm rounded-xl border border-white/10 animate-pulse">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h3 className="text-xl font-bold text-primary-foreground mb-1">Preview Mode</h3>
+              <p className="text-primary-foreground/80 text-sm">Sign in to start referring friends and earning free sessions.</p>
+            </div>
+            <Button onClick={handleLogin} className="w-full sm:w-auto bg-primary text-primary-foreground">
+              <LogIn className="mr-2 h-4 w-4" /> Sign In
+            </Button>
+          </div>
+        </div>
+      )}
       
       {/* Main content */}
       <div className="space-y-8">
@@ -212,7 +244,7 @@ const ReferralPage: FC = () => {
             <div className="py-8 flex justify-center">
               <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
             </div>
-          ) : referrals.length === 0 ? (
+          ) : referrals.length === 0 && !isPreviewMode ? (
             <div className="py-6 text-center">
               <p className="text-primary-foreground/60">You haven't invited anyone yet.</p>
               <p className="text-primary-foreground/60">Share your link to get started!</p>
@@ -259,7 +291,7 @@ const ReferralPage: FC = () => {
           
           <div className="flex items-center space-x-2 mt-4">
             <Input
-              value={`${window.location.origin}/login?ref=${referralCode}`}
+              value={`${window.location.origin}?ref=${referralCode}`}
               readOnly
               className="flex-1"
             />
