@@ -31,7 +31,7 @@ serve(async (req) => {
     
     // Find the referrer based on the referral code (first part of their UUID)
     const { data: referrers, error: referrerError } = await supabase
-      .from("auth.users")
+      .from("users")
       .select("id")
       .filter("id", "like", `${referralCode}%`)
       .limit(1);
