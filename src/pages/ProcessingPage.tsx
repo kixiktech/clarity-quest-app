@@ -44,7 +44,7 @@ const ProcessingPage: FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen w-full bg-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* Logo */}
       <div className="absolute top-8 left-1/2 -translate-x-1/2">
         <img 
@@ -54,12 +54,19 @@ const ProcessingPage: FC = () => {
         />
       </div>
 
-      {/* Spline Scene Container */}
-      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px]">
+            {/* Spline Scene Container */}
+            <div className="w-full max-w-[340px] sm:max-w-[480px] md:max-w-[600px] pt-6 pb-6">
+        <div className="relative w-full aspect-[4/4] sm:aspect-[5/4] md:aspect-[16/12] overflow-hidden">
           <Spline
-            scene="https://prod.spline.design/skZMG4xreB6TopXp/scene.splinecode" 
-            className="absolute inset-0 w-full h-full"
+            scene="https://prod.spline.design/skZMG4xreB6TopXp/scene.splinecode"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Single Overlay with Radial Gradient */}
+          <div
+            className="absolute -inset-2 pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, transparent 20%, #221737 80%)",
+            }}
           />
         </div>
       </div>

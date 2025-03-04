@@ -9,7 +9,7 @@ const VisualizationPage: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-full bg-[#0D1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* End Session Button */}
       <Button
         onClick={() => navigate("/session-feedback")}
@@ -21,22 +21,22 @@ const VisualizationPage: FC = () => {
       </Button>
 
       {/* Top Text */}
-      <p className="text-white/60 text-lg mb-12 animate-fade-in">
+      <p className="text-white/60 text-lg mb-1 animate-fade-in">
         Take a deep breath
       </p>
 
       {/* Spline Scene Container */}
-      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <div className="relative w-full h-[300px] sm:h-[300px] md:h-[300px]">
+      <div className="w-full max-w-[300px] sm:max-w-[400px] md:max-w-[480px]">
+        <div className="relative w-full aspect-[4/4] sm:aspect-[5/4] md:aspect-[16/12]">
           <Spline
-            scene="https://prod.spline.design/aolWtgmIui-99n5Q/scene.splinecode" 
+            scene="https://prod.spline.design/aolWtgmIui-99n5Q/scene.splinecode"
             className="absolute inset-0 w-full h-full"
           />
         </div>
       </div>
 
       {/* Bottom Text */}
-      <p className="text-white/60 text-lg mt-12 animate-fade-in">
+      <p className="text-white/60 text-lg mt-1 animate-fade-in">
         Settle into the moment
       </p>
 

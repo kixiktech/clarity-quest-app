@@ -78,7 +78,7 @@ const HomePage: FC = () => {
 
   return (
     <BackgroundImage>
-      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-6 sm:pt-12">
+      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-6">
         <img 
           src="/lovable-uploads/3d7b9f60-a195-43f0-b963-e6e084999749.png" 
           alt="ClarityQuest"
@@ -87,16 +87,23 @@ const HomePage: FC = () => {
       </div>
 
       {/* Spline Scene Container */}
-      <div className="w-full max-w-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px]">
+      <div className="w-full max-w-[280px] sm:max-w-[400px] md:max-w-[500px] pt-6 pb-6">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9]">
           <Spline
             scene="https://prod.spline.design/MC6pPkuT016z7SsZ/scene.splinecode"
-            className="absolute inset-0 w-full h-full"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Single Overlay with Radial Gradient */}
+          <div
+            className="absolute -inset-2 pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, transparent 20%, #221737 80%)",
+            }}
           />
         </div>
       </div>
       
-      <div className="flex-1 flex flex-col items-center justify-center gap-4 sm:gap-6">
+      <div className="flex-1 flex flex-col items-center justify-start gap-4 sm:gap-6">
         <button
           onClick={handleGetStarted}
           className="w-[240px] sm:w-64 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-base sm:text-lg uppercase
@@ -112,7 +119,7 @@ const HomePage: FC = () => {
         
         <button
           onClick={() => navigate("/science")}
-          className="w-[240px] sm:w-64 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-base sm:text-lg uppercase
+          className="w-[240px] sm:w-64 py-2.5 sm:py-2 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-medium text-base sm:text-lg uppercase
             shadow-[0_0_20px_rgba(14,165,233,0.3)] relative overflow-hidden
             border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
             before:absolute before:inset-0 before:bg-gradient-to-b before:from-white/20 before:to-transparent before:rounded-xl

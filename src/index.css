@@ -57,7 +57,8 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'VT323', monospace;
     font-size: 1.25rem; /* Increased body font size */
-    background-image: url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");
+    background-color: #221737;
+    /*background-image: url("/lovable-uploads/c6d52c11-2653-458e-ac8d-0376e057da9c.png");*/
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
