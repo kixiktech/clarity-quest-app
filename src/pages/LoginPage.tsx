@@ -122,8 +122,8 @@ const LoginPage: FC = () => {
           }
         }
 
-        toast.success("Signup successful! Please check your email to verify your account.");
-        navigate("/intro-questions");
+        toast.success("Signup successful!");
+        // New users will be redirected to IntroQuestionsPage by the App's route protection
       } else {
         // Login flow
         // Validate login fields
@@ -157,7 +157,7 @@ const LoginPage: FC = () => {
         }
 
         toast.success("Login successful!");
-        navigate("/intro-questions");
+        // Existing users will be redirected to SessionCategoriesPage by the App's route protection
       }
     } catch (error) {
       console.error("Authentication error:", error);

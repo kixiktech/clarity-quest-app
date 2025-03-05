@@ -32,35 +32,64 @@ const queryClient = new QueryClient();
 const App = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      
+      // Check if this is a new user by looking at session creation time
+      if (session) {
+        const createdAt = new Date(session.user.created_at);
+        const now = new Date();
+        // If the account was created within the last minute, consider it a new user
+        setIsNewUser(now.getTime() - createdAt.getTime() < 60000);
+      }
+      
       setLoading(false);
     });
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
+      (event, session) => {
         setSession(session);
+        
+        // If this is a signup event, mark as new user
+        if (event === 'SIGNED_IN') {
+          const createdAt = new Date(session?.user.created_at || '');
+          const now = new Date();
+          setIsNewUser(now.getTime() - createdAt.getTime() < 60000);
+        }
       }
     );
 
     return () => subscription.unsubscribe();
   }, []);
 
-  // Protected route component
-  const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  // Protected route component that redirects based on user status
+  const ProtectedRoute = ({ children, isIntroRoute = false }: { children: JSX.Element, isIntroRoute?: boolean }) => {
     if (loading) return <div>Loading...</div>;
     if (!session) return <Navigate to="/login" replace />;
+    
+    // For new users, direct them to intro questions
+    if (isNewUser && !isIntroRoute) return <Navigate to="/intro-questions" replace />;
+    
+    // For existing users visiting the intro page, redirect to session categories
+    if (!isNewUser && isIntroRoute) return <Navigate to="/session-categories" replace />;
+    
     return children;
   };
 
-  // Public route component that redirects to intro questions if logged in
+  // Public route component that redirects to relevant page if logged in
   const PublicRoute = ({ children }: { children: JSX.Element }) => {
     if (loading) return <div>Loading...</div>;
-    if (session) return <Navigate to="/intro-questions" replace />;
+    if (session) {
+      // New users go to intro questions, existing users go to session categories
+      return isNewUser 
+        ? <Navigate to="/intro-questions" replace /> 
+        : <Navigate to="/session-categories" replace />;
+    }
     return children;
   };
 
@@ -78,7 +107,7 @@ const App = () => {
               <Route path="/science" element={<PublicRoute><SciencePage /></PublicRoute>} />
               
               {/* Protected routes */}
-              <Route path="/intro-questions" element={<ProtectedRoute><IntroQuestionsPage /></ProtectedRoute>} />
+              <Route path="/intro-questions" element={<ProtectedRoute isIntroRoute={true}><IntroQuestionsPage /></ProtectedRoute>} />
               <Route path="/finances" element={<ProtectedRoute><FinancesPage /></ProtectedRoute>} />
               <Route path="/career" element={<ProtectedRoute><CareerPage /></ProtectedRoute>} />
               <Route path="/relationships" element={<ProtectedRoute><RelationshipsPage /></ProtectedRoute>} />
