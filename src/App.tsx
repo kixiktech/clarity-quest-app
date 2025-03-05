@@ -28,11 +28,8 @@ import DeleteAccountPage from "./pages/DeleteAccountPage";
 import SettingsPage from "./pages/SettingsPage";
 import CookieConsent from "./components/CookieConsent";
 
-// Configure Supabase to use longer session duration
-supabase.auth.setSession({
-  refresh_token_rotation_enabled: true,
-  access_token_expiration_time: 3600 * 24 * 30, // 30 days
-});
+// Note: We're removing the invalid setSession call and will use the configuration
+// in the Supabase client instead
 
 const queryClient = new QueryClient();
 
