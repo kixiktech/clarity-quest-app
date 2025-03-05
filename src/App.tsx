@@ -26,6 +26,13 @@ import VisualizationPage from "./pages/VisualizationPage";
 import SessionFeedbackPage from "./pages/SessionFeedbackPage";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
 import SettingsPage from "./pages/SettingsPage";
+import CookieConsent from "./components/CookieConsent";
+
+// Configure Supabase to use longer session duration
+supabase.auth.setSession({
+  refresh_token_rotation_enabled: true,
+  access_token_expiration_time: 3600 * 24 * 30, // 30 days
+});
 
 const queryClient = new QueryClient();
 
@@ -33,9 +40,14 @@ const App = () => {
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [cookieConsentShown, setCookieConsentShown] = useState(false);
 
   useEffect(() => {
-    // Get initial session
+    // Check if cookie consent was previously given
+    const consentGiven = localStorage.getItem('cookie-consent');
+    setCookieConsentShown(!!consentGiven);
+
+    // Get initial session with persistence enabled
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       
@@ -45,14 +57,25 @@ const App = () => {
         const now = new Date();
         // If the account was created within the last minute, consider it a new user
         setIsNewUser(now.getTime() - createdAt.getTime() < 60000);
+        
+        // If session is close to expiring, refresh it
+        const expiresAt = session.expires_at;
+        const nowInSeconds = Math.floor(Date.now() / 1000);
+        const timeToExpiry = expiresAt - nowInSeconds;
+        
+        // If session expires in less than a day, refresh it
+        if (timeToExpiry < 86400) {
+          supabase.auth.refreshSession();
+        }
       }
       
       setLoading(false);
     });
 
-    // Listen for auth changes
+    // Listen for auth changes with enhanced persistence
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log("Auth state changed:", event);
         setSession(session);
         
         // If this is a signup event, mark as new user
@@ -66,6 +89,12 @@ const App = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Record consent when user accepts cookies
+  const handleCookieConsent = () => {
+    localStorage.setItem('cookie-consent', 'true');
+    setCookieConsentShown(true);
+  };
 
   // Protected route component that redirects based on user status
   const ProtectedRoute = ({ children, isIntroRoute = false }: { children: JSX.Element, isIntroRoute?: boolean }) => {
@@ -127,6 +156,7 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
+          {!cookieConsentShown && <CookieConsent onAccept={handleCookieConsent} />}
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
