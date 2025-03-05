@@ -3,7 +3,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { supabase } from "./integrations/supabase/client";
 import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
@@ -27,38 +29,79 @@ import SettingsPage from "./pages/SettingsPage";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/science" element={<SciencePage />} />
-            <Route path="/intro-questions" element={<IntroQuestionsPage />} />
-            <Route path="/finances" element={<FinancesPage />} />
-            <Route path="/career" element={<CareerPage />} />
-            <Route path="/relationships" element={<RelationshipsPage />} />
-            <Route path="/personal-growth" element={<PersonalGrowthPage />} />
-            <Route path="/confidence" element={<ConfidencePage />} />
-            <Route path="/health" element={<HealthPage />} />
-            <Route path="/processing" element={<ProcessingPage />} />
-            <Route path="/category-processing" element={<CategoryProcessingPage />} />
-            <Route path="/session-categories" element={<SessionCategoriesPage />} />
-            <Route path="/focus-input" element={<FocusInputPage />} />
-            <Route path="/visualization" element={<VisualizationPage />} />
-            <Route path="/session-feedback" element={<SessionFeedbackPage />} />
-            <Route path="/delete-account" element={<DeleteAccountPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      }
+    );
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // Protected route component
+  const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+    if (loading) return <div>Loading...</div>;
+    if (!session) return <Navigate to="/login" replace />;
+    return children;
+  };
+
+  // Public route component that redirects to intro questions if logged in
+  const PublicRoute = ({ children }: { children: JSX.Element }) => {
+    if (loading) return <div>Loading...</div>;
+    if (session) return <Navigate to="/intro-questions" replace />;
+    return children;
+  };
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Layout>
+            <Routes>
+              {/* Public routes */}
+              <Route path="/" element={<PublicRoute><HomePage /></PublicRoute>} />
+              <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+              <Route path="/science" element={<PublicRoute><SciencePage /></PublicRoute>} />
+              
+              {/* Protected routes */}
+              <Route path="/intro-questions" element={<ProtectedRoute><IntroQuestionsPage /></ProtectedRoute>} />
+              <Route path="/finances" element={<ProtectedRoute><FinancesPage /></ProtectedRoute>} />
+              <Route path="/career" element={<ProtectedRoute><CareerPage /></ProtectedRoute>} />
+              <Route path="/relationships" element={<ProtectedRoute><RelationshipsPage /></ProtectedRoute>} />
+              <Route path="/personal-growth" element={<ProtectedRoute><PersonalGrowthPage /></ProtectedRoute>} />
+              <Route path="/confidence" element={<ProtectedRoute><ConfidencePage /></ProtectedRoute>} />
+              <Route path="/health" element={<ProtectedRoute><HealthPage /></ProtectedRoute>} />
+              <Route path="/processing" element={<ProtectedRoute><ProcessingPage /></ProtectedRoute>} />
+              <Route path="/category-processing" element={<ProtectedRoute><CategoryProcessingPage /></ProtectedRoute>} />
+              <Route path="/session-categories" element={<ProtectedRoute><SessionCategoriesPage /></ProtectedRoute>} />
+              <Route path="/focus-input" element={<ProtectedRoute><FocusInputPage /></ProtectedRoute>} />
+              <Route path="/visualization" element={<ProtectedRoute><VisualizationPage /></ProtectedRoute>} />
+              <Route path="/session-feedback" element={<ProtectedRoute><SessionFeedbackPage /></ProtectedRoute>} />
+              <Route path="/delete-account" element={<ProtectedRoute><DeleteAccountPage /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+              
+              {/* 404 route */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

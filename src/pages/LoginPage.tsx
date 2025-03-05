@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Facebook, Github, X, HelpCircle, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Facebook, Github, X, HelpCircle, Eye, EyeOff } from "lucide-react";
 import countries from "@/lib/countries";
 import { Toggle } from "@/components/ui/toggle";
 import { toast } from "sonner";
@@ -180,11 +180,6 @@ const LoginPage: FC = () => {
           <ArrowLeft className="w-4 h-4" />
           Back
         </button>
-
-        <Button onClick={() => navigate("/intro-questions")} className="gap-2 text-white/70 hover:text-white transition-colors flex items-center text-sm py-1">
-          Skip for now
-          <ArrowRight className="w-4 h-4" />
-        </Button>
       </div>
 
       <div className="w-full max-w-[320px] bg-black/30 backdrop-blur-xl rounded-2xl p-3 sm:p-4 shadow-2xl border border-white/10 relative z-10 mt-10">
