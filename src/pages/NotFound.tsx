@@ -39,7 +39,7 @@ const CodeRain = () => {
       
       // Set text style
       ctx.fillStyle = "rgba(139, 92, 246, 0.35)"; // Purple tint
-      ctx.font = `${fontSize}px VT323`;
+      ctx.font = `${fontSize}px VT323, monospace`;
       
       // Loop through drops
       for (let i = 0; i < drops.length; i++) {
@@ -102,18 +102,26 @@ const GlitchText = ({ text }: { text: string }) => {
 
 const NotFound = () => {
   const location = useLocation();
+  const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
+    // Log the 404 error for debugging
     console.error(
       "404 Error: User attempted to access non-existent route:",
       location.pathname
     );
+
+    // Ensure font is loaded before rendering
+    document.fonts.ready.then(() => {
+      setFontLoaded(true);
+    });
   }, [location.pathname]);
 
+  // Force a background color to prevent default browser styling
   return (
-    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen w-full flex items-center justify-center relative overflow-hidden bg-[#221737]">
       {/* Matrix Code Rain Background */}
-      <CodeRain />
+      {fontLoaded && <CodeRain />}
       
       {/* Content Container */}
       <div className="relative z-10 text-center px-4 py-8 max-w-md">

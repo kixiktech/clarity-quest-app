@@ -123,7 +123,7 @@ const App = () => {
               <Route path="/delete-account" element={<ProtectedRoute><DeleteAccountPage /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
               
-              {/* 404 route */}
+              {/* 404 route - make sure this is the last route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
