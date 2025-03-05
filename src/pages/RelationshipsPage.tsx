@@ -2,7 +2,7 @@
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import VoiceTextInput from "@/components/VoiceTextInput";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,7 +29,7 @@ const RelationshipsPage: FC = () => {
 
       toast({
         title: "Response Saved",
-        description: "Your relationship goals have been recorded. Let's move on to the next category.",
+        description: "Your relationship goals have been recorded. Moving to the next category.",
       });
       navigate("/personal-growth");
     } catch (error) {
@@ -76,22 +76,6 @@ const RelationshipsPage: FC = () => {
             onSubmit={handleSubmit}
             placeholder="Describe your relationship goals and aspirations..."
           />
-        </div>
-
-        <div className="flex justify-center mt-4 mb-6">
-          <Button
-            onClick={() => navigate("/personal-growth")}
-            className="gap-2 py-6 px-8 rounded-xl bg-primary text-primary-foreground font-medium text-lg relative overflow-hidden group
-              hover:shadow-[0_0_30px_-5px_rgba(255,184,0,0.6)] transition-all duration-300 ease-out
-              before:absolute before:inset-0 before:bg-gradient-to-r before:from-primary/0 before:via-white/25 before:to-primary/0 
-              before:translate-x-[-150%] before:transition-transform before:duration-500 hover:before:translate-x-[150%]
-              after:absolute after:inset-0 after:rounded-xl after:shadow-[0_0_15px_rgba(255,184,0,0.5),inset_0_0_15px_rgba(255,184,0,0.5)] 
-              after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-300
-              hover:scale-105 active:scale-95"
-          >
-            Next Category
-            <ArrowRight className="h-5 w-5" />
-          </Button>
         </div>
       </div>
     </div>
