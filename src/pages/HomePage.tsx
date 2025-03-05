@@ -171,14 +171,14 @@ const HomePage: FC = () => {
   };
 
   return <BackgroundImage>
-      <div className="flex flex-col items-center justify-start w-full pt-4 sm:pt-6">
+      <div className="flex flex-col items-center justify-start w-full pt-2 sm:pt-3">
         <img 
           src="/lovable-uploads/d923baf7-78e1-40d3-9b06-3741979d91d1.png" 
           alt="ClarityQuest" 
           className="w-[180px] sm:w-[220px] md:w-[260px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" 
         />
         
-        <div className="text-white text-center mt-1 sm:mt-2 space-y-0.5">
+        <div className="text-white text-center mt-0.5 sm:mt-1 space-y-0.5">
           <p className="text-base sm:text-lg md:text-xl">Hack your Brain.</p>
           <p className="text-base sm:text-lg md:text-xl">Unlock the full potential of your mind.</p>
           <p className="text-base sm:text-lg md:text-xl">Visualize with purpose.</p>
