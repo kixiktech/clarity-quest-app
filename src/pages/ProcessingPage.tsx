@@ -77,10 +77,10 @@ const ProcessingPage: FC = () => {
 
       {showCompletion ? (
         <div className="text-center animate-fade-in pixel-font">
-          <h2 className="text-xl md:text-2xl font-normal text-[#39FF14] mb-4">
+          <h2 className="text-xl md:text-2xl font-normal text-[#FFD700] mb-4">
             INITIALIZATION COMPLETE
           </h2>
-          <p className="text-sm md:text-base text-[#39FF14]">
+          <p className="text-sm md:text-base text-[#FFD700]">
             LOADING SESSION CATEGORIES...
           </p>
         </div>
@@ -88,7 +88,7 @@ const ProcessingPage: FC = () => {
         <div className="w-full max-w-2xl px-4">
           {/* Message */}
           <div className="mb-8 min-h-[2rem] text-center">
-            <p className="text-[#39FF14] text-sm md:text-base pixel-font animate-fade-in">
+            <p className="text-[#FFD700] text-sm md:text-base pixel-font animate-fade-in">
               {messages[currentMessageIndex]}
             </p>
           </div>
@@ -99,7 +99,7 @@ const ProcessingPage: FC = () => {
               value={progress} 
               className="mb-2"
             />
-            <div className="text-right text-sm text-[#39FF14] pixel-font">
+            <div className="text-right text-sm text-[#FFD700] pixel-font">
               {Math.round(progress)}%
             </div>
           </div>
