@@ -17,6 +17,7 @@ const CategoryProcessingPage: FC = () => {
   const location = useLocation();
   const [progress, setProgress] = useState(0);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
+  const [showCompletion, setShowCompletion] = useState(false);
 
   useEffect(() => {
     const duration = 15000;
@@ -32,9 +33,17 @@ const CategoryProcessingPage: FC = () => {
 
       if (newProgress >= 100) {
         clearInterval(timer);
-        navigate("/visualization", {
-          state: location.state
-        });
+        setShowCompletion(true);
+        
+        console.log("Category processing complete, preparing to navigate to visualization");
+        
+        setTimeout(() => {
+          console.log("Navigating to /visualization now with state:", location.state);
+          navigate("/visualization", {
+            state: location.state,
+            replace: true
+          });
+        }, 2000);
       }
     }, 50);
 
@@ -51,16 +60,26 @@ const CategoryProcessingPage: FC = () => {
           </p>
         </div>
 
-        {/* Progress Bar */}
-        <div className="w-full max-w-md mx-auto">
-          <Progress 
-            value={progress} 
-            className="mb-2"
-          />
-          <div className="text-right text-sm text-[#39FF14] pixel-font">
-            {Math.round(progress)}%
+        {showCompletion ? (
+          <div className="text-center animate-fade-in pixel-font">
+            <h2 className="text-xl md:text-2xl font-normal text-[#39FF14] mb-4">
+              PREPARATION COMPLETE
+            </h2>
+            <p className="text-sm md:text-base text-[#39FF14]">
+              ENTERING VISUALIZATION...
+            </p>
           </div>
-        </div>
+        ) : (
+          <div className="w-full max-w-md mx-auto">
+            <Progress 
+              value={progress} 
+              className="mb-2"
+            />
+            <div className="text-right text-sm text-[#39FF14] pixel-font">
+              {Math.round(progress)}%
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

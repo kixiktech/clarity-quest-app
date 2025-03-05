@@ -35,11 +35,9 @@ const ProcessingPage: FC = () => {
         clearInterval(timer);
         setShowCompletion(true);
         
-        // Add a console log for debugging
         console.log("Processing complete, preparing to navigate to session-categories");
         
         setTimeout(() => {
-          // Add a console log right before navigation
           console.log("Navigating to /session-categories now");
           navigate("/session-categories", { replace: true });
         }, 2000);
