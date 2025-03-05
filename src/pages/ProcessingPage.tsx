@@ -34,8 +34,14 @@ const ProcessingPage: FC = () => {
       if (newProgress >= 100) {
         clearInterval(timer);
         setShowCompletion(true);
+        
+        // Add a console log for debugging
+        console.log("Processing complete, preparing to navigate to session-categories");
+        
         setTimeout(() => {
-          navigate("/session-categories");
+          // Add a console log right before navigation
+          console.log("Navigating to /session-categories now");
+          navigate("/session-categories", { replace: true });
         }, 2000);
       }
     }, 50);
@@ -54,8 +60,8 @@ const ProcessingPage: FC = () => {
         />
       </div>
 
-            {/* Spline Scene Container */}
-            <div className="w-full max-w-[340px] sm:max-w-[480px] md:max-w-[600px] pt-6 pb-6">
+      {/* Spline Scene Container */}
+      <div className="w-full max-w-[340px] sm:max-w-[480px] md:max-w-[600px] pt-6 pb-6">
         <div className="relative w-full aspect-[4/4] sm:aspect-[5/4] md:aspect-[16/12] overflow-hidden">
           <Spline
             scene="https://prod.spline.design/skZMG4xreB6TopXp/scene.splinecode"
