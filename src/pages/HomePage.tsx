@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
@@ -176,6 +177,12 @@ const HomePage: FC = () => {
           alt="ClarityQuest" 
           className="w-[200px] sm:w-[240px] md:w-[280px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" 
         />
+        
+        <div className="text-white text-center mt-4 sm:mt-6 space-y-1">
+          <p className="text-lg sm:text-xl md:text-2xl">Hack your Brain.</p>
+          <p className="text-lg sm:text-xl md:text-2xl">Unlock the full potential of your mind.</p>
+          <p className="text-lg sm:text-xl md:text-2xl">Visualize with purpose.</p>
+        </div>
       </div>
 
       <div className="w-full max-w-[280px] sm:max-w-[400px] md:max-w-[500px] pt-6 pb-6">
