@@ -81,22 +81,22 @@ const SessionFeedbackPage: FC = () => {
       </Button>
 
       {/* Main Content */}
-      <div className="w-full flex flex-col items-center justify-between h-[100dvh] py-16">
+      <div className="w-full flex flex-col items-center justify-between h-[100dvh] py-12 px-4">
         {/* Header Section */}
-        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md">
-          {/* Central Pulsating Orb */}
-          <div className="relative w-16 h-16 mb-6">
+        <div className="flex-1 flex flex-col items-center justify-center w-full max-w-md mt-6">
+          {/* Modified Pulsating Orb - Removed the selected div */}
+          <div className="relative w-12 h-12 mb-6 sm:w-16 sm:h-16">
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 opacity-20 blur-2xl animate-pulse-slow" />
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-400 to-purple-400 opacity-30 blur-xl animate-pulse-slow delay-100" />
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-300 to-purple-300 opacity-40 animate-pulse-slow delay-200" />
+            {/* The third div (selected element) has been removed */}
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-semibold text-white mb-8 tracking-tight">
+          <h1 className="text-xl md:text-3xl font-semibold text-white mb-6 md:mb-8 tracking-tight text-center">
             How was your last session?
           </h1>
 
-          {/* Rating Scale */}
-          <div className="flex justify-center items-center gap-8 sm:gap-12 mb-6">
+          {/* Rating Scale - Adjusted for better mobile display */}
+          <div className="flex justify-center items-center gap-4 sm:gap-8 md:gap-12 mb-6">
             {[
               { rating: "bad", icon: Frown, color: "red" },
               { rating: "good", icon: Meh, color: "yellow" },
@@ -114,10 +114,10 @@ const SessionFeedbackPage: FC = () => {
                   }
                 }}
               >
-                <div className="p-3 transition-all duration-300 hover:scale-110 active:scale-95">
+                <div className="p-2 sm:p-3 transition-all duration-300 hover:scale-110 active:scale-95">
                   <Icon
                     strokeWidth={1.75}
-                    className={`w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 ${
+                    className={`w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 transition-all duration-300 ${
                       selectedRating === rating
                         ? color === "red"
                           ? "text-red-500 drop-shadow-[0_0_8px_rgba(239,68,68,0.5)]"
@@ -132,17 +132,17 @@ const SessionFeedbackPage: FC = () => {
             ))}
           </div>
 
-          {/* Consistency Reminder */}
-          <p className="text-white/70 text-sm md:text-base mb-8 leading-relaxed max-w-xs text-center">
+          {/* Consistency Reminder - Adjusted width and text size */}
+          <p className="text-white/70 text-xs sm:text-sm md:text-base mb-6 md:mb-8 leading-relaxed max-w-xs text-center">
             Remember, visualization only works if you're consistent. Train your brain to align with your goals.
           </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col gap-3 w-full max-w-xs">
+        {/* Action Buttons - Adjusted margins and padding */}
+        <div className="flex flex-col gap-3 w-full max-w-xs mb-4">
           <Button
             onClick={handleReplay}
-            className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl
+            className="w-full py-4 sm:py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl
               transition-all duration-300 hover:scale-105 active:scale-95"
           >
             <Play className="w-5 h-5 mr-2" />
@@ -152,7 +152,7 @@ const SessionFeedbackPage: FC = () => {
             onClick={handleSubmit}
             disabled={isSubmitting}
             variant={selectedRating ? "default" : "secondary"}
-            className={`w-full py-5 text-white font-medium rounded-xl
+            className={`w-full py-4 sm:py-5 text-white font-medium rounded-xl
               transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer
               ${selectedRating 
                 ? 'bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-500 hover:to-amber-600 shadow-lg shadow-amber-500/30 animate-pulse-slow'
