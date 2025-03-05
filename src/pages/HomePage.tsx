@@ -1,8 +1,8 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
 import Spline from '@splinetool/react-spline';
+
 const notifications = [{
   name: "John",
   country: "United States"
@@ -148,10 +148,12 @@ const notifications = [{
   name: "Diego",
   country: "Argentina"
 }];
+
 const HomePage: FC = () => {
   const navigate = useNavigate();
   const [currentNotificationIndex, setCurrentNotificationIndex] = useState(0);
   const [isEntering, setIsEntering] = useState(true);
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       setIsEntering(false);
@@ -162,19 +164,23 @@ const HomePage: FC = () => {
     }, 4000);
     return () => clearInterval(intervalId);
   }, []);
+
   const handleGetStarted = () => {
     navigate("/login?mode=signup");
   };
+
   return <BackgroundImage>
-      <div className="flex flex-col items-center justify-start w-full max-w-4xl mx-auto pt-6">
-        <img src="/lovable-uploads/3d7b9f60-a195-43f0-b963-e6e084999749.png" alt="ClarityQuest" className="w-[280px] sm:w-[400px] md:w-[500px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" />
+      <div className="flex flex-col items-center justify-start w-full pt-8 sm:pt-10 md:pt-12">
+        <img 
+          src="/lovable-uploads/d923baf7-78e1-40d3-9b06-3741979d91d1.png" 
+          alt="ClarityQuest" 
+          className="w-[200px] sm:w-[240px] md:w-[280px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" 
+        />
       </div>
 
-      {/* Spline Scene Container */}
       <div className="w-full max-w-[280px] sm:max-w-[400px] md:max-w-[500px] pt-6 pb-6">
         <div className="relative w-full aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9]">
           <Spline scene="https://prod.spline.design/MC6pPkuT016z7SsZ/scene.splinecode" className="absolute inset-0 w-full h-full object-cover" />
-          {/* Single Overlay with Radial Gradient */}
           <div className="absolute -inset-2 pointer-events-none" style={{
           background: "radial-gradient(circle, transparent 20%, #221737 80%)"
         }} />
@@ -217,4 +223,5 @@ const HomePage: FC = () => {
       </div>
     </BackgroundImage>;
 };
+
 export default HomePage;
