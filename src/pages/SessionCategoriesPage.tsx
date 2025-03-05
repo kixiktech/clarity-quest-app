@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown, Trash2 } from "lucide-react";
 import Spline from "@splinetool/react-spline";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const categories = [
   { id: 1, title: "career + purpose" },
@@ -23,7 +25,42 @@ const categories = [
 
 const SessionCategoriesPage: FC = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
+  const [userInitial, setUserInitial] = useState<string>("U");
+  const [userName, setUserName] = useState<string>("User");
+
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          // Get user email and extract first name
+          const email = user.email || "";
+          // For demonstration, using the first part of email as name
+          // In a real app, you might fetch this from a profiles table
+          const namePart = email.split('@')[0];
+          const formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+          
+          // Set the first initial and name
+          setUserInitial(formattedName.charAt(0).toUpperCase());
+          setUserName(formattedName);
+          
+          console.log(`User initial set to: ${formattedName.charAt(0).toUpperCase()}`);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Could not fetch user information",
+          variant: "destructive",
+        });
+      }
+    };
+
+    getUserData();
+  }, [toast]);
 
   const handleNumberSelect = (number: number) => {
     setSelectedNumber(number);
@@ -49,9 +86,9 @@ const SessionCategoriesPage: FC = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10">
               <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-medium">
-                J
+                {userInitial}
               </div>
-              <span className="hidden sm:inline text-sm">John Doe</span>
+              <span className="hidden sm:inline text-sm">{userName}</span>
               <ChevronDown className="h-4 w-4 opacity-50" />
             </Button>
           </DropdownMenuTrigger>
@@ -128,47 +165,3 @@ const SessionCategoriesPage: FC = () => {
 };
 
 export default SessionCategoriesPage;
-
-
- {/*
-      <div className="relative w-full max-w-[280px] sm:max-w-[300px]">
-        <div className="absolute inset-0 bg-[#4A4A4A] rounded-2xl transform translate-y-1"></div>
-        <div className="relative bg-[#4A4A4A] rounded-2xl p-3 sm:p-4">
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-2 sm:mb-3">
-            {[1, 2, 3, 4, 5, 6].map((number) => (
-              <Button
-                key={number}
-                onClick={() => handleNumberSelect(number)}
-                className={cn(
-                  "h-12 sm:h-16 w-full text-xl sm:text-2xl font-bold bg-[#2A2A2A] hover:bg-[#3A3A3A] text-white rounded-lg sm:rounded-xl transition-all duration-300",
-                  selectedNumber === number && "ring-2 ring-[#F97316] shadow-[0_0_15px_rgba(249,115,22,0.5)]"
-                )}
-              >
-                {number}
-              </Button>
-            ))}
-          </div>
-          <Button
-            onClick={handleEnter}
-            disabled={!selectedNumber}
-            className={cn(
-              "w-full h-12 sm:h-16 text-xl sm:text-2xl font-bold bg-[#2A2A2A] hover:bg-[#3A3A3A] text-white rounded-lg sm:rounded-xl transition-all duration-300",
-              selectedNumber && "ring-2 ring-[#F97316] shadow-[0_0_15px_rgba(249,115,22,0.5)]"
-            )}
-          >
-            ENTER
-          </Button>
-        </div>
-
-        <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 flex gap-1.5 sm:gap-2">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#4ADE80] animate-pulse shadow-[0_0_8px_#4ADE80] opacity-90"
-              style={{
-                animationDelay: `${i * 200}ms`
-              }}
-            />
-          ))}
-        </div>
-      </div>*/}
