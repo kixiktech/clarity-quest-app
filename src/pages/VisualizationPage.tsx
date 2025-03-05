@@ -3,12 +3,13 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import Spline from '@splinetool/react-spline';
 
 const VisualizationPage: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-full bg-[#0D1117] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* End Session Button */}
       <Button
         onClick={() => navigate("/session-feedback")}
@@ -20,24 +21,22 @@ const VisualizationPage: FC = () => {
       </Button>
 
       {/* Top Text */}
-      <p className="text-white/60 text-lg mb-12 animate-fade-in">
+      <p className="text-white/60 text-lg mb-1 animate-fade-in">
         Take a deep breath
       </p>
 
-      {/* Pulsating Orb */}
-      <div className="relative">
-        {/* Multiple layers for depth effect */}
-        <div className="w-48 h-48 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 opacity-20 blur-2xl animate-pulse-slow" />
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-indigo-400 to-purple-400 opacity-30 blur-xl animate-pulse-slow delay-100" />
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-indigo-300 to-purple-300 opacity-40 blur-lg animate-pulse-slow delay-200" />
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-indigo-200 to-purple-200 opacity-50 animate-pulse-slow delay-300" />
-        
-        {/* Inner glow */}
-        <div className="absolute inset-0 w-48 h-48 rounded-full bg-gradient-to-br from-white to-indigo-100 opacity-20 scale-50 blur-xl animate-pulse-slow" />
+      {/* Spline Scene Container */}
+      <div className="w-full max-w-[300px] sm:max-w-[400px] md:max-w-[480px]">
+        <div className="relative w-full aspect-[4/4] sm:aspect-[5/4] md:aspect-[16/12]">
+          <Spline
+            scene="https://prod.spline.design/aolWtgmIui-99n5Q/scene.splinecode"
+            className="absolute inset-0 w-full h-full"
+          />
+        </div>
       </div>
 
       {/* Bottom Text */}
-      <p className="text-white/60 text-lg mt-12 animate-fade-in">
+      <p className="text-white/60 text-lg mt-1 animate-fade-in">
         Settle into the moment
       </p>
 
