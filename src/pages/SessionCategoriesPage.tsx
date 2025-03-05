@@ -36,18 +36,23 @@ const SessionCategoriesPage: FC = () => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
-          // Get user email and extract first name
-          const email = user.email || "";
-          // For demonstration, using the first part of email as name
-          // In a real app, you might fetch this from a profiles table
-          const namePart = email.split('@')[0];
-          const formattedName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+          // Get full name from user metadata
+          const fullName = user.user_metadata?.full_name || "";
           
-          // Set the first initial and name
-          setUserInitial(formattedName.charAt(0).toUpperCase());
-          setUserName(formattedName);
-          
-          console.log(`User initial set to: ${formattedName.charAt(0).toUpperCase()}`);
+          if (fullName) {
+            // Extract first initial and set name
+            const firstInitial = fullName.charAt(0).toUpperCase();
+            
+            setUserInitial(firstInitial);
+            setUserName(fullName);
+            
+            console.log(`User initial set to: ${firstInitial}`);
+          } else {
+            console.log("No full name found in user metadata");
+            // Fallback to a default value
+            setUserInitial("U");
+            setUserName("User");
+          }
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
