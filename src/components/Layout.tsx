@@ -16,16 +16,21 @@ const Layout: FC<LayoutProps> = ({ children }) => {
                       location.pathname !== "/terms-of-service";
 
   useEffect(() => {
+    // Only apply overflow hidden to specific pages that need it
+    // Remove overflow:hidden from the home page
     if (isSciencePage) {
       document.body.style.overflow = 'auto';
-    } else {
+    } else if (!isHomePage) {
       document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto'; // Allow scrolling on home page
     }
 
     return () => {
-      document.body.style.overflow = 'hidden';
+      // Reset on unmount if needed
+      document.body.style.overflow = 'auto';
     };
-  }, [isSciencePage]);
+  }, [isSciencePage, isHomePage]);
 
   return (
     <div className="min-h-[100dvh] bg-transparent flex flex-col">
