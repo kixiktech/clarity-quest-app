@@ -1,4 +1,3 @@
-
 import { FC, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,6 +8,7 @@ import countries from "@/lib/countries";
 import { Toggle } from "@/components/ui/toggle";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { supabase } from "@/integrations/supabase/client";
 
 const LoginPage: FC = () => {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ const LoginPage: FC = () => {
   const [gender, setGender] = useState<"male" | "female" | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -38,59 +39,131 @@ const LoginPage: FC = () => {
     return email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isSignUp) {
-      // Validate all fields for sign up
-      if (!formData.fullName.trim()) {
-        toast.error("Please enter your full name");
-        return;
-      }
-      if (!formData.email) {
-        toast.error("Please enter your email address");
-        return;
-      }
-      if (!validateEmail(formData.email)) {
-        toast.error("Please enter a valid email address");
-        return;
-      }
-      if (!formData.password) {
-        toast.error("Please enter a password");
-        return;
-      }
-      if (formData.password !== formData.confirmPassword) {
-        toast.error("Passwords do not match");
-        return;
-      }
-      if (!formData.country) {
-        toast.error("Please select your country");
-        return;
-      }
-      if (!gender) {
-        toast.error("Please select your gender");
-        return;
-      }
+    setIsLoading(true);
+    
+    try {
+      if (isSignUp) {
+        // Validate all fields for sign up
+        if (!formData.fullName.trim()) {
+          toast.error("Please enter your full name");
+          setIsLoading(false);
+          return;
+        }
+        if (!formData.email) {
+          toast.error("Please enter your email address");
+          setIsLoading(false);
+          return;
+        }
+        if (!validateEmail(formData.email)) {
+          toast.error("Please enter a valid email address");
+          setIsLoading(false);
+          return;
+        }
+        if (!formData.password) {
+          toast.error("Please enter a password");
+          setIsLoading(false);
+          return;
+        }
+        if (formData.password !== formData.confirmPassword) {
+          toast.error("Passwords do not match");
+          setIsLoading(false);
+          return;
+        }
+        if (!formData.country) {
+          toast.error("Please select your country");
+          setIsLoading(false);
+          return;
+        }
+        if (!gender) {
+          toast.error("Please select your gender");
+          setIsLoading(false);
+          return;
+        }
 
-      console.log("Sign up data:", { ...formData, gender });
-    } else {
-      // Validate login fields
-      if (!formData.email) {
-        toast.error("Please enter your email address");
-        return;
-      }
-      if (!validateEmail(formData.email)) {
-        toast.error("Please enter a valid email address");
-        return;
-      }
-      if (!formData.password) {
-        toast.error("Please enter your password");
-        return;
-      }
+        // Check for referral code in session storage
+        const referralCode = sessionStorage.getItem('referralCode');
+        
+        // Get the metadata ready
+        const metadata = { 
+          full_name: formData.fullName, 
+          country: formData.country, 
+          gender 
+        };
+        
+        // Sign up with Supabase
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: metadata,
+          }
+        });
 
-      console.log("Login data:", {
-        email: formData.email,
-        password: formData.password
-      });
+        if (error) {
+          toast.error(error.message);
+          console.error("Signup error:", error);
+          setIsLoading(false);
+          return;
+        }
+
+        // Process referral if exists
+        if (referralCode) {
+          try {
+            await supabase.functions.invoke('process-referral', {
+              body: { referralCode, newUserId: data.user?.id }
+            });
+            // Clear the referral code from session storage after processing
+            sessionStorage.removeItem('referralCode');
+          } catch (refError) {
+            console.error("Error processing referral:", refError);
+            // Don't block signup if referral processing fails
+          }
+        }
+
+        toast.success("Signup successful! Please check your email to verify your account.");
+        navigate("/intro-questions");
+      } else {
+        // Login flow
+        // Validate login fields
+        if (!formData.email) {
+          toast.error("Please enter your email address");
+          setIsLoading(false);
+          return;
+        }
+        if (!validateEmail(formData.email)) {
+          toast.error("Please enter a valid email address");
+          setIsLoading(false);
+          return;
+        }
+        if (!formData.password) {
+          toast.error("Please enter your password");
+          setIsLoading(false);
+          return;
+        }
+
+        // Sign in with Supabase
+        const { error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (error) {
+          toast.error(error.message);
+          console.error("Login error:", error);
+          setIsLoading(false);
+          return;
+        }
+
+        toast.success("Login successful!");
+        navigate("/intro-questions");
+      }
+    } catch (error) {
+      console.error("Authentication error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -278,8 +351,12 @@ const LoginPage: FC = () => {
             </>
           )}
 
-          <Button type="submit" className="w-full h-8">
-            {isSignUp ? "Sign Up" : "Log In"}
+          <Button 
+            type="submit" 
+            className="w-full h-8" 
+            disabled={isLoading}
+          >
+            {isLoading ? "Processing..." : (isSignUp ? "Sign Up" : "Log In")}
           </Button>
         </form>
 
@@ -293,13 +370,13 @@ const LoginPage: FC = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-2">
-          <Button variant="outline" className="bg-white/10 border-white/20 h-7 w-full">
+          <Button variant="outline" type="button" className="bg-white/10 border-white/20 h-7 w-full">
             <Github className="h-4 w-4" />
           </Button>
-          <Button variant="outline" className="bg-white/10 border-white/20 h-7 w-full">
+          <Button variant="outline" type="button" className="bg-white/10 border-white/20 h-7 w-full">
             <Facebook className="h-4 w-4" />
           </Button>
-          <Button variant="outline" className="bg-white/10 border-white/20 h-7 w-full">
+          <Button variant="outline" type="button" className="bg-white/10 border-white/20 h-7 w-full">
             <X className="h-4 w-4" />
           </Button>
         </div>
