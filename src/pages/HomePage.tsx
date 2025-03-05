@@ -171,21 +171,21 @@ const HomePage: FC = () => {
   };
 
   return <BackgroundImage>
-      <div className="flex flex-col items-center justify-start w-full pt-8 sm:pt-10 md:pt-12">
+      <div className="flex flex-col items-center justify-start w-full pt-4 sm:pt-6">
         <img 
           src="/lovable-uploads/d923baf7-78e1-40d3-9b06-3741979d91d1.png" 
           alt="ClarityQuest" 
-          className="w-[200px] sm:w-[240px] md:w-[280px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" 
+          className="w-[180px] sm:w-[220px] md:w-[260px] h-auto drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]" 
         />
         
-        <div className="text-white text-center mt-4 sm:mt-6 space-y-1">
-          <p className="text-lg sm:text-xl md:text-2xl">Hack your Brain.</p>
-          <p className="text-lg sm:text-xl md:text-2xl">Unlock the full potential of your mind.</p>
-          <p className="text-lg sm:text-xl md:text-2xl">Visualize with purpose.</p>
+        <div className="text-white text-center mt-1 sm:mt-2 space-y-0.5">
+          <p className="text-base sm:text-lg md:text-xl">Hack your Brain.</p>
+          <p className="text-base sm:text-lg md:text-xl">Unlock the full potential of your mind.</p>
+          <p className="text-base sm:text-lg md:text-xl">Visualize with purpose.</p>
         </div>
       </div>
 
-      <div className="w-full max-w-[280px] sm:max-w-[400px] md:max-w-[500px] pt-6 pb-6">
+      <div className="w-full max-w-[280px] sm:max-w-[400px] md:max-w-[500px] pt-4 pb-6">
         <div className="relative w-full aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9]">
           <Spline scene="https://prod.spline.design/MC6pPkuT016z7SsZ/scene.splinecode" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute -inset-2 pointer-events-none" style={{
