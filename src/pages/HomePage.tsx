@@ -1,8 +1,8 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BackgroundImage from "../components/BackgroundImage";
 import Spline from '@splinetool/react-spline';
+import Footer from "../components/Footer";
 
 const notifications = [{
   name: "John",
@@ -215,6 +215,8 @@ const HomePage: FC = () => {
           <span className="relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">The Science</span>
         </button>
       </div>
+
+      <Footer className="mt-auto mb-12" />
 
       <div className={`fixed bottom-4 sm:bottom-8 left-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 ${isEntering ? "animate-slide-in-right" : "animate-slide-out-right"}`} style={{
       transform: `translate(${isEntering ? '-50%, 0' : '100%, 0'})`,

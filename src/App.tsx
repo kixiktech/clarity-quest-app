@@ -26,6 +26,8 @@ import VisualizationPage from "./pages/VisualizationPage";
 import SessionFeedbackPage from "./pages/SessionFeedbackPage";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
 import SettingsPage from "./pages/SettingsPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsOfServicePage from "./pages/TermsOfServicePage";
 import CookieConsent from "./components/CookieConsent";
 
 // Note: We're removing the invalid setSession call and will use the configuration
@@ -131,6 +133,8 @@ const App = () => {
               <Route path="/" element={<PublicRoute><HomePage /></PublicRoute>} />
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/science" element={<PublicRoute><SciencePage /></PublicRoute>} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/terms-of-service" element={<TermsOfServicePage />} />
               
               {/* Protected routes */}
               <Route path="/intro-questions" element={<ProtectedRoute isIntroRoute={true}><IntroQuestionsPage /></ProtectedRoute>} />

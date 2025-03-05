@@ -2,6 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Info } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface CookieConsentProps {
   onAccept: () => void;
@@ -20,7 +21,7 @@ const CookieConsent = ({ onAccept }: CookieConsentProps) => {
                 We use cookies to enhance your experience, remember your preferences, and understand how 
                 you use our platform. This includes essential authentication cookies to keep you logged in.
                 By continuing to use our site, you consent to our use of cookies in accordance with our 
-                <a href="/privacy" className="text-primary hover:underline"> Privacy Policy</a>.
+                <Link to="/privacy-policy" className="text-primary hover:underline"> Privacy Policy</Link>.
               </p>
             </div>
           </div>

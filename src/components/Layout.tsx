@@ -1,6 +1,7 @@
 
 import { FC, ReactNode, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Footer from "./Footer";
 
 interface LayoutProps {
   children: ReactNode;
@@ -10,6 +11,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isSciencePage = location.pathname === "/science";
   const isHomePage = location.pathname === "/";
+  const needsFooter = !isHomePage && 
+                      location.pathname !== "/privacy-policy" && 
+                      location.pathname !== "/terms-of-service";
 
   useEffect(() => {
     if (isSciencePage) {
@@ -24,7 +28,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   }, [isSciencePage]);
 
   return (
-    <div className="min-h-[100dvh] bg-transparent">
+    <div className="min-h-[100dvh] bg-transparent flex flex-col">
       {/* Mobile Notice Banner - Only shows on screens larger than 768px */}
       <div className="hidden md:block fixed top-0 left-0 w-full bg-primary/95 backdrop-blur-sm z-50 border-b border-yellow-500/30 animate-banner-pulse animate-slide-in-down">
         <div className="container mx-auto px-4 py-3 text-center">
@@ -42,8 +46,9 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         </>
       )}
       {/* Adjust content padding when banner is visible */}
-      <div className="relative z-10 md:pt-12">
+      <div className="relative z-10 md:pt-12 flex flex-col flex-1">
         {children}
+        {needsFooter && <Footer className="mt-auto" />}
       </div>
     </div>
   );

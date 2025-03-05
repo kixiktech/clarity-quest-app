@@ -1,6 +1,6 @@
 
 import { FC, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -72,7 +72,7 @@ const DeleteAccountPage: FC = () => {
           <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
           <p className="text-sm text-red-500">
             <span className="font-bold block mb-1">CRITICAL WARNING!</span>
-            This action cannot be undone. All your progress, achievements, and saved data will be permanently erased from our servers.
+            This action cannot be undone. All your progress, achievements, and saved data will be permanently erased from our servers. Please review our <Link to="/terms-of-service" className="underline">Terms of Service</Link> for more information on account deletion.
           </p>
         </div>
 
