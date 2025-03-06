@@ -1,4 +1,3 @@
-
 import { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -216,22 +215,20 @@ const SessionCategoriesPage: FC = () => {
           ))}
         </div>
 
-        {/* Session Status & Enter Button */}
-        <div className="w-full max-w-md px-4 mb-4">
-          {!hasAvailableSession && (
-            <p className="text-amber-400 text-sm text-center mb-2">
-              You've used your free session this week
-            </p>
-          )}
-          
-          <Button
-            disabled={selectedNumber === null}
-            onClick={handleEnter}
-            className="w-full bg-[#4ADE80] hover:bg-[#3BCE70] text-[#221737] font-bold py-2"
-          >
-            {hasAvailableSession ? "Enter" : "Get More Sessions"}
-          </Button>
-        </div>
+        {/* Session Status */}
+        {!hasAvailableSession && (
+          <p className="text-amber-400 text-sm text-center mb-2">
+            You've used your free session this week
+          </p>
+        )}
+
+        <Button
+          disabled={selectedNumber === null}
+          onClick={handleEnter}
+          className="w-full bg-[#4ADE80] hover:bg-[#3BCE70] text-[#221737] font-bold py-2"
+        >
+          {hasAvailableSession ? "Enter" : "Get More Sessions"}
+        </Button>
 
         {/* Spline Scene Container */}
         <div className="w-full max-w-[300px] sm:max-w-[400px] md:max-w-[480px]">
