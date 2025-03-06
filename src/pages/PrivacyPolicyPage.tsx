@@ -1,4 +1,3 @@
-
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { ArrowLeft, Shield } from "lucide-react";
 
 const PrivacyPolicyPage: FC = () => {
   const navigate = useNavigate();
-  const lastUpdated = "August 15, 2023";
+  const lastUpdated = "March 06, 2025";
 
   return (
     <div className="min-h-screen bg-background">

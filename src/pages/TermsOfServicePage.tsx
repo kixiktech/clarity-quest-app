@@ -2,9 +2,10 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, FileText } from "lucide-react";
+
 const TermsOfServicePage: FC = () => {
   const navigate = useNavigate();
-  const lastUpdated = "August 15, 2023";
+  const lastUpdated = "March 06, 2025";
   return <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <Button onClick={() => navigate(-1)} variant="ghost" className="mb-6 gap-2">
@@ -249,4 +250,5 @@ const TermsOfServicePage: FC = () => {
       </div>
     </div>;
 };
+
 export default TermsOfServicePage;
