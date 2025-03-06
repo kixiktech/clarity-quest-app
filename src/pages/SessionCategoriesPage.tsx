@@ -1,3 +1,4 @@
+
 import { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown, Trash2 } from "l
 import Spline from "@splinetool/react-spline";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 
 const categories = [
   { id: 1, title: "career + purpose" },
@@ -26,9 +28,11 @@ const categories = [
 const SessionCategoriesPage: FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { triggerHaptic } = useHapticFeedback();
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
   const [userInitial, setUserInitial] = useState<string>("U");
   const [userName, setUserName] = useState<string>("User");
+  const [hasAvailableSession, setHasAvailableSession] = useState<boolean>(true);
 
   useEffect(() => {
     const getUserData = async () => {
@@ -53,6 +57,9 @@ const SessionCategoriesPage: FC = () => {
             setUserInitial("U");
             setUserName("User");
           }
+          
+          // Check if user has available sessions
+          checkSessionAvailability(user.id);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -66,12 +73,49 @@ const SessionCategoriesPage: FC = () => {
 
     getUserData();
   }, [toast]);
+  
+  const checkSessionAvailability = async (userId: string) => {
+    try {
+      // Query the session_credits table to check if the user has any credits remaining
+      const { data, error } = await supabase
+        .from('session_credits')
+        .select('credits_remaining, referral_credits')
+        .eq('user_id', userId)
+        .single();
+      
+      if (error) {
+        console.error("Error checking session availability:", error);
+        // Default to allowing access if there's an error
+        setHasAvailableSession(true);
+        return;
+      }
+      
+      // If user has at least one credit (regular or referral), they can access
+      const totalCredits = (data?.credits_remaining || 0) + (data?.referral_credits || 0);
+      setHasAvailableSession(totalCredits > 0);
+      
+      console.log(`User has ${totalCredits} total sessions available`);
+    } catch (error) {
+      console.error("Error in session availability check:", error);
+      // Default to allowing access if there's an error
+      setHasAvailableSession(true);
+    }
+  };
 
   const handleNumberSelect = (number: number) => {
+    triggerHaptic();
     setSelectedNumber(number);
   };
 
   const handleEnter = () => {
+    triggerHaptic();
+    
+    if (!hasAvailableSession) {
+      // Redirect to paywall if no sessions available
+      navigate("/paywall");
+      return;
+    }
+    
     if (selectedNumber) {
       navigate("/focus-input", {
         state: { category: categories[selectedNumber - 1].id },
@@ -79,8 +123,19 @@ const SessionCategoriesPage: FC = () => {
     }
   };
 
-  const handleLogout = () => {
-    navigate("/");
+  const handleLogout = async () => {
+    triggerHaptic();
+    try {
+      await supabase.auth.signOut();
+      navigate("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast({
+        title: "Error",
+        description: "Could not sign out. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -115,7 +170,10 @@ const SessionCategoriesPage: FC = () => {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-red-400 hover:text-red-300 hover:bg-white/10 focus:bg-white/10 cursor-pointer text-sm"
-              onClick={() => navigate("/delete-account")}
+              onClick={() => {
+                triggerHaptic();
+                navigate("/delete-account");
+              }}
             >
               <Trash2 className="mr-2 h-4 w-4" />
               <span>Delete Account</span>
@@ -127,7 +185,10 @@ const SessionCategoriesPage: FC = () => {
       <Button
         variant="ghost"
         className="absolute top-2 sm:top-4 xl:top-6 right-2 sm:right-4 text-white/80 hover:text-white hover:bg-white/10"
-        onClick={() => navigate("/settings")}
+        onClick={() => {
+          triggerHaptic();
+          navigate("/settings");
+        }}
       >
         <Settings className="h-5 w-5" />
       </Button>
@@ -153,6 +214,23 @@ const SessionCategoriesPage: FC = () => {
               </span>
             </div>
           ))}
+        </div>
+
+        {/* Session Status & Enter Button */}
+        <div className="w-full max-w-md px-4 mb-4">
+          {!hasAvailableSession && (
+            <p className="text-amber-400 text-sm text-center mb-2">
+              You've used your free session this week
+            </p>
+          )}
+          
+          <Button
+            disabled={selectedNumber === null}
+            onClick={handleEnter}
+            className="w-full bg-[#4ADE80] hover:bg-[#3BCE70] text-[#221737] font-bold py-2"
+          >
+            {hasAvailableSession ? "Enter" : "Get More Sessions"}
+          </Button>
         </div>
 
         {/* Spline Scene Container */}
