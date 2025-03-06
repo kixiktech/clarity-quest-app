@@ -1,11 +1,10 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Save } from "lucide-react";
+import { ArrowLeft, Save, Lightbulb } from "lucide-react";
 
 interface UserResponse {
   id: string;
@@ -169,10 +168,18 @@ const EditCategoryPage: FC = () => {
           <div className="space-y-6">
             <div className="bg-card rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-semibold mb-3">{getCategoryDisplayName(response.category)}</h2>
-              <p className="text-muted-foreground mb-6">{getCategoryDescription(response.category)}</p>
+              <p className="text-muted-foreground mb-4">{getCategoryDescription(response.category)}</p>
+              
+              <div className="bg-primary/5 rounded-lg p-4 mb-6 flex items-start gap-3 border border-primary/20">
+                <Lightbulb className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                <p className="text-sm text-foreground/90">
+                  The more detailed and specific you are about your vision, the more effective your personalized sessions will be, 
+                  significantly increasing your chances of achieving your goals.
+                </p>
+              </div>
               
               <Textarea
-                className="min-h-[200px] p-4 text-base leading-relaxed mb-4"
+                className="min-h-[300px] p-4 text-base leading-relaxed mb-4"
                 value={responseText}
                 onChange={(e) => setResponseText(e.target.value)}
                 placeholder={`Describe your ${response.category} goals and aspirations...`}
