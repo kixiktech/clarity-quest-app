@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -220,7 +221,7 @@ const SettingsPage: FC = () => {
           <Button
             variant="ghost"
             className="mr-4"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/session-categories")}
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
