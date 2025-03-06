@@ -112,6 +112,15 @@ const UpgradePage = () => {
           </p>
         </div>
         
+        {/* Additional CTA button */}
+        <Button 
+          onClick={handleUpgrade}
+          className="w-full mb-8 py-6 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black flex items-center justify-center gap-2 transition transform hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <Sparkles className="h-5 w-5" />
+          <span>Upgrade Now</span>
+        </Button>
+        
         {/* Benefits section */}
         <div className="mb-8">
           <h2 className="text-xl text-white/90 mb-4 text-center">What You'll Get</h2>
