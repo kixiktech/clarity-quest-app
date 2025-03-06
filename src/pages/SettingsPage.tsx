@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Brain, Calendar, Copy, Edit, ExternalLink, Gift, HeartHandshake, Link2, Share2, Check } from "lucide-react";
+import { ArrowLeft, Brain, Calendar, Copy, Edit, ExternalLink, Gift, HeartHandshake, Link2, Share2, Check, Sparkles } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -75,6 +75,7 @@ const SettingsPage: FC = () => {
     totalReferrals: 0,
     sessionsEarned: 0
   });
+  const [isFreePlan, setIsFreePlan] = useState(true);
 
   useEffect(() => {
     fetchUserData();
@@ -93,6 +94,19 @@ const SettingsPage: FC = () => {
         });
         navigate("/login");
         return;
+      }
+
+      const { data: subscriptionData, error: subscriptionError } = await supabase
+        .from('subscriptions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+        .maybeSingle();
+      
+      if (subscriptionError) {
+        console.error("Error fetching subscription:", subscriptionError);
+      } else {
+        setIsFreePlan(!subscriptionData || subscriptionData.plan_type === 'free');
       }
 
       const baseUrl = window.location.origin;
@@ -237,6 +251,11 @@ const SettingsPage: FC = () => {
     navigate("/share-earn");
   };
 
+  const handleUpgrade = () => {
+    triggerHaptic();
+    navigate("/upgrade");
+  };
+
   const handleUpdateResponse = async (id: string, newResponse: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -300,6 +319,24 @@ const SettingsPage: FC = () => {
           </div>
         ) : (
           <div className="space-y-12">
+            {isFreePlan && (
+              <section className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-lg p-6 shadow-sm border border-amber-500/30">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">Ready to unlock your full potential?</h2>
+                    <p className="text-muted-foreground">Get unlimited visualization sessions and accelerate your growth.</p>
+                  </div>
+                  <Button 
+                    onClick={handleUpgrade}
+                    className="py-6 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black flex items-center justify-center gap-2 transition transform hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap"
+                  >
+                    <Sparkles className="h-5 w-5" />
+                    <span>Go Unlimited</span>
+                  </Button>
+                </div>
+              </section>
+            )}
+
             <section className="space-y-4">
               <div className="flex items-center justify-center flex-col">
                 <Brain className="h-20 w-20 text-primary mb-3" />
