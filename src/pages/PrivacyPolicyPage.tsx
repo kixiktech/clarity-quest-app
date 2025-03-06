@@ -2,19 +2,12 @@ import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield } from "lucide-react";
-
 const PrivacyPolicyPage: FC = () => {
   const navigate = useNavigate();
   const lastUpdated = "March 06, 2025";
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <Button
-          onClick={() => navigate(-1)}
-          variant="ghost"
-          className="mb-6 gap-2"
-        >
+        <Button onClick={() => navigate(-1)} variant="ghost" className="mb-6 gap-2">
           <ArrowLeft className="h-4 w-4" />
           Back
         </Button>
@@ -224,7 +217,7 @@ const PrivacyPolicyPage: FC = () => {
               If you have any questions about this Privacy Policy, please contact us:
             </p>
             <ul className="list-disc pl-6 space-y-2">
-              <li>By email: privacy@clarityquest.io</li>
+              <li>By email: support@clarityquest.app</li>
               <li>By visiting the contact section on our website</li>
             </ul>
           </section>
@@ -237,8 +230,6 @@ const PrivacyPolicyPage: FC = () => {
           </Button>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default PrivacyPolicyPage;
