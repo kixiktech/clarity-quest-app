@@ -39,11 +39,9 @@ const SessionCategoriesPage: FC = () => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
-          // Get full name from user metadata
           const fullName = user.user_metadata?.full_name || "";
           
           if (fullName) {
-            // Extract first initial and set name
             const firstInitial = fullName.charAt(0).toUpperCase();
             
             setUserInitial(firstInitial);
@@ -52,12 +50,10 @@ const SessionCategoriesPage: FC = () => {
             console.log(`User initial set to: ${firstInitial}`);
           } else {
             console.log("No full name found in user metadata");
-            // Fallback to a default value
             setUserInitial("U");
             setUserName("User");
           }
           
-          // Check if user has available sessions
           checkSessionAvailability(user.id);
         }
       } catch (error) {
@@ -75,7 +71,6 @@ const SessionCategoriesPage: FC = () => {
   
   const checkSessionAvailability = async (userId: string) => {
     try {
-      // Query the session_credits table to check if the user has any credits remaining
       const { data, error } = await supabase
         .from('session_credits')
         .select('credits_remaining, referral_credits')
@@ -84,19 +79,16 @@ const SessionCategoriesPage: FC = () => {
       
       if (error) {
         console.error("Error checking session availability:", error);
-        // Default to allowing access if there's an error
         setHasAvailableSession(true);
         return;
       }
       
-      // If user has at least one credit (regular or referral), they can access
       const totalCredits = (data?.credits_remaining || 0) + (data?.referral_credits || 0);
       setHasAvailableSession(totalCredits > 0);
       
       console.log(`User has ${totalCredits} total sessions available`);
     } catch (error) {
       console.error("Error in session availability check:", error);
-      // Default to allowing access if there's an error
       setHasAvailableSession(true);
     }
   };
@@ -110,7 +102,6 @@ const SessionCategoriesPage: FC = () => {
     triggerHaptic();
     
     if (!hasAvailableSession) {
-      // Redirect to paywall if no sessions available
       navigate("/paywall");
       return;
     }
@@ -139,7 +130,6 @@ const SessionCategoriesPage: FC = () => {
 
   return (
     <div className="h-screen w-full bg-[#221737] flex flex-col items-center justify-between p-4 sm:p-6 relative overflow-hidden">
-      {/* Top Section: Dropdown and Settings */}
       <div className="absolute top-2 sm:top-4 xl:top-6 left-2 sm:left-4 z-50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -192,7 +182,6 @@ const SessionCategoriesPage: FC = () => {
         <Settings className="h-5 w-5" />
       </Button>
 
-      {/* Main Content */}
       <div className="flex flex-col items-center justify-center flex-1 w-full max-w-4xl">
         <h1 className="text-2xl sm:text-4xl xl:text-5xl font-arcade text-center text-white mb-4 sm:mb-6 [text-shadow:_0_0_20px_rgb(255_255_255_/_40%)]">
           choose your focus:
@@ -215,22 +204,12 @@ const SessionCategoriesPage: FC = () => {
           ))}
         </div>
 
-        {/* Session Status */}
         {!hasAvailableSession && (
           <p className="text-amber-400 text-sm text-center mb-2">
             You've used your free session this week
           </p>
         )}
 
-        <Button
-          disabled={selectedNumber === null}
-          onClick={handleEnter}
-          className="w-full bg-[#4ADE80] hover:bg-[#3BCE70] text-[#221737] font-bold py-2"
-        >
-          {hasAvailableSession ? "Enter" : "Get More Sessions"}
-        </Button>
-
-        {/* Spline Scene Container */}
         <div className="w-full max-w-[300px] sm:max-w-[400px] md:max-w-[480px]">
           <div className="relative w-full aspect-[4/4] sm:aspect-[5/4] md:aspect-[16/12]">
             <Spline
