@@ -44,12 +44,13 @@ export interface ButtonProps
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, onClick, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
-    const { triggerHaptic } = useHapticFeedback();
+    const { triggerHaptic, vibrate } = useHapticFeedback();
     
     // Handle click with haptic feedback
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      // Trigger haptic feedback
+      // Try both methods for maximum compatibility
       triggerHaptic();
+      vibrate(20); // Short vibration as fallback
       
       // Call the original onClick handler if it exists
       if (onClick) {

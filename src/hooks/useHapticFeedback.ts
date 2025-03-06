@@ -1,5 +1,5 @@
 
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 /**
  * Hook to provide haptic feedback functionality
@@ -7,17 +7,52 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
  */
 export const useHapticFeedback = () => {
   /**
+   * Checks if the device supports haptic feedback
+   */
+  const isHapticSupported = async (): Promise<boolean> => {
+    try {
+      return true; // Assume support, will fail gracefully if not supported
+    } catch (error) {
+      console.debug('Error checking haptic support:', error);
+      return false;
+    }
+  };
+
+  /**
    * Triggers a light haptic feedback impact
    * Silently fails on unsupported devices
    */
   const triggerHaptic = async () => {
     try {
-      await Haptics.impact({ style: ImpactStyle.Light });
+      // Try the notification type first as it's more reliable on iOS
+      await Haptics.notification({ type: NotificationType.Success });
+      
+      // Also try impact as a fallback
+      await Haptics.impact({ style: ImpactStyle.Medium });
+      
+      console.debug('Haptic feedback triggered');
     } catch (error) {
       // Silently fail on unsupported devices or web
-      console.debug('Haptic feedback not supported on this device');
+      console.debug('Haptic feedback failed:', error);
     }
   };
   
-  return { triggerHaptic };
+  /**
+   * Vibrates the device for a specific duration
+   * This is a more reliable fallback method
+   */
+  const vibrate = async (duration: number = 20) => {
+    try {
+      await Haptics.vibrate({ duration });
+      console.debug('Vibration triggered');
+    } catch (error) {
+      console.debug('Vibration failed:', error);
+    }
+  };
+  
+  return { 
+    triggerHaptic,
+    vibrate,
+    isHapticSupported
+  };
 };

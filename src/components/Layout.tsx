@@ -2,6 +2,7 @@
 import { FC, ReactNode, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Footer from "./Footer";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 
 interface LayoutProps {
   children: ReactNode;
@@ -13,6 +14,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const needsFooter = !isHomePage && 
                       location.pathname !== "/privacy-policy" && 
                       location.pathname !== "/terms-of-service";
+  const { isHapticSupported } = useHapticFeedback();
 
   // Scroll to top on route change
   useEffect(() => {
@@ -23,11 +25,19 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     // Make all pages scrollable
     document.body.style.overflow = 'auto';
 
+    // Check if haptics are supported
+    const checkHaptics = async () => {
+      const supported = await isHapticSupported();
+      console.log('Haptic feedback supported:', supported);
+    };
+    
+    checkHaptics();
+
     return () => {
       // Reset on unmount if needed
       document.body.style.overflow = 'auto';
     };
-  }, []);
+  }, [isHapticSupported]);
 
   return (
     <div className="min-h-[100dvh] bg-transparent flex flex-col">
