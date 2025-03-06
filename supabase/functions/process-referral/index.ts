@@ -54,12 +54,13 @@ serve(async (req) => {
       );
     }
 
-    // Find the referrer user from the referral code
-    // In this simple example, we're assuming the referral code is part of the user's ID
+    console.log(`Processing referral: code=${referralCode}, newUserId=${newUserId}`);
+
+    // Find the referrer user based on the referral code
     const { data: users, error: userError } = await supabase
       .from("auth.users")
       .select("id")
-      .ilike("id", `${referralCode}%`)
+      .ilike("id", `${referralCode}%`) // Match users where ID starts with the referral code
       .limit(1);
 
     if (userError || !users || users.length === 0) {
@@ -74,6 +75,31 @@ serve(async (req) => {
     }
 
     const referrerId = users[0].id;
+    console.log(`Found referrer: ${referrerId}`);
+
+    // Check if this referral has already been processed
+    const { data: existingReferrals, error: existingError } = await supabase
+      .from("referrals")
+      .select("*")
+      .eq("referrer_id", referrerId)
+      .eq("referred_user_id", newUserId);
+
+    if (existingError) {
+      console.error("Error checking existing referrals:", existingError);
+    } else if (existingReferrals && existingReferrals.length > 0) {
+      console.log("Referral already processed");
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: "Referral already processed",
+          alreadyProcessed: true 
+        }),
+        {
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 200,
+        }
+      );
+    }
 
     // Store the referral in the database
     const { error: referralError } = await supabase
@@ -94,6 +120,8 @@ serve(async (req) => {
         }
       );
     }
+
+    console.log("Referral record created, adding credits to both users");
 
     // Add credits to both users
     for (const userId of [referrerId, newUserId]) {
@@ -120,6 +148,8 @@ serve(async (req) => {
 
         if (updateError) {
           console.error(`Error updating credits for ${userId}:`, updateError);
+        } else {
+          console.log(`Added 2 referral credits for user ${userId}`);
         }
       } else {
         // Create new record
@@ -133,12 +163,17 @@ serve(async (req) => {
 
         if (insertError) {
           console.error(`Error creating credits for ${userId}:`, insertError);
+        } else {
+          console.log(`Created new credit record with 2 referral credits for user ${userId}`);
         }
       }
     }
 
     return new Response(
-      JSON.stringify({ success: true, message: "Referral processed successfully" }),
+      JSON.stringify({ 
+        success: true, 
+        message: "Referral processed successfully" 
+      }),
       {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 200,

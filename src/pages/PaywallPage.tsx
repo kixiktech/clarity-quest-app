@@ -15,69 +15,9 @@ const PaywallPage: FC = () => {
   const [referralLink, setReferralLink] = useState<string>("");
   const [showReferralDialog, setShowReferralDialog] = useState(false);
 
-  // Generate or fetch the user's referral link
-  const getReferralLink = async () => {
-    try {
-      triggerHaptic();
-      
-      // Get current user
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        toast({
-          title: "Error",
-          description: "You must be logged in to share",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      // In a real implementation, you would generate/fetch a unique code
-      // For now, we'll use the user's ID as part of the referral code
-      const baseUrl = window.location.origin;
-      const referralCode = user.id.substring(0, 8); // Using part of the user ID as a simple example
-      const fullReferralLink = `${baseUrl}/login?ref=${referralCode}`;
-      
-      setReferralLink(fullReferralLink);
-      setShowReferralDialog(true);
-    } catch (error) {
-      console.error("Error generating referral link:", error);
-      toast({
-        title: "Error",
-        description: "Could not generate referral link",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleShareLink = async () => {
+  const handleShare = () => {
     triggerHaptic();
-    
-    // Check if Web Share API is available
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Join me on ClarityQuest",
-          text: "Transform your reality with visualization! Join me on ClarityQuest and we'll both get free sessions.",
-          url: referralLink,
-        });
-        
-        toast({
-          title: "Shared!",
-          description: "Thank you for sharing ClarityQuest",
-        });
-      } catch (error) {
-        console.error("Error sharing:", error);
-        // User probably cancelled sharing
-      }
-    } else {
-      // Fallback - copy to clipboard
-      navigator.clipboard.writeText(referralLink);
-      toast({
-        title: "Link copied!",
-        description: "Referral link copied to clipboard",
-      });
-    }
+    navigate("/share-earn");
   };
 
   const handleUpgrade = () => {
@@ -132,7 +72,7 @@ const PaywallPage: FC = () => {
         <div className="space-y-4">
           {/* Share Button */}
           <Button 
-            onClick={getReferralLink}
+            onClick={handleShare}
             className="w-full py-6 bg-indigo-600 hover:bg-indigo-500 text-white flex items-center justify-center gap-2"
           >
             <Share className="h-5 w-5" />
@@ -154,31 +94,6 @@ const PaywallPage: FC = () => {
             Enjoy unlimited sessions all month long - $25/month or $210/year
           </p>
         </div>
-        
-        {/* Referral Dialog */}
-        <Dialog open={showReferralDialog} onOpenChange={setShowReferralDialog}>
-          <DialogContent className="bg-black/80 backdrop-blur-xl border-white/10 text-white">
-            <h2 className="text-xl font-arcade text-yellow-400 mb-4">
-              Share Your Unique Link
-            </h2>
-            
-            <div className="bg-white/10 p-4 rounded-md mb-4 overflow-auto">
-              <code className="text-green-400 text-sm break-all">{referralLink}</code>
-            </div>
-            
-            <p className="text-white/70 mb-4 text-sm">
-              Share this link with friends. You'll both receive 2 free sessions when they sign up!
-            </p>
-            
-            <Button 
-              onClick={handleShareLink} 
-              className="w-full bg-indigo-600 hover:bg-indigo-500"
-            >
-              <Share className="mr-2 h-4 w-4" />
-              Share Link
-            </Button>
-          </DialogContent>
-        </Dialog>
       </div>
     </div>
   );

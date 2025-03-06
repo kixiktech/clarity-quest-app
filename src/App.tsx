@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -29,6 +30,7 @@ import EditCategoryPage from "./pages/EditCategoryPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/TermsOfServicePage";
 import PaywallPage from "./pages/PaywallPage";
+import ShareEarnPage from "./pages/ShareEarnPage";
 import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
@@ -119,6 +121,7 @@ const App = () => {
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/terms-of-service" element={<TermsOfServicePage />} />
               <Route path="/paywall" element={<ProtectedRoute><PaywallPage /></ProtectedRoute>} />
+              <Route path="/share-earn" element={<ProtectedRoute><ShareEarnPage /></ProtectedRoute>} />
               
               <Route path="/intro-questions" element={<ProtectedRoute isIntroRoute={true}><IntroQuestionsPage /></ProtectedRoute>} />
               <Route path="/finances" element={<ProtectedRoute><FinancesPage /></ProtectedRoute>} />
