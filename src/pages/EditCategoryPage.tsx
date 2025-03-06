@@ -1,3 +1,4 @@
+
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -48,6 +49,11 @@ const EditCategoryPage: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [responseText, setResponseText] = useState("");
+
+  // Effect to scroll to top of page on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (category) {

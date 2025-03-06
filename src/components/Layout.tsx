@@ -14,6 +14,11 @@ const Layout: FC<LayoutProps> = ({ children }) => {
                       location.pathname !== "/privacy-policy" && 
                       location.pathname !== "/terms-of-service";
 
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   useEffect(() => {
     // Make all pages scrollable
     document.body.style.overflow = 'auto';
