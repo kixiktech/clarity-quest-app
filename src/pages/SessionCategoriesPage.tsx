@@ -27,8 +27,8 @@ const keyboardOverlayStyles = {
   inset: 0,
   display: 'grid',
   gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: '8px',
-  padding: '16px',
+  gap: '1px',
+  padding: '35px',
   pointerEvents: 'none', // Allow clicks to pass through by default
 } as const;
 
@@ -229,7 +229,7 @@ const SessionCategoriesPage: FC = () => {
                 style={{
                   ...keyButtonStyles,
                   gridColumn: '1 / -1',
-                  marginTop: '8px',
+                  marginTop: '1px',
                 }}
                 onClick={handleEnterClick}
                 disabled={!selectedNumber}
