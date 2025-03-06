@@ -1,10 +1,9 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Brain, Calendar, Edit } from "lucide-react";
+import { ArrowLeft, Brain, Calendar, Edit, ExternalLink } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
@@ -85,7 +84,6 @@ const SettingsPage: FC = () => {
         return;
       }
 
-      // Fetch user responses
       const { data: responseData, error: responseError } = await supabase
         .from("user_responses")
         .select("*")
@@ -95,7 +93,6 @@ const SettingsPage: FC = () => {
       if (responseError) throw responseError;
       setResponses(responseData || []);
 
-      // Fetch session data to calculate streak and active days
       const { data: sessionData, error: sessionError } = await supabase
         .from("session_feedback")
         .select("created_at, session_category_id")
@@ -104,20 +101,16 @@ const SettingsPage: FC = () => {
 
       if (sessionError) throw sessionError;
       
-      // Calculate category stats
       const categoryUsageCounts = CATEGORIES.reduce((acc, category) => {
         acc[category] = 0;
         return acc;
       }, {} as Record<string, number>);
 
-      // Process session data
       if (sessionData && sessionData.length > 0) {
-        // Track sessions by day for the last 7 days
         const now = new Date();
         const activeDaysMap = new Array(7).fill(false);
         const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
         
-        // Calculate the start date (6 days ago)
         const startDate = new Date();
         startDate.setDate(now.getDate() - 6);
         startDate.setHours(0, 0, 0, 0);
@@ -125,17 +118,14 @@ const SettingsPage: FC = () => {
         sessionData.forEach(session => {
           const sessionDate = new Date(session.created_at);
           
-          // Count category usage - assume session_category_id maps to category index
           if (session.session_category_id >= 0 && session.session_category_id < CATEGORIES.length) {
             const category = CATEGORIES[session.session_category_id];
             categoryUsageCounts[category] = (categoryUsageCounts[category] || 0) + 1;
           }
           
-          // Check if session is within the last 7 days
           if (sessionDate >= startDate && sessionDate <= now) {
-            // Calculate day index (0 = today, 1 = yesterday, etc.)
             const dayDiff = Math.floor((now.getTime() - sessionDate.getTime()) / (1000 * 60 * 60 * 24));
-            const dayIndex = 6 - dayDiff; // Convert to 0-6 for display (Monday to Sunday)
+            const dayIndex = 6 - dayDiff;
             
             if (dayIndex >= 0 && dayIndex < 7) {
               activeDaysMap[dayIndex] = true;
@@ -143,11 +133,9 @@ const SettingsPage: FC = () => {
           }
         });
         
-        // Calculate streak
         let streakCount = 0;
         let streakBroken = false;
         
-        // Start from today (index 6) and go backward
         for (let i = 6; i >= 0; i--) {
           if (activeDaysMap[i] && !streakBroken) {
             streakCount++;
@@ -163,7 +151,6 @@ const SettingsPage: FC = () => {
         });
       }
       
-      // Format category stats for display
       const formattedStats = CATEGORIES.map(category => ({
         category,
         count: categoryUsageCounts[category] || 0
@@ -200,7 +187,7 @@ const SettingsPage: FC = () => {
         .from("user_responses")
         .update({ response: newResponse, updated_at: new Date().toISOString() })
         .eq("id", id)
-        .eq("user_id", user.id); // Ensure user can only update their own responses
+        .eq("user_id", user.id);
 
       if (error) throw error;
 
@@ -209,7 +196,6 @@ const SettingsPage: FC = () => {
         description: "Your response has been updated",
       });
       
-      // Update local state to reflect the change
       setResponses(prev => 
         prev.map(item => item.id === id ? {...item, response: newResponse, updated_at: new Date().toISOString()} : item)
       );
@@ -221,6 +207,10 @@ const SettingsPage: FC = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleEditCategory = (category: string) => {
+    navigate(`/edit-category/${category}`);
   };
 
   return (
@@ -243,7 +233,6 @@ const SettingsPage: FC = () => {
           </div>
         ) : (
           <div className="space-y-12">
-            {/* Brain Streak Visualization */}
             <section className="space-y-4">
               <div className="flex items-center justify-center flex-col">
                 <Brain className="h-20 w-20 text-primary mb-3" />
@@ -257,7 +246,6 @@ const SettingsPage: FC = () => {
               </div>
             </section>
 
-            {/* Weekly Outline */}
             <section className="bg-card rounded-lg p-6 shadow-sm space-y-4">
               <div className="flex items-center gap-2 mb-3">
                 <Calendar className="h-6 w-6 text-primary" />
@@ -280,20 +268,28 @@ const SettingsPage: FC = () => {
               </div>
             </section>
 
-            {/* Category Stats */}
             <section className="bg-card rounded-lg p-6 shadow-sm">
               <h2 className="text-xl font-semibold mb-6">Category Usage</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {categoryStats.map((stat) => (
-                  <div key={stat.category} className="flex justify-between items-center p-3 bg-background rounded-md border border-border">
+                  <div 
+                    key={stat.category} 
+                    className="flex justify-between items-center p-4 bg-background rounded-md border border-border hover:bg-accent/30 cursor-pointer transition-colors"
+                    onClick={() => handleEditCategory(stat.category)}
+                  >
                     <span className="font-medium">{getCategoryDisplayName(stat.category)}</span>
-                    <span className="text-muted-foreground">Sessions: {stat.count}</span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-muted-foreground">Sessions: {stat.count}</span>
+                      <ExternalLink className="h-4 w-4 text-muted-foreground" />
+                    </div>
                   </div>
                 ))}
               </div>
+              <p className="text-muted-foreground text-sm mt-6">
+                Click on a category to edit your response
+              </p>
             </section>
 
-            {/* User Responses */}
             <section className="bg-card rounded-lg p-6 shadow-sm">
               <div className="flex items-center gap-2 mb-6">
                 <Edit className="h-6 w-6 text-primary" />
@@ -305,18 +301,27 @@ const SettingsPage: FC = () => {
               ) : (
                 <div className="space-y-6">
                   {responses.map((response) => (
-                    <div key={response.id} className="bg-background rounded-lg p-4 border border-border">
-                      <h3 className="font-medium mb-2 capitalize">{getCategoryDisplayName(response.category)}</h3>
-                      <textarea
-                        className="w-full min-h-[100px] p-3 rounded-md border border-input bg-background resize-y"
-                        defaultValue={response.response}
-                        onBlur={(e) => {
-                          if (e.target.value !== response.response) {
-                            handleUpdateResponse(response.id, e.target.value);
-                          }
-                        }}
-                      />
-                      <p className="text-sm text-muted-foreground mt-2">
+                    <div 
+                      key={response.id} 
+                      className="bg-background rounded-lg p-4 border border-border hover:bg-accent/30 cursor-pointer transition-colors"
+                      onClick={() => handleEditCategory(response.category)}
+                    >
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="font-medium capitalize">{getCategoryDisplayName(response.category)}</h3>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="gap-1 text-xs"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditCategory(response.category);
+                          }}
+                        >
+                          <Edit className="h-3 w-3" /> Edit
+                        </Button>
+                      </div>
+                      <p className="text-muted-foreground line-clamp-3">{response.response}</p>
+                      <p className="text-xs text-muted-foreground mt-2">
                         Last updated: {new Date(response.updated_at).toLocaleDateString()}
                       </p>
                     </div>

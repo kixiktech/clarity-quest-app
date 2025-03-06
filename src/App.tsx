@@ -26,6 +26,7 @@ import VisualizationPage from "./pages/VisualizationPage";
 import SessionFeedbackPage from "./pages/SessionFeedbackPage";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
 import SettingsPage from "./pages/SettingsPage";
+import EditCategoryPage from "./pages/EditCategoryPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/TermsOfServicePage";
 import CookieConsent from "./components/CookieConsent";
@@ -152,6 +153,7 @@ const App = () => {
               <Route path="/session-feedback" element={<ProtectedRoute><SessionFeedbackPage /></ProtectedRoute>} />
               <Route path="/delete-account" element={<ProtectedRoute><DeleteAccountPage /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+              <Route path="/edit-category/:category" element={<ProtectedRoute><EditCategoryPage /></ProtectedRoute>} />
               
               {/* 404 route - make sure this is the last route */}
               <Route path="*" element={<NotFound />} />
