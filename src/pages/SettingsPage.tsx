@@ -1,12 +1,14 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Brain, Calendar, Edit, ExternalLink } from "lucide-react";
+import { ArrowLeft, Brain, Calendar, Copy, Edit, ExternalLink, Gift, HeartHandshake, Link2, Share2, Check } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
+import { Icons } from "@/components/Icons";
 
 interface UserResponse {
   id: string;
@@ -57,6 +59,7 @@ const getCategoryDisplayName = (category: string): string => {
 const SettingsPage: FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { triggerHaptic } = useHapticFeedback();
   const [responses, setResponses] = useState<UserResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
@@ -64,6 +67,13 @@ const SettingsPage: FC = () => {
     streak_count: 0,
     active_days: [false, false, false, false, false, false, false],
     last_active_date: null
+  });
+  
+  const [referralLink, setReferralLink] = useState<string>("");
+  const [isCopied, setIsCopied] = useState(false);
+  const [referralStats, setReferralStats] = useState({
+    totalReferrals: 0,
+    sessionsEarned: 0
   });
 
   useEffect(() => {
@@ -83,6 +93,36 @@ const SettingsPage: FC = () => {
         });
         navigate("/login");
         return;
+      }
+
+      const baseUrl = window.location.origin;
+      const referralCode = user.id.substring(0, 8);
+      const fullReferralLink = `${baseUrl}/login?ref=${referralCode}`;
+      setReferralLink(fullReferralLink);
+
+      const { data: referrals, error: referralsError } = await supabase
+        .from('referrals')
+        .select('*')
+        .eq('referrer_id', user.id)
+        .eq('status', 'completed');
+
+      if (referralsError) {
+        console.error("Error fetching referrals:", referralsError);
+      } else {
+        const { data: credits, error: creditsError } = await supabase
+          .from('session_credits')
+          .select('referral_credits')
+          .eq('user_id', user.id)
+          .single();
+
+        if (creditsError && creditsError.code !== 'PGRST116') {
+          console.error("Error fetching credits:", creditsError);
+        } else {
+          setReferralStats({
+            totalReferrals: referrals?.length || 0,
+            sessionsEarned: credits?.referral_credits || 0
+          });
+        }
       }
 
       const { data: responseData, error: responseError } = await supabase
@@ -110,7 +150,6 @@ const SettingsPage: FC = () => {
       if (sessionData && sessionData.length > 0) {
         const now = new Date();
         const activeDaysMap = new Array(7).fill(false);
-        const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
         
         const startDate = new Date();
         startDate.setDate(now.getDate() - 6);
@@ -169,6 +208,33 @@ const SettingsPage: FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleCopyLink = async () => {
+    triggerHaptic();
+    
+    try {
+      await navigator.clipboard.writeText(referralLink);
+      setIsCopied(true);
+      toast({
+        title: "Link copied!",
+        description: "Referral link copied to clipboard",
+      });
+      
+      setTimeout(() => setIsCopied(false), 2000);
+    } catch (error) {
+      console.error("Error copying to clipboard:", error);
+      toast({
+        title: "Error",
+        description: "Could not copy link to clipboard",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleShareScreen = () => {
+    triggerHaptic();
+    navigate("/share-earn");
   };
 
   const handleUpdateResponse = async (id: string, newResponse: string) => {
@@ -244,6 +310,64 @@ const SettingsPage: FC = () => {
                 <div className="w-full max-w-md">
                   <Progress value={(streakData.streak_count / 7) * 100} className="h-6" />
                 </div>
+              </div>
+            </section>
+
+            <section className="bg-card rounded-lg p-6 shadow-sm space-y-4">
+              <div className="flex items-center gap-2 mb-3">
+                <HeartHandshake className="h-6 w-6 text-primary" />
+                <h2 className="text-xl font-semibold">Share & Earn Free Sessions</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div className="bg-background/50 rounded-lg p-4 border border-border flex flex-col items-center justify-center text-center">
+                  <Gift className="h-10 w-10 text-yellow-400 mb-2" />
+                  <p className="text-xl font-semibold">{referralStats.totalReferrals}</p>
+                  <p className="text-sm text-muted-foreground">Friends Joined</p>
+                </div>
+                <div className="bg-background/50 rounded-lg p-4 border border-border flex flex-col items-center justify-center text-center">
+                  <Brain className="h-10 w-10 text-yellow-400 mb-2" />
+                  <p className="text-xl font-semibold">{referralStats.sessionsEarned}</p>
+                  <p className="text-sm text-muted-foreground">Sessions Earned</p>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Your Referral Link</label>
+                  <div className="flex gap-2">
+                    {isLoading ? (
+                      <div className="w-full h-10 bg-card/50 animate-pulse rounded-md"></div>
+                    ) : (
+                      <Input 
+                        value={referralLink} 
+                        readOnly 
+                        className="flex-1 bg-background/50 border-border text-sm font-mono" 
+                      />
+                    )}
+                    <Button 
+                      onClick={handleCopyLink} 
+                      className="shrink-0"
+                      variant="secondary"
+                      disabled={isLoading}
+                    >
+                      {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-muted-foreground">
+                  For every friend who signs up using your link, you'll both earn 2 free sessions!
+                </p>
+                
+                <Button 
+                  onClick={handleShareScreen} 
+                  className="w-full"
+                  variant="outline"
+                >
+                  <Share2 className="mr-2 h-4 w-4" />
+                  Share Your Link
+                </Button>
               </div>
             </section>
 
