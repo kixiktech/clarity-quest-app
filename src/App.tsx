@@ -31,6 +31,7 @@ import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/TermsOfServicePage";
 import PaywallPage from "./pages/PaywallPage";
 import ShareEarnPage from "./pages/ShareEarnPage";
+import UpgradePage from "./pages/UpgradePage";
 import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
@@ -122,6 +123,7 @@ const App = () => {
               <Route path="/terms-of-service" element={<TermsOfServicePage />} />
               <Route path="/paywall" element={<ProtectedRoute><PaywallPage /></ProtectedRoute>} />
               <Route path="/share-earn" element={<ProtectedRoute><ShareEarnPage /></ProtectedRoute>} />
+              <Route path="/upgrade" element={<ProtectedRoute><UpgradePage /></ProtectedRoute>} />
               
               <Route path="/intro-questions" element={<ProtectedRoute isIntroRoute={true}><IntroQuestionsPage /></ProtectedRoute>} />
               <Route path="/finances" element={<ProtectedRoute><FinancesPage /></ProtectedRoute>} />
