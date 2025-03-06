@@ -1,4 +1,3 @@
-
 import { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -172,13 +171,10 @@ const ShareEarnPage: FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative">
-      {/* Gradient background overlays */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 to-purple-900/30" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.25)_0%,transparent_100%)]" />
       
-      {/* Main content */}
       <div className="relative z-10 w-full max-w-md bg-black/60 backdrop-blur-xl rounded-xl border border-white/10 shadow-xl p-6 sm:p-8 animate-fade-in">
-        {/* Back button */}
         <Button 
           variant="ghost" 
           className="absolute top-4 left-4 text-white/60 hover:text-white p-2 h-auto"
@@ -187,17 +183,14 @@ const ShareEarnPage: FC = () => {
           <ArrowLeft className="h-5 w-5" />
         </Button>
         
-        {/* Header */}
         <h1 className="text-2xl sm:text-3xl font-arcade text-center text-yellow-400 mb-4 mt-4">
           Unlock More Free Sessions
         </h1>
         
-        {/* Subheading */}
         <p className="text-center text-white/90 mb-6">
           Self-improvement is a journey—each friend you invite brings you closer to your best self. Our neuroscience-backed techniques show that sharing and consistent practice amplify your transformation.
         </p>
         
-        {/* Referral stats */}
         <div className="grid grid-cols-2 gap-4 mb-6">
           <div className="bg-white/5 rounded-lg p-4 text-center">
             <p className="text-yellow-400 text-xl font-bold">{referralStats.totalReferrals}</p>
@@ -209,7 +202,6 @@ const ShareEarnPage: FC = () => {
           </div>
         </div>
         
-        {/* Referral Link Field */}
         <div className="mb-6">
           <label className="block text-white/80 text-sm mb-2">Your Unique Referral Link</label>
           <div className="flex gap-2">
@@ -234,14 +226,12 @@ const ShareEarnPage: FC = () => {
           </div>
         </div>
         
-        {/* Explanation Section */}
         <div className="bg-white/5 rounded-lg p-4 mb-6">
           <p className="text-white/80 text-center">
             For every friend who signs up with your link, you'll earn 2 free sessions. There's no limit—share as often as you like and fuel your journey to unlock your full potential.
           </p>
         </div>
         
-        {/* Share Options */}
         <div className="mb-8">
           <p className="text-white/80 text-sm mb-3 text-center">Share via:</p>
           <div className="flex justify-center gap-4">
@@ -288,14 +278,13 @@ const ShareEarnPage: FC = () => {
           </div>
         </div>
         
-        {/* Back Button */}
         <Button 
           variant="ghost" 
           className="w-full text-white/80 hover:text-white border border-white/20"
           onClick={handleBack}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Paywall
+          Go Back
         </Button>
       </div>
     </div>
