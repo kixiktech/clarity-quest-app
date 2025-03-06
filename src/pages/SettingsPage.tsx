@@ -21,6 +21,17 @@ interface CategoryStats {
   count: number;
 }
 
+interface SessionData {
+  date: string;
+  category: string;
+}
+
+interface UserStreak {
+  streak_count: number;
+  active_days: boolean[];
+  last_active_date: string | null;
+}
+
 const CATEGORIES = [
   "career", 
   "finances", 
@@ -49,8 +60,11 @@ const SettingsPage: FC = () => {
   const [responses, setResponses] = useState<UserResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
-  const [streakCount, setStreakCount] = useState(3); // Mock data, would come from API
-  const [activeDays, setActiveDays] = useState([false, true, true, true, false, false, false]); // Mock data
+  const [streakData, setStreakData] = useState<UserStreak>({
+    streak_count: 0,
+    active_days: [false, false, false, false, false, false, false],
+    last_active_date: null
+  });
 
   useEffect(() => {
     fetchUserData();
@@ -75,21 +89,87 @@ const SettingsPage: FC = () => {
       const { data: responseData, error: responseError } = await supabase
         .from("user_responses")
         .select("*")
+        .eq("user_id", user.id)
         .order("created_at", { ascending: true });
 
       if (responseError) throw responseError;
-      
-      // Mock category usage stats - in a real app, this would be from the database
-      const mockStats = CATEGORIES.map(category => ({
-        category,
-        count: Math.floor(Math.random() * 10) + 1 // Random number between 1-10 for demo
-      }));
-
-      setCategoryStats(mockStats);
       setResponses(responseData || []);
+
+      // Fetch session data to calculate streak and active days
+      const { data: sessionData, error: sessionError } = await supabase
+        .from("session_feedback")
+        .select("created_at, session_category_id")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (sessionError) throw sessionError;
       
-      // Here you would also fetch the streak data from your database
-      // For now we're using mock data set above
+      // Calculate category stats
+      const categoryUsageCounts = CATEGORIES.reduce((acc, category) => {
+        acc[category] = 0;
+        return acc;
+      }, {} as Record<string, number>);
+
+      // Process session data
+      if (sessionData && sessionData.length > 0) {
+        // Track sessions by day for the last 7 days
+        const now = new Date();
+        const activeDaysMap = new Array(7).fill(false);
+        const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+        
+        // Calculate the start date (6 days ago)
+        const startDate = new Date();
+        startDate.setDate(now.getDate() - 6);
+        startDate.setHours(0, 0, 0, 0);
+        
+        sessionData.forEach(session => {
+          const sessionDate = new Date(session.created_at);
+          
+          // Count category usage - assume session_category_id maps to category index
+          if (session.session_category_id >= 0 && session.session_category_id < CATEGORIES.length) {
+            const category = CATEGORIES[session.session_category_id];
+            categoryUsageCounts[category] = (categoryUsageCounts[category] || 0) + 1;
+          }
+          
+          // Check if session is within the last 7 days
+          if (sessionDate >= startDate && sessionDate <= now) {
+            // Calculate day index (0 = today, 1 = yesterday, etc.)
+            const dayDiff = Math.floor((now.getTime() - sessionDate.getTime()) / (1000 * 60 * 60 * 24));
+            const dayIndex = 6 - dayDiff; // Convert to 0-6 for display (Monday to Sunday)
+            
+            if (dayIndex >= 0 && dayIndex < 7) {
+              activeDaysMap[dayIndex] = true;
+            }
+          }
+        });
+        
+        // Calculate streak
+        let streakCount = 0;
+        let streakBroken = false;
+        
+        // Start from today (index 6) and go backward
+        for (let i = 6; i >= 0; i--) {
+          if (activeDaysMap[i] && !streakBroken) {
+            streakCount++;
+          } else if (!activeDaysMap[i]) {
+            streakBroken = true;
+          }
+        }
+        
+        setStreakData({
+          streak_count: streakCount,
+          active_days: activeDaysMap,
+          last_active_date: sessionData[0]?.created_at || null
+        });
+      }
+      
+      // Format category stats for display
+      const formattedStats = CATEGORIES.map(category => ({
+        category,
+        count: categoryUsageCounts[category] || 0
+      }));
+      
+      setCategoryStats(formattedStats);
       
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -105,10 +185,22 @@ const SettingsPage: FC = () => {
 
   const handleUpdateResponse = async (id: string, newResponse: string) => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Error", 
+          description: "User not authenticated",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       const { error } = await supabase
         .from("user_responses")
-        .update({ response: newResponse })
-        .eq("id", id);
+        .update({ response: newResponse, updated_at: new Date().toISOString() })
+        .eq("id", id)
+        .eq("user_id", user.id); // Ensure user can only update their own responses
 
       if (error) throw error;
 
@@ -119,7 +211,7 @@ const SettingsPage: FC = () => {
       
       // Update local state to reflect the change
       setResponses(prev => 
-        prev.map(item => item.id === id ? {...item, response: newResponse} : item)
+        prev.map(item => item.id === id ? {...item, response: newResponse, updated_at: new Date().toISOString()} : item)
       );
     } catch (error) {
       console.error("Error updating response:", error);
@@ -155,12 +247,12 @@ const SettingsPage: FC = () => {
             <section className="space-y-4">
               <div className="flex items-center justify-center flex-col">
                 <Brain className="h-20 w-20 text-primary mb-3" />
-                <h2 className="text-xl font-semibold mb-2">Brain Power Streak: {streakCount} days</h2>
+                <h2 className="text-xl font-semibold mb-2">Brain Power Streak: {streakData.streak_count} days</h2>
                 <p className="text-muted-foreground text-center mb-4 max-w-lg">
                   Your brain is powering up with each day of visualization! Complete 7 days in a row to fully illuminate your potential.
                 </p>
                 <div className="w-full max-w-md">
-                  <Progress value={(streakCount / 7) * 100} className="h-6" />
+                  <Progress value={(streakData.streak_count / 7) * 100} className="h-6" />
                 </div>
               </div>
             </section>
@@ -177,7 +269,7 @@ const SettingsPage: FC = () => {
                   <div key={index} className="flex flex-col items-center">
                     <div className={cn(
                       "w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-all",
-                      activeDays[index] 
+                      streakData.active_days[index] 
                         ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30" 
                         : "bg-secondary text-muted-foreground"
                     )}>
