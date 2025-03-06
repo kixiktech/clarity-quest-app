@@ -46,7 +46,7 @@ export const useHapticFeedback = () => {
       
       // If we're in a development environment and not in a Capacitor app,
       // log that haptics require a native build
-      if (typeof window !== 'undefined' && !window.Capacitor) {
+      if (typeof window !== 'undefined' && window.Capacitor === undefined) {
         console.debug('Note: Full haptic feedback requires building as a native app with Capacitor');
       }
     } catch (error) {
