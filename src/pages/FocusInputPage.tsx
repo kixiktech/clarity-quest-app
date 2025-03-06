@@ -33,7 +33,7 @@ const FocusInputPage: FC = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex flex-col p-4">
+    <div className="min-h-[100dvh] w-full bg-[#221737] flex flex-col p-4">
       <div className="flex-none">
         <Button
           onClick={() => navigate("/session-categories")}
@@ -81,6 +81,12 @@ const FocusInputPage: FC = () => {
             {focusText ? "Begin Visualization" : "Skip"}
           </Button>
         </div>
+      </div>
+      
+      {/* Background gradient elements */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-purple-900/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)]" />
       </div>
     </div>
   );
