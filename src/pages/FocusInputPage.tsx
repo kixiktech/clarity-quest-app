@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import VoiceTextInput from "@/components/VoiceTextInput";
 import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const FocusInputPage: FC = () => {
   const navigate = useNavigate();
@@ -14,13 +15,35 @@ const FocusInputPage: FC = () => {
   
   const category = location.state?.category || "session";
 
-  const handleSubmit = (text: string) => {
-    setFocusText(text);
-    localStorage.setItem("sessionFocus", text);
-    toast({
-      title: "Focus Area Saved",
-      description: "Your specific focus has been recorded. Let's begin the visualization.",
-    });
+  const handleSubmit = async (text: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+
+      const { error } = await supabase.from("user_responses").insert({
+        user_id: user.id,
+        category: "focus",
+        response: text
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Focus Area Saved",
+        description: "Your specific focus has been recorded. Let's begin the visualization.",
+      });
+      navigate("/career");
+    } catch (error) {
+      console.error('Error saving response:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save your response. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleNavigation = () => {
