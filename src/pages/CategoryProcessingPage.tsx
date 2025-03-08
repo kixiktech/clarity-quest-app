@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { generateMeditationResponse } from "@/integrations/openaiService";
+import { generateSpeech } from "@/integrations/elevenLabsService";
 
 const messages = [
   "INITIALIZING YOUR VISUALIZATION...",
@@ -47,6 +48,23 @@ const CategoryProcessingPage: FC = () => {
       if (newProgress >= 100) {
         clearInterval(timer);
         setShowCompletion(true);
+
+        // Test ElevenLabs API
+        const testSpeech = async () => {
+          console.log("Calling ElevenLabs API...");
+          const audioBlob = await generateSpeech("Hi, How are you");
+          
+          if (audioBlob) {
+            console.log("Audio generated successfully!", audioBlob);
+            // Optional: Play the audio to test
+            const audio = new Audio(URL.createObjectURL(audioBlob));
+            audio.play();
+          } else {
+            console.error("Failed to generate audio");
+          }
+        };
+
+        testSpeech();
 
         setTimeout(() => {
           console.log("Passing meditation to visualization:", meditationResponse);
