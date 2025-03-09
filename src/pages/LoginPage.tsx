@@ -1,4 +1,3 @@
-
 import { FC, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -10,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { countries } from "@/lib/countries";
+import countries from "@/lib/countries";
 
 interface LoginPageProps {
   className?: string;
@@ -34,7 +33,6 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState<string | null>(null);
   
-  // Signup form state
   const [signupForm, setSignupForm] = useState<SignupFormData>({
     fullName: "",
     email: "",
@@ -45,7 +43,6 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
   });
   
   useEffect(() => {
-    // Check if there's a referral code in the URL
     const params = new URLSearchParams(window.location.search);
     const ref = params.get('ref');
     if (ref) {
@@ -58,7 +55,6 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
     if (!referralCode) return;
     
     try {
-      // Call the Supabase Edge Function to process the referral
       const { data, error } = await supabase.functions.invoke('process-referral', {
         body: {
           referralCode,
@@ -73,7 +69,6 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
       
       console.log("Referral processed successfully:", data);
       
-      // Show success toast
       toast({
         title: "Bonus Sessions Added!",
         description: "You've received 2 free sessions from a referral!",
@@ -103,13 +98,11 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
       }
 
       if (data.user) {
-        // Process referral if there's a code
         await processReferral(data.user.id);
         
-        // Redirect based on whether the user is new or existing
         const createdAt = new Date(data.user.created_at);
         const now = new Date();
-        const isNewUser = now.getTime() - createdAt.getTime() < 60000; // Adjust time as needed
+        const isNewUser = now.getTime() - createdAt.getTime() < 60000;
 
         if (isNewUser) {
           navigate("/intro-questions");
@@ -149,7 +142,6 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Validate form
     if (signupForm.password !== signupForm.confirmPassword) {
       toast({
         title: "Error",
@@ -193,7 +185,6 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
       }
 
       if (data.user) {
-        // Process referral if there's a code
         await processReferral(data.user.id);
         
         navigate("/intro-questions");
