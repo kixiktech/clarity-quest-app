@@ -1,4 +1,3 @@
-
 import { FC, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -11,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import countries from "@/lib/countries";
-import { Facebook, X, ArrowLeft, ArrowRight, Eye, EyeOff, Google } from "lucide-react";
+import { Facebook, X, ArrowLeft, ArrowRight, Eye, EyeOff, Search } from "lucide-react";
 
 interface LoginPageProps {
   className?: string;
@@ -441,7 +440,7 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
                   onClick={handleGoogleSignIn}
                   disabled={isLoading}
                 >
-                  <Google className="h-5 w-5" />
+                  <Search className="h-5 w-5" />
                 </Button>
                 <Button
                   type="button"
@@ -561,7 +560,7 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
                   onClick={handleGoogleSignIn}
                   disabled={isLoading}
                 >
-                  <Google className="h-5 w-5" />
+                  <Search className="h-5 w-5" />
                 </Button>
                 <Button
                   type="button"
