@@ -1,3 +1,4 @@
+
 import { FC, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -8,21 +9,41 @@ import { Icons } from "@/components/Icons";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { countries } from "@/lib/countries";
 
 interface LoginPageProps {
   className?: string;
 }
 
+interface SignupFormData {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  country: string;
+  gender: string;
+}
+
 const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSigningUp, setIsSigningUp] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [referralCode, setReferralCode] = useState<string | null>(null);
-
+  
+  // Signup form state
+  const [signupForm, setSignupForm] = useState<SignupFormData>({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    country: "",
+    gender: "",
+  });
+  
   useEffect(() => {
     // Check if there's a referral code in the URL
     const params = new URLSearchParams(window.location.search);
@@ -107,17 +128,57 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
     }
   };
 
+  const handleSignupFormChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setSignupForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setSignupForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
+    // Validate form
+    if (signupForm.password !== signupForm.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
+    if (signupForm.password.length < 6) {
+      toast({
+        title: "Error",
+        description: "Password must be at least 6 characters",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: signupForm.email,
+        password: signupForm.password,
         options: {
           data: {
-            full_name: email.split('@')[0], // Default full name from email
+            full_name: signupForm.fullName,
+            country: signupForm.country,
+            gender: signupForm.gender,
           },
         },
       });
@@ -175,83 +236,203 @@ const LoginPage: FC<LoginPageProps> = ({ className = "" }) => {
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-card py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form
-              className="space-y-6"
-              onSubmit={isSignupMode ? handleSignup : handleLogin}
-            >
-              <div>
-                <Label htmlFor="email">Email address</Label>
-                <div className="mt-1">
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Email"
-                    disabled={isLoading}
-                  />
+            {isSignupMode ? (
+              <form className="space-y-6" onSubmit={handleSignup}>
+                <div>
+                  <Label htmlFor="fullName">Full Name</Label>
+                  <div className="mt-1">
+                    <Input
+                      id="fullName"
+                      name="fullName"
+                      type="text"
+                      required
+                      value={signupForm.fullName}
+                      onChange={handleSignupFormChange}
+                      placeholder="Full Name"
+                      disabled={isLoading}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div>
-                <Label htmlFor="password">Password</Label>
-                <div className="mt-1">
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    disabled={isLoading}
-                  />
+                <div>
+                  <Label htmlFor="email">Email address</Label>
+                  <div className="mt-1">
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      value={signupForm.email}
+                      onChange={handleSignupFormChange}
+                      placeholder="Email"
+                      disabled={isLoading}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="remember_me"
-                    name="remember_me"
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
-                    disabled={isLoading}
-                  />
-                  <Label htmlFor="remember_me" className="ml-2 block text-sm">
-                    Remember me
-                  </Label>
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <div className="mt-1">
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="new-password"
+                      required
+                      value={signupForm.password}
+                      onChange={handleSignupFormChange}
+                      placeholder="Password"
+                      disabled={isLoading}
+                    />
+                  </div>
                 </div>
-                <div className="text-sm">
-                  <Link
-                    to="#"
-                    className="font-medium text-primary hover:underline"
+                <div>
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <div className="mt-1">
+                    <Input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type="password"
+                      autoComplete="new-password"
+                      required
+                      value={signupForm.confirmPassword}
+                      onChange={handleSignupFormChange}
+                      placeholder="Confirm Password"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="country">Country</Label>
+                  <div className="mt-1">
+                    <Select
+                      value={signupForm.country}
+                      onValueChange={(value) => handleSelectChange("country", value)}
+                      disabled={isLoading}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your country" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-80">
+                        {countries.map((country) => (
+                          <SelectItem key={country.code} value={country.code}>
+                            {country.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="gender">Gender</Label>
+                  <div className="mt-1">
+                    <Select
+                      value={signupForm.gender}
+                      onValueChange={(value) => handleSelectChange("gender", value)}
+                      disabled={isLoading}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your gender" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                        <SelectItem value="non-binary">Non-binary</SelectItem>
+                        <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isLoading}
                   >
-                    Forgot your password?
-                  </Link>
+                    {isLoading ? (
+                      <>
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        Loading ...
+                      </>
+                    ) : (
+                      "Sign up"
+                    )}
+                  </Button>
                 </div>
-              </div>
-              <div>
-                <Button
-                  type="submit"
-                  className="w-full"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-                      Loading ...
-                    </>
-                  ) : (
-                    <>
-                      {isSignupMode ? "Sign up" : "Sign in"}
-                    </>
-                  )}
-                </Button>
-              </div>
-            </form>
+              </form>
+            ) : (
+              <form className="space-y-6" onSubmit={handleLogin}>
+                <div>
+                  <Label htmlFor="email">Email address</Label>
+                  <div className="mt-1">
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Email"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <div className="mt-1">
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Password"
+                      disabled={isLoading}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <input
+                      id="remember_me"
+                      name="remember_me"
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      disabled={isLoading}
+                    />
+                    <Label htmlFor="remember_me" className="ml-2 block text-sm">
+                      Remember me
+                    </Label>
+                  </div>
+                  <div className="text-sm">
+                    <Link
+                      to="#"
+                      className="font-medium text-primary hover:underline"
+                    >
+                      Forgot your password?
+                    </Link>
+                  </div>
+                </div>
+                <div>
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        Loading ...
+                      </>
+                    ) : (
+                      "Sign in"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       </div>
