@@ -1,12 +1,32 @@
-
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import Spline from '@splinetool/react-spline';
+import { fetchUserResponses } from "@/components/ObjectGenerator";
+import { generateMeditationPrompt } from "@/utils/meditationPromptGenerator";
 
 const VisualizationPage: FC = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    async function getUserResponses() {
+      const responses = await fetchUserResponses();
+      console.log('User Response History:', responses);
+    }
+    
+    getUserResponses();
+  }, []);
+
+  useEffect(() => {
+    async function setupMeditation() {
+      const prompt = await generateMeditationPrompt();
+      console.log('Meditation Prompt:', prompt);
+      // Here you can use the prompt with your AI service
+    }
+    
+    setupMeditation();
+  }, []);
 
   return (
     <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">

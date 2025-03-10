@@ -1,7 +1,8 @@
-
 import { FC, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
+import { generateMeditationResponse } from "@/integrations/openaiService";
+import { generateSpeech } from "@/integrations/elevenLabsService";
 
 const messages = [
   "INITIALIZING YOUR VISUALIZATION...",
@@ -14,14 +15,27 @@ const messages = [
 
 const CategoryProcessingPage: FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [progress, setProgress] = useState(0);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [showCompletion, setShowCompletion] = useState(false);
+  const [meditationResponse, setMeditationResponse] = useState<string | null>(null);
 
   useEffect(() => {
     const duration = 15000;
     const startTime = Date.now();
+
+    const generateMeditation = async () => {
+      console.log("Generating meditation...");
+      const result = await generateMeditationResponse();
+      if (result.error) {
+        console.error("Meditation generation error:", result.error);
+      } else {
+        console.log("Meditation generated successfully:", result.content);
+        setMeditationResponse(result.content);
+      }
+    };
+
+    generateMeditation();
 
     const timer = setInterval(() => {
       const elapsed = Date.now() - startTime;
@@ -34,13 +48,28 @@ const CategoryProcessingPage: FC = () => {
       if (newProgress >= 100) {
         clearInterval(timer);
         setShowCompletion(true);
-        
-        console.log("Category processing complete, preparing to navigate to visualization");
-        
+
+        // Test ElevenLabs API
+        const testSpeech = async () => {
+          console.log("Calling ElevenLabs API...");
+          const audioBlob = await generateSpeech("Hi, How are you");
+          
+          if (audioBlob) {
+            console.log("Audio generated successfully!", audioBlob);
+            // Optional: Play the audio to test
+            const audio = new Audio(URL.createObjectURL(audioBlob));
+            audio.play();
+          } else {
+            console.error("Failed to generate audio");
+          }
+        };
+
+        testSpeech();
+
         setTimeout(() => {
-          console.log("Navigating to /visualization now with state:", location.state);
+          console.log("Passing meditation to visualization:", meditationResponse);
           navigate("/visualization", {
-            state: location.state,
+            state: { meditationContent: meditationResponse || "No meditation data available" },
             replace: true
           });
         }, 2000);
@@ -48,7 +77,7 @@ const CategoryProcessingPage: FC = () => {
     }, 50);
 
     return () => clearInterval(timer);
-  }, [navigate, location.state]);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen w-full bg-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
