@@ -2,6 +2,7 @@
 import { FC, ReactNode, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Footer from "./Footer";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 
 interface LayoutProps {
   children: ReactNode;
@@ -9,28 +10,34 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
-  const isSciencePage = location.pathname === "/science";
   const isHomePage = location.pathname === "/";
   const needsFooter = !isHomePage && 
                       location.pathname !== "/privacy-policy" && 
                       location.pathname !== "/terms-of-service";
+  const { isHapticSupported } = useHapticFeedback();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   useEffect(() => {
-    // Only apply overflow hidden to specific pages that need it
-    // Remove overflow:hidden from the home page
-    if (isSciencePage) {
-      document.body.style.overflow = 'auto';
-    } else if (!isHomePage) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto'; // Allow scrolling on home page
-    }
+    // Make all pages scrollable
+    document.body.style.overflow = 'auto';
+
+    // Check if haptics are supported
+    const checkHaptics = async () => {
+      const supported = await isHapticSupported();
+      console.log('Haptic feedback supported:', supported);
+    };
+    
+    checkHaptics();
 
     return () => {
       // Reset on unmount if needed
       document.body.style.overflow = 'auto';
     };
-  }, [isSciencePage, isHomePage]);
+  }, [isHapticSupported]);
 
   return (
     <div className="min-h-[100dvh] bg-transparent flex flex-col">
@@ -44,12 +51,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         </div>
       </div>
 
-      {!isHomePage && (
-        <>
-          <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
-          <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)]" />
-        </>
-      )}
+      {/* Background gradients - Apply to all pages */}
+      <div className="fixed inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20" />
+      <div className="fixed inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)]" />
+
       {/* Adjust content padding when banner is visible */}
       <div className="relative z-10 md:pt-12 flex flex-col flex-1">
         {children}

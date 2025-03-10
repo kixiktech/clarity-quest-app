@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown, Trash2 } from "lucide-react";
 import Spline from "@splinetool/react-spline";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { useHapticFeedback } from "@/hooks/useHapticFeedback";
 
 const categories = [
   { id: 1, title: "career + purpose" },
@@ -47,59 +50,105 @@ const keyButtonStyles = {
 
 const SessionCategoriesPage: FC = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { triggerHaptic } = useHapticFeedback();
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
-  const [spline, setSpline] = useState<any>(null);
-  const splineContainerRef = useRef<HTMLDivElement>(null);
+  const [userInitial, setUserInitial] = useState<string>("U");
+  const [userName, setUserName] = useState<string>("User");
+  const [hasAvailableSession, setHasAvailableSession] = useState<boolean>(true);
 
-  const keyIds = {
-    "2b6639a2-d5fc-4cfc-95ea-a054d3231441": "Key1",
-    "dea3a446-3baa-43e9-bfa4-b4cfe46f17d4": "Key2",
-    "73f9c0d2-aed9-47bf-bd6e-2f33171bef07": "Key3",
-    "0e367520-0bcd-4dc1-aa7a-9f9448f4f971": "Key4",
-    "f45d8eb8-88f6-4c33-a3f4-d1da742a9bd3": "Key5",
-    "7d8ac785-5093-4216-ad74-41e449e13b56": "Key6",
-    "66530cf3-5a25-4b74-af3a-799f0c29476d": "KeyEnter"
-  };
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user) {
+          const fullName = user.user_metadata?.full_name || "";
+          
+          if (fullName) {
+            const firstInitial = fullName.charAt(0).toUpperCase();
+            
+            setUserInitial(firstInitial);
+            setUserName(fullName);
+            
+            console.log(`User initial set to: ${firstInitial}`);
+          } else {
+            console.log("No full name found in user metadata");
+            setUserInitial("U");
+            setUserName("User");
+          }
+          
+          checkSessionAvailability(user.id);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast({
+          title: "Error",
+          description: "Could not fetch user information",
+          variant: "destructive",
+        });
+      }
+    };
 
-  function onLoad(splineApp: any) {
-    console.log("Spline scene loaded");
-    setSpline(splineApp);
-  }
-
-  const handleLogout = () => {
-    navigate("/");
-  };
-
-  const handleKeyClick = (num: number) => {
-    console.log(`Key ${num} clicked`);
-    setSelectedNumber(num);
-    
-    // Find the UUID for the corresponding key
-    const keyUUID = Object.entries(keyIds).find(([_, value]) => value === `Key${num}`)?.[0];
-    if (keyUUID && spline) {
-      spline.emitEvent('mouseDown', keyUUID);
+    getUserData();
+  }, [toast]);
+  
+  const checkSessionAvailability = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('session_credits')
+        .select('credits_remaining, referral_credits')
+        .eq('user_id', userId)
+        .single();
+      
+      if (error) {
+        console.error("Error checking session availability:", error);
+        setHasAvailableSession(true);
+        return;
+      }
+      
+      const totalCredits = (data?.credits_remaining || 0) + (data?.referral_credits || 0);
+      setHasAvailableSession(totalCredits > 0);
+      
+      console.log(`User has ${totalCredits} total sessions available`);
+    } catch (error) {
+      console.error("Error in session availability check:", error);
+      setHasAvailableSession(true);
     }
   };
 
-  const handleEnterClick = () => {
+  const handleNumberSelect = (number: number) => {
+    triggerHaptic();
+    setSelectedNumber(number);
+  };
+
+  const handleEnter = () => {
+    triggerHaptic();
+    
+    if (!hasAvailableSession) {
+      navigate("/paywall");
+      return;
+    }
+    
     if (selectedNumber) {
-      console.log("Enter pressed");
-      console.log(`Navigating to category: ${categories[selectedNumber - 1].title}`);
-      
-      // Trigger Enter key animation
-      const enterKeyUUID = Object.entries(keyIds).find(([_, value]) => value === 'KeyEnter')?.[0];
-      if (enterKeyUUID && spline) {
-        spline.emitEvent('mouseDown', enterKeyUUID);
-      }
-      
-      // Add 500ms delay before navigation
-      setTimeout(() => {
-        navigate("/focus-input", {
-          state: { category: categories[selectedNumber - 1].id },
-        });
-      }, 500);
-    } else {
-      console.log("No category selected");
+      navigate("/focus-input", {
+        state: { category: categories[selectedNumber - 1].id },
+      });
+    }
+  };
+
+  const handleLogout = async () => {
+    triggerHaptic();
+    try {
+      await supabase.auth.signOut();
+      navigate("/");
+    } catch (error) {
+      console.error("Error signing out:", error);
+      toast({
+        title: "Error",
+        description: "Could not sign out. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -129,7 +178,6 @@ const SessionCategoriesPage: FC = () => {
 
   return (
     <div className="h-screen w-full bg-[#221737] flex flex-col items-center justify-between p-4 sm:p-6 relative overflow-hidden">
-      {/* Top Section: Dropdown and Settings */}
       <div className="absolute top-2 sm:top-4 xl:top-6 left-2 sm:left-4 z-50">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -159,7 +207,10 @@ const SessionCategoriesPage: FC = () => {
             </DropdownMenuItem>
             <DropdownMenuItem
               className="text-red-400 hover:text-red-300 hover:bg-white/10 focus:bg-white/10 cursor-pointer text-sm"
-              onClick={() => navigate("/delete-account")}
+              onClick={() => {
+                triggerHaptic();
+                navigate("/delete-account");
+              }}
             >
               <Trash2 className="mr-2 h-4 w-4" />
               <span>Delete Account</span>
@@ -171,12 +222,14 @@ const SessionCategoriesPage: FC = () => {
       <Button
         variant="ghost"
         className="absolute top-2 sm:top-4 xl:top-6 right-2 sm:right-4 text-white/80 hover:text-white hover:bg-white/10"
-        onClick={() => navigate("/settings")}
+        onClick={() => {
+          triggerHaptic();
+          navigate("/settings");
+        }}
       >
         <Settings className="h-5 w-5" />
       </Button>
 
-      {/* Main Content */}
       <div className="flex flex-col items-center justify-center flex-1 w-full max-w-4xl">
         <h1 className="text-2xl sm:text-4xl xl:text-5xl font-arcade text-center text-white mb-4 sm:mb-6 [text-shadow:_0_0_20px_rgb(255_255_255_/_40%)]">
           choose your focus:
@@ -199,7 +252,12 @@ const SessionCategoriesPage: FC = () => {
           ))}
         </div>
 
-        {/* Spline Scene Container */}
+        {!hasAvailableSession && (
+          <p className="text-amber-400 text-sm text-center mb-2">
+            You've used your free session this week
+          </p>
+        )}
+
         <div className="w-full max-w-[300px] sm:max-w-[400px] md:max-w-[480px]">
           <div className="relative w-full aspect-[4/4] sm:aspect-[5/4] md:aspect-[16/12]">
             <Spline

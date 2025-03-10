@@ -1,5 +1,4 @@
-
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -10,6 +9,10 @@ import { supabase } from "@/integrations/supabase/client";
 const RelationshipsPage: FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const handleSubmit = async (text: string) => {
     try {
@@ -43,7 +46,7 @@ const RelationshipsPage: FC = () => {
   };
 
   return (
-    <div className="min-h-[100dvh] w-full bg-[#1A1F2C] flex flex-col p-4">
+    <div className="min-h-[100dvh] w-full bg-[#221737] flex flex-col p-4">
       <div className="flex-none">
         <Button
           onClick={() => navigate("/career")}
@@ -77,6 +80,11 @@ const RelationshipsPage: FC = () => {
             placeholder="Describe your relationship goals and aspirations..."
           />
         </div>
+      </div>
+      
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-purple-900/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.15)_0%,transparent_100%)]" />
       </div>
     </div>
   );

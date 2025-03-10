@@ -26,12 +26,13 @@ import VisualizationPage from "./pages/VisualizationPage";
 import SessionFeedbackPage from "./pages/SessionFeedbackPage";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
 import SettingsPage from "./pages/SettingsPage";
+import EditCategoryPage from "./pages/EditCategoryPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsOfServicePage from "./pages/TermsOfServicePage";
+import PaywallPage from "./pages/PaywallPage";
+import ShareEarnPage from "./pages/ShareEarnPage";
+import UpgradePage from "./pages/UpgradePage";
 import CookieConsent from "./components/CookieConsent";
-
-// Note: We're removing the invalid setSession call and will use the configuration
-// in the Supabase client instead
 
 const queryClient = new QueryClient();
 
@@ -42,27 +43,21 @@ const App = () => {
   const [cookieConsentShown, setCookieConsentShown] = useState(false);
 
   useEffect(() => {
-    // Check if cookie consent was previously given
     const consentGiven = localStorage.getItem('cookie-consent');
     setCookieConsentShown(!!consentGiven);
 
-    // Get initial session with persistence enabled
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       
-      // Check if this is a new user by looking at session creation time
       if (session) {
         const createdAt = new Date(session.user.created_at);
         const now = new Date();
-        // If the account was created within the last minute, consider it a new user
         setIsNewUser(now.getTime() - createdAt.getTime() < 60000);
         
-        // If session is close to expiring, refresh it
         const expiresAt = session.expires_at;
         const nowInSeconds = Math.floor(Date.now() / 1000);
         const timeToExpiry = expiresAt - nowInSeconds;
         
-        // If session expires in less than a day, refresh it
         if (timeToExpiry < 86400) {
           supabase.auth.refreshSession();
         }
@@ -71,13 +66,11 @@ const App = () => {
       setLoading(false);
     });
 
-    // Listen for auth changes with enhanced persistence
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         console.log("Auth state changed:", event);
         setSession(session);
         
-        // If this is a signup event, mark as new user
         if (event === 'SIGNED_IN') {
           const createdAt = new Date(session?.user.created_at || '');
           const now = new Date();
@@ -89,31 +82,25 @@ const App = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Record consent when user accepts cookies
   const handleCookieConsent = () => {
     localStorage.setItem('cookie-consent', 'true');
     setCookieConsentShown(true);
   };
 
-  // Protected route component that redirects based on user status
   const ProtectedRoute = ({ children, isIntroRoute = false }: { children: JSX.Element, isIntroRoute?: boolean }) => {
     if (loading) return <div>Loading...</div>;
     if (!session) return <Navigate to="/login" replace />;
     
-    // For new users, direct them to intro questions
     if (isNewUser && !isIntroRoute) return <Navigate to="/intro-questions" replace />;
     
-    // For existing users visiting the intro page, redirect to session categories
     if (!isNewUser && isIntroRoute) return <Navigate to="/session-categories" replace />;
     
     return children;
   };
 
-  // Public route component that redirects to relevant page if logged in
   const PublicRoute = ({ children }: { children: JSX.Element }) => {
     if (loading) return <div>Loading...</div>;
     if (session) {
-      // New users go to intro questions, existing users go to session categories
       return isNewUser 
         ? <Navigate to="/intro-questions" replace /> 
         : <Navigate to="/session-categories" replace />;
@@ -129,14 +116,15 @@ const App = () => {
         <BrowserRouter>
           <Layout>
             <Routes>
-              {/* Public routes */}
               <Route path="/" element={<PublicRoute><HomePage /></PublicRoute>} />
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/science" element={<PublicRoute><SciencePage /></PublicRoute>} />
               <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
               <Route path="/terms-of-service" element={<TermsOfServicePage />} />
+              <Route path="/paywall" element={<ProtectedRoute><PaywallPage /></ProtectedRoute>} />
+              <Route path="/share-earn" element={<ProtectedRoute><ShareEarnPage /></ProtectedRoute>} />
+              <Route path="/upgrade" element={<ProtectedRoute><UpgradePage /></ProtectedRoute>} />
               
-              {/* Protected routes */}
               <Route path="/intro-questions" element={<ProtectedRoute isIntroRoute={true}><IntroQuestionsPage /></ProtectedRoute>} />
               <Route path="/finances" element={<ProtectedRoute><FinancesPage /></ProtectedRoute>} />
               <Route path="/career" element={<ProtectedRoute><CareerPage /></ProtectedRoute>} />
@@ -152,8 +140,8 @@ const App = () => {
               <Route path="/session-feedback" element={<ProtectedRoute><SessionFeedbackPage /></ProtectedRoute>} />
               <Route path="/delete-account" element={<ProtectedRoute><DeleteAccountPage /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+              <Route path="/edit-category/:category" element={<ProtectedRoute><EditCategoryPage /></ProtectedRoute>} />
               
-              {/* 404 route - make sure this is the last route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
