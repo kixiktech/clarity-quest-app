@@ -53,9 +53,22 @@ const SessionCategoriesPage: FC = () => {
   const { toast } = useToast();
   const { triggerHaptic } = useHapticFeedback();
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
+  const [spline, setSpline] = useState<any>(null);
+  const splineContainerRef = useRef<HTMLDivElement>(null);
   const [userInitial, setUserInitial] = useState<string>("U");
   const [userName, setUserName] = useState<string>("User");
   const [hasAvailableSession, setHasAvailableSession] = useState<boolean>(true);
+
+  // Add keyIds from the older version
+  const keyIds = {
+    "2b6639a2-d5fc-4cfc-95ea-a054d3231441": "Key1",
+    "dea3a446-3baa-43e9-bfa4-b4cfe46f17d4": "Key2",
+    "73f9c0d2-aed9-47bf-bd6e-2f33171bef07": "Key3",
+    "0e367520-0bcd-4dc1-aa7a-9f9448f4f971": "Key4",
+    "f45d8eb8-88f6-4c33-a3f4-d1da742a9bd3": "Key5",
+    "7d8ac785-5093-4216-ad74-41e449e13b56": "Key6",
+    "66530cf3-5a25-4b74-af3a-799f0c29476d": "KeyEnter"
+  };
 
   useEffect(() => {
     const getUserData = async () => {
@@ -117,23 +130,46 @@ const SessionCategoriesPage: FC = () => {
     }
   };
 
-  const handleNumberSelect = (number: number) => {
+  function onLoad(splineApp: any) {
+    console.log("Spline scene loaded");
+    setSpline(splineApp);
+  }
+
+  const handleKeyClick = (num: number) => {
     triggerHaptic();
-    setSelectedNumber(number);
+    console.log(`Key ${num} clicked`);
+    setSelectedNumber(num);
+    
+    // Find the UUID for the corresponding key
+    const keyUUID = Object.entries(keyIds).find(([_, value]) => value === `Key${num}`)?.[0];
+    if (keyUUID && spline) {
+      spline.emitEvent('mouseDown', keyUUID);
+    }
   };
 
-  const handleEnter = () => {
+  const handleEnterClick = () => {
     triggerHaptic();
     
     if (!hasAvailableSession) {
       navigate("/paywall");
       return;
     }
-    
+
     if (selectedNumber) {
-      navigate("/focus-input", {
-        state: { category: categories[selectedNumber - 1].id },
-      });
+      console.log("Enter pressed");
+      
+      // Trigger Enter key animation
+      const enterKeyUUID = Object.entries(keyIds).find(([_, value]) => value === 'KeyEnter')?.[0];
+      if (enterKeyUUID && spline) {
+        spline.emitEvent('mouseDown', enterKeyUUID);
+      }
+      
+      // Add 500ms delay before navigation
+      setTimeout(() => {
+        navigate("/focus-input", {
+          state: { category: categories[selectedNumber - 1].id },
+        });
+      }, 500);
     }
   };
 

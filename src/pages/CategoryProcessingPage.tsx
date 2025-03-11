@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { generateMeditationResponse } from "@/integrations/openaiService";
 import { generateSpeech } from "@/integrations/elevenLabsService";
+import Spline from '@splinetool/react-spline';
 
 const messages = [
   "INITIALIZING YOUR VISUALIZATION...",
@@ -80,7 +81,33 @@ const CategoryProcessingPage: FC = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen w-full bg-black flex flex-col items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">
+      {/* Logo */}
+      <div className="absolute top-8 left-1/2 -translate-x-1/2">
+        <img 
+          src="/lovable-uploads/3d7b9f60-a195-43f0-b963-e6e084999749.png" 
+          alt="ClarityQuest"
+          className="w-48 md:w-56 opacity-30"
+        />
+      </div>
+
+      {/* Spline Scene Container */}
+      <div className="w-full max-w-[340px] sm:max-w-[480px] md:max-w-[600px] pt-6 pb-6">
+        <div className="relative w-full aspect-[4/4] sm:aspect-[5/4] md:aspect-[16/12] overflow-hidden">
+          <Spline
+            scene="https://prod.spline.design/skZMG4xreB6TopXp/scene.splinecode"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Single Overlay with Radial Gradient */}
+          <div
+            className="absolute -inset-2 pointer-events-none"
+            style={{
+              background: "radial-gradient(circle, transparent 20%, #221737 80%)",
+            }}
+          />
+        </div>
+      </div>
+
       <div className="w-full max-w-2xl px-4">
         {/* Message */}
         <div className="mb-8 min-h-[2rem] text-center">
