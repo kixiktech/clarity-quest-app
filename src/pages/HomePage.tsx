@@ -146,7 +146,10 @@ const notifications = [
   }, {
     name: "Amadou",
     country: "Nigeria"
-  }, {
+  },{
+    name: "Jorge",
+    country: "Colombia"
+  },  {
     name: "Diego",
     country: "Argentina"
   }
@@ -163,8 +166,8 @@ const HomePage: FC = () => {
       setTimeout(() => {
         setCurrentNotificationIndex(prev => (prev + 1) % notifications.length);
         setIsEntering(true);
-      }, 500);
-    }, 4000);
+      }, 1200);
+    }, 5000);
     return () => clearInterval(intervalId);
   }, []);
 
@@ -189,16 +192,22 @@ const HomePage: FC = () => {
           </div>
         </div>
 
-        <div className="w-full max-w-[280px] sm:max-w-[400px] md:max-w-[500px] mx-auto pt-6 pb-8">
-          <div className="relative w-full aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9]">
-            <Spline scene="https://prod.spline.design/MC6pPkuT016z7SsZ/scene.splinecode" className="absolute inset-0 w-full h-full object-cover" />
-            <div className="absolute -inset-2 pointer-events-none" style={{
-              background: "radial-gradient(circle, transparent 20%, #221737 80%)"
-            }} />
+        <div className="w-full max-w-[400px] sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1000px] mx-auto pt-6 pb-8">
+          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[2/1] lg:aspect-[21/9]">
+            <Spline 
+              scene="https://prod.spline.design/MC6pPkuT016z7SsZ/scene.splinecode" 
+              className="absolute inset-0 w-full h-full object-cover" 
+            />
+            <div 
+              className="absolute -inset-4 pointer-events-none" 
+              style={{
+                background: "radial-gradient(circle, transparent 30%, #221737 70%)"
+              }} 
+            />
           </div>
         </div>
         
-        <div className="flex flex-col items-center justify-start gap-4 sm:gap-6 px-4 pb-12">
+        <div className="flex flex-col items-center justify-start gap-4 sm:gap-6 px-4 pb-8">
           <button onClick={handleGetStarted} className="w-[240px] sm:w-64 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-white font-medium text-base sm:text-lg uppercase
               shadow-[0_0_20px_rgba(245,158,11,0.4)] relative overflow-hidden
               border-2 border-t-white/30 border-l-white/30 border-r-black/30 border-b-black/30
@@ -317,15 +326,20 @@ const HomePage: FC = () => {
 
         <Footer className="mt-auto" />
 
-        <div className={`fixed bottom-4 sm:bottom-8 left-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64 ${isEntering ? "animate-slide-in-right" : "animate-slide-out-right"}`} style={{
-          transform: `translate(${isEntering ? '-50%, 0' : '100%, 0'})`,
-          transition: 'transform 500ms cubic-bezier(0.4, 0, 0.2, 1), opacity 500ms cubic-bezier(0.4, 0, 0.2, 1)',
-          opacity: isEntering ? 1 : 0
-        }}>
-          <p className="text-xs sm:text-sm text-foreground/70">
+        <div 
+          className="fixed bottom-4 sm:bottom-8 left-1/2 glass rounded-lg p-2 sm:p-3 w-[240px] sm:w-64"
+          style={{
+            transform: `translate(${isEntering ? '-50%, 0' : '120%, 0'}) scale(${isEntering ? '1' : '0.95'})`,
+            transition: 'all 1200ms cubic-bezier(0.34, 1.56, 0.64, 1)',
+            opacity: isEntering ? 1 : 0,
+            visibility: isEntering ? 'visible' : 'hidden',
+          }}
+        >
+          <p className="text-xs sm:text-sm text-foreground/70 text-center">
             <span className="text-primary font-medium">
               {notifications[currentNotificationIndex].name} from {notifications[currentNotificationIndex].country}
-            </span>{" "}
+            </span>
+            <br />
             just completed a visualization session
           </p>
         </div>
