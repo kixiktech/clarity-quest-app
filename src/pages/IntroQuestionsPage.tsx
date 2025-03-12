@@ -1,11 +1,52 @@
-
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MessageSquare } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const IntroQuestionsPage: FC = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const addCredits = async () => {
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      
+      if (userError) throw userError;
+
+      if (user) {
+        // Insert credits for the user
+        const { error: creditError } = await supabase.from("session_credits").insert({
+          user_id: user.id, // Using the user ID from the sign-up response
+          credits_remaining: 2, // Adding 2 credits
+          referral_credits: 0,
+        });
+
+        if (creditError) {
+          console.error("Error inserting credits:", creditError);
+          throw creditError;
+        }
+
+        toast({
+          title: "Credits Added",
+          description: "You have received 2 additional credits!",
+        });
+      }
+    } catch (error) {
+      console.error("Error adding credits:", error);
+      toast({
+        title: "Error",
+        description: "Failed to add credits. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleButtonClick = async () => {
+
+    navigate("/finances"); // Navigate to finances page
+  };
 
   return (
     <div className="min-h-[100dvh] w-full bg-[#221737] flex flex-col items-center p-6 overflow-y-auto">

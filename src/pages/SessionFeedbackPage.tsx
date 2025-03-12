@@ -1,4 +1,3 @@
-
 import { FC, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -139,7 +138,7 @@ const SessionFeedbackPage: FC = () => {
         </div>
 
         {/* Action Buttons - Adjusted margins and padding */}
-        <div className="flex flex-col gap-3 w-full max-w-xs mb-4">
+        <div className="flex flex-col gap-3 w-full max-w-xs mb-4 relative z-10">
           <Button
             onClick={handleReplay}
             className="w-full py-4 sm:py-5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-xl
