@@ -24,7 +24,6 @@ const categories = [
   { id: 6, title: "friends + family + relationships" },
 ];
 
-
 const keyboardOverlayStyles = {
   position: 'absolute',
   inset: 0,
@@ -32,13 +31,13 @@ const keyboardOverlayStyles = {
   gridTemplateColumns: 'repeat(3, 1fr)',
   gap: '1px',
   padding: '35px',
-  pointerEvents: 'none', // Allow clicks to pass through by default
+  pointerEvents: 'none',
 } as const;
 
 const keyButtonStyles = {
   position: 'relative',
   cursor: 'pointer',
-  pointerEvents: 'auto', // Enable clicks on the buttons
+  pointerEvents: 'auto',
   background: 'transparent',
   border: '2px solid transparent',
   borderRadius: '8px',
@@ -59,7 +58,6 @@ const SessionCategoriesPage: FC = () => {
   const [userName, setUserName] = useState<string>("User");
   const [hasAvailableSession, setHasAvailableSession] = useState<boolean>(true);
 
-  // Add keyIds from the older version
   const keyIds = {
     "2b6639a2-d5fc-4cfc-95ea-a054d3231441": "Key1",
     "dea3a446-3baa-43e9-bfa4-b4cfe46f17d4": "Key2",
@@ -73,17 +71,20 @@ const SessionCategoriesPage: FC = () => {
   useEffect(() => {
     const getUserData = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
         
+        if (userError) {
+          console.error("Error fetching user:", userError);
+          throw userError;
+        }
+
         if (user) {
           const fullName = user.user_metadata?.full_name || "";
           
           if (fullName) {
             const firstInitial = fullName.charAt(0).toUpperCase();
-            
             setUserInitial(firstInitial);
             setUserName(fullName);
-            
             console.log(`User initial set to: ${firstInitial}`);
           } else {
             console.log("No full name found in user metadata");
@@ -91,7 +92,8 @@ const SessionCategoriesPage: FC = () => {
             setUserName("User");
           }
           
-          checkSessionAvailability(user.id);
+          // Fetch and log credits as soon as the page loads
+          await checkSessionAvailability(user.id);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -105,7 +107,7 @@ const SessionCategoriesPage: FC = () => {
 
     getUserData();
   }, [toast]);
-  
+
   const checkSessionAvailability = async (userId: string) => {
     try {
       const { data, error } = await supabase
@@ -113,20 +115,36 @@ const SessionCategoriesPage: FC = () => {
         .select('credits_remaining, referral_credits')
         .eq('user_id', userId)
         .single();
-      
-      if (error) {
-        console.error("Error checking session availability:", error);
+
+      if (error && error.code === 'PGRST116') { // No row found
+        const { error: insertError } = await supabase
+          .from("session_credits")
+          .insert({
+            user_id: userId,
+            credits_remaining: 2, // Initial credits
+            referral_credits: 0,
+          });
+
+        if (insertError) {
+          console.error("Error inserting initial credits:", insertError);
+          throw insertError;
+        }
         setHasAvailableSession(true);
+        console.log("Initial credits inserted: 2 remaining");
         return;
       }
-      
+
+      if (error) {
+        console.error("Error checking session availability:", error);
+        throw error;
+      }
+
       const totalCredits = (data?.credits_remaining || 0) + (data?.referral_credits || 0);
       setHasAvailableSession(totalCredits > 0);
-      
-      console.log(`User has ${totalCredits} total sessions available`);
+      console.log(`Current credits on page load: ${data?.credits_remaining} remaining, ${data?.referral_credits} referral, ${totalCredits} total`);
     } catch (error) {
       console.error("Error in session availability check:", error);
-      setHasAvailableSession(true);
+      setHasAvailableSession(true); // Fallback to true to avoid blocking the user
     }
   };
 
@@ -140,14 +158,13 @@ const SessionCategoriesPage: FC = () => {
     console.log(`Key ${num} clicked`);
     setSelectedNumber(num);
     
-    // Find the UUID for the corresponding key
     const keyUUID = Object.entries(keyIds).find(([_, value]) => value === `Key${num}`)?.[0];
     if (keyUUID && spline) {
       spline.emitEvent('mouseDown', keyUUID);
     }
   };
 
-  const handleEnterClick = () => {
+  const handleEnterClick = async () => {
     triggerHaptic();
     
     if (!hasAvailableSession) {
@@ -155,21 +172,67 @@ const SessionCategoriesPage: FC = () => {
       return;
     }
 
-    if (selectedNumber) {
-      console.log("Enter pressed");
-      
-      // Trigger Enter key animation
-      const enterKeyUUID = Object.entries(keyIds).find(([_, value]) => value === 'KeyEnter')?.[0];
-      if (enterKeyUUID && spline) {
-        spline.emitEvent('mouseDown', enterKeyUUID);
+    if (!selectedNumber) return;
+
+    console.log("Enter pressed");
+
+    const enterKeyUUID = Object.entries(keyIds).find(([_, value]) => value === 'KeyEnter')?.[0];
+    if (enterKeyUUID && spline) {
+      spline.emitEvent('mouseDown', enterKeyUUID);
+    }
+
+    try {
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        throw new Error("User not authenticated");
       }
-      
-      // Add 500ms delay before navigation
+
+      const { data: creditsData, error: fetchError } = await supabase
+        .from("session_credits")
+        .select("credits_remaining")
+        .eq("user_id", user.id)
+        .single();
+
+      if (fetchError) {
+        console.error("Error fetching credits:", fetchError);
+        throw fetchError;
+      }
+
+      const currentCredits = creditsData?.credits_remaining || 0;
+
+      if (currentCredits <= 0) {
+        setHasAvailableSession(false);
+        navigate("/paywall");
+        return;
+      }
+
+      const { error: updateError } = await supabase
+        .from("session_credits")
+        .update({ credits_remaining: currentCredits - 1 })
+        .eq("user_id", user.id);
+
+      if (updateError) {
+        console.error("Error updating credits:", updateError);
+        throw updateError;
+      }
+
+      console.log(`Credits updated: ${currentCredits - 1} remaining`);
+
+      setHasAvailableSession(currentCredits - 1 > 0);
+
       setTimeout(() => {
         navigate("/focus-input", {
           state: { category: categories[selectedNumber - 1].id },
         });
       }, 500);
+
+    } catch (error) {
+      console.error("Error handling enter click:", error);
+      toast({
+        title: "Error",
+        description: "Failed to process session. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -188,18 +251,14 @@ const SessionCategoriesPage: FC = () => {
     }
   };
 
-  // Update keyboard event listener to match the click behavior
   useEffect(() => {
     const container = splineContainerRef.current;
     if (container) {
       const handleKeyDown = (event: KeyboardEvent) => {
-        // Handle number keys (1-6)
         if (event.key >= "1" && event.key <= "6") {
           const num = parseInt(event.key);
           handleKeyClick(num);
-        }
-        // Handle Enter key
-        else if (event.key === "Enter") {
+        } else if (event.key === "Enter") {
           handleEnterClick();
         }
       };
@@ -210,7 +269,7 @@ const SessionCategoriesPage: FC = () => {
 
       return () => container.removeEventListener("keydown", handleKeyDown);
     }
-  }, [selectedNumber]); // Add selectedNumber to dependencies
+  }, [selectedNumber]);
 
   return (
     <div className="h-screen w-full bg-[#221737] flex flex-col items-center justify-between p-4 sm:p-6 relative overflow-hidden">
@@ -219,9 +278,9 @@ const SessionCategoriesPage: FC = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2 text-white/80 hover:text-white hover:bg-white/10">
               <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-medium">
-                J
+                {userInitial}
               </div>
-              <span className="hidden sm:inline text-sm">John Doe</span>
+              <span className="hidden sm:inline text-sm">{userName}</span>
               <ChevronDown className="h-4 w-4 opacity-50" />
             </Button>
           </DropdownMenuTrigger>
@@ -302,9 +361,7 @@ const SessionCategoriesPage: FC = () => {
               className="absolute inset-0 w-full h-full"
             />
             
-            {/* Transparent Keyboard Overlay */}
             <div style={keyboardOverlayStyles}>
-              {/* Number Keys */}
               {[1, 2, 3, 4, 5, 6].map((num) => (
                 <button
                   key={num}
@@ -318,7 +375,6 @@ const SessionCategoriesPage: FC = () => {
                 </button>
               ))}
               
-              {/* Enter Key */}
               <button
                 style={{
                   ...keyButtonStyles,
@@ -339,47 +395,3 @@ const SessionCategoriesPage: FC = () => {
 };
 
 export default SessionCategoriesPage;
-
-
- {/*
-      <div className="relative w-full max-w-[280px] sm:max-w-[300px]">
-        <div className="absolute inset-0 bg-[#4A4A4A] rounded-2xl transform translate-y-1"></div>
-        <div className="relative bg-[#4A4A4A] rounded-2xl p-3 sm:p-4">
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 mb-2 sm:mb-3">
-            {[1, 2, 3, 4, 5, 6].map((number) => (
-              <Button
-                key={number}
-                onClick={() => handleNumberSelect(number)}
-                className={cn(
-                  "h-12 sm:h-16 w-full text-xl sm:text-2xl font-bold bg-[#2A2A2A] hover:bg-[#3A3A3A] text-white rounded-lg sm:rounded-xl transition-all duration-300",
-                  selectedNumber === number && "ring-2 ring-[#F97316] shadow-[0_0_15px_rgba(249,115,22,0.5)]"
-                )}
-              >
-                {number}
-              </Button>
-            ))}
-          </div>
-          <Button
-            onClick={handleEnter}
-            disabled={!selectedNumber}
-            className={cn(
-              "w-full h-12 sm:h-16 text-xl sm:text-2xl font-bold bg-[#2A2A2A] hover:bg-[#3A3A3A] text-white rounded-lg sm:rounded-xl transition-all duration-300",
-              selectedNumber && "ring-2 ring-[#F97316] shadow-[0_0_15px_rgba(249,115,22,0.5)]"
-            )}
-          >
-            ENTER
-          </Button>
-        </div>
-
-        <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 flex gap-1.5 sm:gap-2">
-          {[...Array(3)].map((_, i) => (
-            <div
-              key={i}
-              className="w-1.5 sm:w-2 h-1.5 sm:h-2 rounded-full bg-[#4ADE80] animate-pulse shadow-[0_0_8px_#4ADE80] opacity-90"
-              style={{
-                animationDelay: `${i * 200}ms`
-              }}
-            />
-          ))}
-        </div>
-      </div>*/}
