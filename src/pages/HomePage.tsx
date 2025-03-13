@@ -193,7 +193,7 @@ const HomePage: FC = () => {
         </div>
 
         <div className="w-full max-w-[400px] sm:max-w-[600px] md:max-w-[800px] lg:max-w-[1000px] mx-auto pt-6 pb-8">
-          <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] md:aspect-[2/1] lg:aspect-[21/9]">
+          <div className="relative w-full aspect-[3/3] sm:aspect-[16/9] md:aspect-[2/1] lg:aspect-[21/9]">
             <Spline 
               scene="https://prod.spline.design/MC6pPkuT016z7SsZ/scene.splinecode" 
               className="absolute inset-0 w-full h-full object-cover" 
@@ -201,7 +201,7 @@ const HomePage: FC = () => {
             <div 
               className="absolute -inset-4 pointer-events-none" 
               style={{
-                background: "radial-gradient(circle, transparent 30%, #221737 70%)"
+                background: "radial-gradient(circle, transparent 30%, #23154d 70%)"
               }} 
             />
           </div>
@@ -229,39 +229,53 @@ const HomePage: FC = () => {
           </button>
         </div>
 
-        <div className="w-full px-4 py-12 bg-black/30 backdrop-blur-sm">
+        <div className="w-full px-4 py-12 backdrop-blur-sm bg-black/50">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-2xl sm:text-3xl text-primary font-semibold text-center mb-8">Unlock Your Mind's Potential</h2>
+            <h2 className="text-2xl sm:text-3xl text-primary font-semibold text-center mb-8">
+              Unlock Your Mind's Potential
+            </h2>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <div className="glass p-5 rounded-lg">
+              <div className="p-5 rounded-lg bg-[#221737]">
                 <h3 className="text-xl text-white mb-2">Mental Clarity</h3>
-                <p className="text-white/70">Sharpen your focus and reduce mental fog through guided visualization exercises.</p>
+                <p className="text-white/70">
+                  Sharpen your focus and reduce mental fog through guided visualization exercises.
+                </p>
               </div>
               
-              <div className="glass p-5 rounded-lg">
+              <div className="p-5 rounded-lg bg-[#221737]">
                 <h3 className="text-xl text-white mb-2">Goal Achievement</h3>
-                <p className="text-white/70">Program your mind to recognize and capitalize on opportunities aligned with your goals.</p>
+                <p className="text-white/70">
+                  Program your mind to recognize and capitalize on opportunities aligned with your goals.
+                </p>
               </div>
               
-              <div className="glass p-5 rounded-lg">
+              <div className="p-5 rounded-lg bg-[#221737]">
                 <h3 className="text-xl text-white mb-2">Stress Reduction</h3>
-                <p className="text-white/70">Learn techniques to calm your mind and reduce anxiety through targeted visualization.</p>
+                <p className="text-white/70">
+                  Learn techniques to calm your mind and reduce anxiety through targeted visualization.
+                </p>
               </div>
               
-              <div className="glass p-5 rounded-lg">
+              <div className="p-5 rounded-lg bg-[#221737]">
                 <h3 className="text-xl text-white mb-2">Improved Focus</h3>
-                <p className="text-white/70">Train your brain to maintain deep concentration despite distractions.</p>
+                <p className="text-white/70">
+                  Train your brain to maintain deep concentration despite distractions.
+                </p>
               </div>
               
-              <div className="glass p-5 rounded-lg">
+              <div className="p-5 rounded-lg bg-[#221737]">
                 <h3 className="text-xl text-white mb-2">Enhanced Creativity</h3>
-                <p className="text-white/70">Tap into your creative potential by expanding your mind's visual capabilities.</p>
+                <p className="text-white/70">
+                  Tap into your creative potential by expanding your mind's visual capabilities.
+                </p>
               </div>
               
-              <div className="glass p-5 rounded-lg">
+              <div className="p-5 rounded-lg bg-[#221737]">
                 <h3 className="text-xl text-white mb-2">Better Sleep</h3>
-                <p className="text-white/70">Develop pre-sleep visualization routines for deeper, more restorative rest.</p>
+                <p className="text-white/70">
+                  Develop pre-sleep visualization routines for deeper, more restorative rest.
+                </p>
               </div>
             </div>
           </div>

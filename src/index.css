@@ -57,7 +57,7 @@
     @apply bg-background text-foreground antialiased;
     font-family: 'VT323', monospace;
     font-size: 1.25rem; /* Increased body font size */
-    background-color: #221737;
+    background-color: #17082d;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

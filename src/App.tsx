@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -90,12 +89,17 @@ const App = () => {
   const ProtectedRoute = ({ children, isIntroRoute = false }: { children: JSX.Element, isIntroRoute?: boolean }) => {
     if (loading) return <div>Loading...</div>;
     if (!session) return <Navigate to="/login" replace />;
-    
-    if (isNewUser && !isIntroRoute) return <Navigate to="/intro-questions" replace />;
-    
+
+    // Allow new users to access the intro questions page
+    if (isNewUser && isIntroRoute) return children;
+
+    // Redirect new users trying to access other routes
+    //if (isNewUser && !isIntroRoute) return <Navigate to="/intro-questions" replace />;
+
+    // Allow existing users to access other routes
     if (!isNewUser && isIntroRoute) return <Navigate to="/session-categories" replace />;
-    
-    return children;
+
+    return children; // Allow access to the route for existing users
   };
 
   const PublicRoute = ({ children }: { children: JSX.Element }) => {
