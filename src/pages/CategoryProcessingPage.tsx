@@ -43,6 +43,44 @@ const CategoryProcessingPage: FC = () => {
         console.log(result.content);
         console.log("=====================================\n");
         setMeditationResponse(result.content);
+
+        // Generate audio from the meditation content
+        console.log("🎵 Generating meditation audio...");
+        const audioBlob = await generateSpeech(result.content);
+        if (audioBlob) {
+          console.log("✨ Audio generated successfully!");
+          // Convert blob to base64 for storage
+          const reader = new FileReader();
+          reader.readAsDataURL(audioBlob);
+          reader.onloadend = () => {
+            const base64Audio = reader.result;
+            // Navigate with both text and audio content
+            setTimeout(() => {
+              navigate("/visualization", {
+                state: { 
+                  meditationContent: result.content,
+                  categoryName: location.state?.categoryName,
+                  focusText: location.state?.focus,
+                  audioContent: base64Audio
+                },
+                replace: true
+              });
+            }, 2000);
+          };
+        } else {
+          console.error("Failed to generate audio");
+          // Navigate with only text content if audio fails
+          setTimeout(() => {
+            navigate("/visualization", {
+              state: { 
+                meditationContent: result.content,
+                categoryName: location.state?.categoryName,
+                focusText: location.state?.focus
+              },
+              replace: true
+            });
+          }, 2000);
+        }
       }
     };
 
@@ -59,36 +97,6 @@ const CategoryProcessingPage: FC = () => {
       if (newProgress >= 100) {
         clearInterval(timer);
         setShowCompletion(true);
-
-        // Test ElevenLabs API
-        const testSpeech = async () => {
-          console.log("Calling ElevenLabs API...");
-          const audioBlob = await generateSpeech("Hi, How are you");
-          
-          if (audioBlob) {
-            console.log("Audio generated successfully!", audioBlob);
-            // Optional: Play the audio to test
-            const audio = new Audio(URL.createObjectURL(audioBlob));
-            audio.play();
-          } else {
-            console.error("Failed to generate audio");
-          }
-        };
-
-        testSpeech();
-
-        setTimeout(() => {
-          console.log("Passing meditation to visualization:", meditationResponse);
-          console.log("Passing category and focus:", location.state?.categoryName, location.state?.focus);
-          navigate("/visualization", {
-            state: { 
-              meditationContent: meditationResponse || "No meditation data available",
-              categoryName: location.state?.categoryName,
-              focusText: location.state?.focus
-            },
-            replace: true
-          });
-        }, 2000);
       }
     }, 50);
 

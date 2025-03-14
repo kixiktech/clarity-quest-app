@@ -61,7 +61,14 @@ const SessionFeedbackPage: FC = () => {
   };
 
   const handleReplay = () => {
-    navigate("/visualization", { state: location.state });
+    navigate("/visualization", { 
+      state: {
+        meditationContent: location.state?.meditationContent,
+        categoryName: location.state?.categoryName,
+        focusText: location.state?.focusText,
+        audioContent: location.state?.audioContent
+      }
+    });
   };
 
   return (

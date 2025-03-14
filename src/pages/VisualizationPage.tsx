@@ -10,7 +10,9 @@ const VisualizationPage: FC = () => {
   const location = useLocation();
   const meditationContent = location.state?.meditationContent;
   const focusText = location.state?.focusText;
+  const audioContent = location.state?.audioContent;
   const [isLoading, setIsLoading] = useState(true);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   // Save the focus text to the database if it exists
   useEffect(() => {
@@ -42,21 +44,65 @@ const VisualizationPage: FC = () => {
     saveFocusResponse();
   }, [focusText]);
 
-  // Initialize the visualization
+  // Initialize the visualization and audio
   useEffect(() => {
     if (!meditationContent) {
       console.error('No meditation content received');
       return;
     }
-    console.log('Initializing visualization with meditation content');
+
+    // Setup audio if available
+    if (audioContent) {
+      const newAudio = new Audio(audioContent as string);
+      setAudio(newAudio);
+      
+      // Play audio after a short delay
+      const playTimeout = setTimeout(() => {
+        newAudio.play().catch(error => {
+          console.error('Error playing audio:', error);
+        });
+      }, 1000);
+
+      return () => {
+        clearTimeout(playTimeout);
+        newAudio.pause();
+        newAudio.currentTime = 0;
+      };
+    }
+
     setIsLoading(false);
-  }, [meditationContent]);
+  }, [meditationContent, audioContent]);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, [audio]);
+
+  const handleEndSession = () => {
+    if (audio) {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+    navigate("/session-feedback", {
+      state: { 
+        meditationContent,
+        categoryName: location.state?.categoryName,
+        focusText,
+        audioContent
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">
       {/* End Session Button */}
       <Button
-        onClick={() => navigate("/session-feedback")}
+        onClick={handleEndSession}
         variant="ghost"
         className="absolute top-6 right-6 text-white/60 hover:text-white/90 transition-colors"
       >
