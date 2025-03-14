@@ -2,6 +2,7 @@
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
+import { Analytics } from '@vercel/analytics/react'
 
 // Preload the VT323 font to ensure it's available for the 404 page
 const preloadFont = () => {
@@ -22,4 +23,9 @@ const preloadFont = () => {
 // Preload font before rendering
 preloadFont();
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(
+  <>
+    <App />
+    <Analytics />
+  </>
+);
