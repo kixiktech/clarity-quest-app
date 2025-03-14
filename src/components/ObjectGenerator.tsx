@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { supabase } from "@/integrations/supabase/client";
 import { User } from '@supabase/supabase-js';
+import { CategoryType } from '@/utils/categoryMapping';
 
 // Define types for our responses
-type CategoryType = 'career' | 'finances' | 'personal-growth' | 'confidence' | 'health' | 'relationships' | 'focus';
-
 interface UserResponse {
   id: string;
   user_id: string;
@@ -26,18 +25,33 @@ interface UserResponseHistory {
   };
 }
 
-// Move function here, before component
+// Cache responses in memory
+let responseCache: { [userId: string]: { responses: UserResponseHistory; timestamp: number } } = {};
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
 async function fetchUserResponses(): Promise<UserResponseHistory | null> {
   try {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return null;
 
-    const { data } = await supabase
+    // Check cache
+    const cachedData = responseCache[user.id];
+    if (cachedData && Date.now() - cachedData.timestamp < CACHE_DURATION) {
+      console.log("📦 Using cached responses");
+      return cachedData.responses;
+    }
+
+    console.log("🔄 Fetching fresh responses");
+    const { data, error } = await supabase
       .from('user_responses')
-      .select('*')
+      .select('category, response')
       .eq('user_id', user.id)
-      .order('created_at', { ascending: false })
-      .limit(7);
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Database error:', error);
+      return null;
+    }
 
     const responses = {
       career: null,
@@ -49,16 +63,38 @@ async function fetchUserResponses(): Promise<UserResponseHistory | null> {
       focus: null,
     };
 
-    data?.forEach((response: any) => {
-      if (!responses[response.category]) {
+    // Use a Set to track processed categories
+    const processedCategories = new Set<string>();
+    
+    data?.forEach((response: UserResponse) => {
+      // Only take the most recent response for each category
+      if (!processedCategories.has(response.category)) {
         responses[response.category] = response.response;
+        processedCategories.add(response.category);
       }
     });
 
-    return { userId: user.id, responses };
+    const responseHistory = { userId: user.id, responses };
+    
+    // Update cache
+    responseCache[user.id] = {
+      responses: responseHistory,
+      timestamp: Date.now()
+    };
+
+    return responseHistory;
   } catch (error) {
     console.error('Error:', error);
     return null;
+  }
+}
+
+// Clear cache when component unmounts
+function clearResponseCache(userId?: string) {
+  if (userId) {
+    delete responseCache[userId];
+  } else {
+    responseCache = {};
   }
 }
 
@@ -67,6 +103,15 @@ const GuidedMeditationGenerator: FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    return () => {
+      // Clear cache when component unmounts
+      if (user?.id) {
+        clearResponseCache(user.id);
+      }
+    };
+  }, [user?.id]);
 
   // Check authentication status and fetch user data
   useEffect(() => {
@@ -156,5 +201,5 @@ const GuidedMeditationGenerator: FC = () => {
 };
 
 export default GuidedMeditationGenerator;
-export { fetchUserResponses };
+export { fetchUserResponses, clearResponseCache };
 

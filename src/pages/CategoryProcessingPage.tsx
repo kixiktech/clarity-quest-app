@@ -4,6 +4,8 @@ import { Progress } from "@/components/ui/progress";
 import { generateMeditationResponse } from "@/integrations/openaiService";
 import { generateSpeech } from "@/integrations/elevenLabsService";
 import Spline from '@splinetool/react-spline';
+import { useToast } from "@/hooks/use-toast";
+import { mapDisplayToDbCategory } from "@/utils/categoryMapping";
 
 const messages = [
   "INITIALIZING YOUR VISUALIZATION...",
@@ -17,28 +19,44 @@ const messages = [
 const CategoryProcessingPage: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { toast } = useToast();
   const [progress, setProgress] = useState(0);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [showCompletion, setShowCompletion] = useState(false);
   const [meditationResponse, setMeditationResponse] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const duration = 15000;
     const startTime = Date.now();
 
     const generateMeditation = async () => {
-      console.log("\n🚀 Starting meditation generation process...");
-      console.log("📋 Category:", location.state?.categoryName);
-      console.log("🎯 Focus:", location.state?.focus);
-      
-      // Convert category name format (e.g., "career + purpose" to "career")
-      const categoryKey = location.state?.categoryName ? 
-        location.state.categoryName.split(' + ')[0].toLowerCase() : null;
-      
-      const result = await generateMeditationResponse(categoryKey);
-      if (result.error) {
-        console.error("❌ Meditation generation error:", result.error);
-      } else {
+      try {
+        console.log("\n🚀 Starting meditation generation process...");
+        console.log("📋 Category:", location.state?.categoryName);
+        console.log("🎯 Focus:", location.state?.focus);
+        
+        if (!location.state?.categoryName) {
+          throw new Error("No category selected");
+        }
+
+        // Map the display category to the database category
+        const categoryKey = mapDisplayToDbCategory(location.state.categoryName);
+        console.log("🔑 Using category key:", categoryKey);
+        
+        const result = await generateMeditationResponse(categoryKey);
+        if (result.error) {
+          console.error("❌ Meditation generation error:", result.error);
+          setError(result.error);
+          toast({
+            title: "Error",
+            description: "There was an issue generating your meditation. Please try again.",
+            variant: "destructive",
+          });
+          setTimeout(() => navigate("/session-categories"), 3000);
+          return;
+        }
+
         console.log("\n=== 🎭 OpenAI Generated Meditation ===");
         console.log(result.content);
         console.log("=====================================\n");
@@ -69,6 +87,10 @@ const CategoryProcessingPage: FC = () => {
           };
         } else {
           console.error("Failed to generate audio");
+          toast({
+            title: "Audio Generation Failed",
+            description: "We'll proceed with text-only meditation.",
+          });
           // Navigate with only text content if audio fails
           setTimeout(() => {
             navigate("/visualization", {
@@ -81,6 +103,15 @@ const CategoryProcessingPage: FC = () => {
             });
           }, 2000);
         }
+      } catch (error) {
+        console.error("Error in meditation generation:", error);
+        setError(error instanceof Error ? error.message : "An unexpected error occurred");
+        toast({
+          title: "Error",
+          description: "There was an issue generating your meditation. Please try again.",
+          variant: "destructive",
+        });
+        setTimeout(() => navigate("/session-categories"), 3000);
       }
     };
 
@@ -101,7 +132,17 @@ const CategoryProcessingPage: FC = () => {
     }, 50);
 
     return () => clearInterval(timer);
-  }, [navigate, location.state]);
+  }, [navigate, location.state, toast]);
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 text-center bg-[#221737] text-white">
+        <h2 className="text-2xl font-semibold mb-4">Oops! Something went wrong</h2>
+        <p className="text-gray-300 mb-8">{error}</p>
+        <p className="text-sm text-gray-400">Redirecting you back...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">
