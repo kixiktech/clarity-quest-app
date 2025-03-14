@@ -1,4 +1,3 @@
-
 import { FC, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,8 @@ const FocusInputPage: FC = () => {
 
   const handleSubmit = async (text: string) => {
     try {
+      setFocusText(text);
+      
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
@@ -35,7 +36,15 @@ const FocusInputPage: FC = () => {
         title: "Focus Area Saved",
         description: "Your specific focus has been recorded. Let's begin the visualization.",
       });
-      navigate("/career");
+      
+      // Navigate to category processing with the focus text
+      navigate("/category-processing", {
+        state: {
+          category,
+          categoryName: location.state?.categoryName,
+          focus: text,
+        }
+      });
     } catch (error) {
       console.error('Error saving response:', error);
       toast({
@@ -50,6 +59,7 @@ const FocusInputPage: FC = () => {
     navigate("/category-processing", {
       state: {
         category,
+        categoryName: location.state?.categoryName,
         focus: focusText,
       }
     });

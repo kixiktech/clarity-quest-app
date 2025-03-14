@@ -6,14 +6,17 @@ interface ChatCompletion {
   error?: string;
 }
 
-export async function generateMeditationResponse(): Promise<ChatCompletion> {
+export async function generateMeditationResponse(category?: string): Promise<ChatCompletion> {
   try {
-    // Get meditation prompts
-    const meditationPrompt = await generateMeditationPrompt();
+    // Get meditation prompts with specific category
+    const meditationPrompt = await generateMeditationPrompt(category);
     
     if (!meditationPrompt) {
       return { content: '', error: 'Failed to generate meditation prompt' };
     }
+
+    console.log('🎯 System Prompt:', meditationPrompt.systemPrompt);
+    console.log('🎯 User Prompt:', meditationPrompt.userPrompt);
 
     const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
     const response = await axios.post(

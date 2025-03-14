@@ -222,7 +222,10 @@ const SessionCategoriesPage: FC = () => {
 
       setTimeout(() => {
         navigate("/focus-input", {
-          state: { category: categories[selectedNumber - 1].id },
+          state: { 
+            category: categories[selectedNumber - 1].id,
+            categoryName: categories[selectedNumber - 1].title
+          },
         });
       }, 500);
 

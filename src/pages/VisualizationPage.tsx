@@ -1,32 +1,56 @@
-import { FC, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import Spline from '@splinetool/react-spline';
-import { fetchUserResponses } from "@/components/ObjectGenerator";
-import { generateMeditationPrompt } from "@/utils/meditationPromptGenerator";
+import { supabase } from "@/integrations/supabase/client";
 
 const VisualizationPage: FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const meditationContent = location.state?.meditationContent;
+  const focusText = location.state?.focusText;
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Save the focus text to the database if it exists
   useEffect(() => {
-    async function getUserResponses() {
-      const responses = await fetchUserResponses();
-      console.log('User Response History:', responses);
+    async function saveFocusResponse() {
+      if (!focusText) return;
+      
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        console.log('Saving focus response:', focusText);
+        
+        const { error } = await supabase.from("user_responses").insert({
+          user_id: user.id,
+          category: "focus",
+          response: focusText
+        });
+
+        if (error) {
+          console.error('Error saving focus response:', error);
+        } else {
+          console.log('Focus response saved successfully');
+        }
+      } catch (error) {
+        console.error('Error in saveFocusResponse:', error);
+      }
     }
     
-    getUserResponses();
-  }, []);
+    saveFocusResponse();
+  }, [focusText]);
 
+  // Initialize the visualization
   useEffect(() => {
-    async function setupMeditation() {
-      const prompt = await generateMeditationPrompt();
-      console.log('Meditation Prompt:', prompt);
-      // Here you can use the prompt with your AI service
+    if (!meditationContent) {
+      console.error('No meditation content received');
+      return;
     }
-    
-    setupMeditation();
-  }, []);
+    console.log('Initializing visualization with meditation content');
+    setIsLoading(false);
+  }, [meditationContent]);
 
   return (
     <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">

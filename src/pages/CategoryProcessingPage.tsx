@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { generateMeditationResponse } from "@/integrations/openaiService";
 import { generateSpeech } from "@/integrations/elevenLabsService";
@@ -16,6 +16,7 @@ const messages = [
 
 const CategoryProcessingPage: FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [progress, setProgress] = useState(0);
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [showCompletion, setShowCompletion] = useState(false);
@@ -26,12 +27,21 @@ const CategoryProcessingPage: FC = () => {
     const startTime = Date.now();
 
     const generateMeditation = async () => {
-      console.log("Generating meditation...");
-      const result = await generateMeditationResponse();
+      console.log("\n🚀 Starting meditation generation process...");
+      console.log("📋 Category:", location.state?.categoryName);
+      console.log("🎯 Focus:", location.state?.focus);
+      
+      // Convert category name format (e.g., "career + purpose" to "career")
+      const categoryKey = location.state?.categoryName ? 
+        location.state.categoryName.split(' + ')[0].toLowerCase() : null;
+      
+      const result = await generateMeditationResponse(categoryKey);
       if (result.error) {
-        console.error("Meditation generation error:", result.error);
+        console.error("❌ Meditation generation error:", result.error);
       } else {
-        console.log("Meditation generated successfully:", result.content);
+        console.log("\n=== 🎭 OpenAI Generated Meditation ===");
+        console.log(result.content);
+        console.log("=====================================\n");
         setMeditationResponse(result.content);
       }
     };
@@ -69,8 +79,13 @@ const CategoryProcessingPage: FC = () => {
 
         setTimeout(() => {
           console.log("Passing meditation to visualization:", meditationResponse);
+          console.log("Passing category and focus:", location.state?.categoryName, location.state?.focus);
           navigate("/visualization", {
-            state: { meditationContent: meditationResponse || "No meditation data available" },
+            state: { 
+              meditationContent: meditationResponse || "No meditation data available",
+              categoryName: location.state?.categoryName,
+              focusText: location.state?.focus
+            },
             replace: true
           });
         }, 2000);
@@ -78,7 +93,7 @@ const CategoryProcessingPage: FC = () => {
     }, 50);
 
     return () => clearInterval(timer);
-  }, [navigate]);
+  }, [navigate, location.state]);
 
   return (
     <div className="min-h-screen w-full bg-[#221737] flex flex-col items-center justify-center p-6 relative overflow-hidden">
