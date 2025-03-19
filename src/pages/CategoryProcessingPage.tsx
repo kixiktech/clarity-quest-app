@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 import { generateMeditationResponse } from "@/integrations/openaiService";
-import { generateSpeech } from "@/integrations/elevenLabsService";
+import { generateSpeech } from "@/integrations/openaiSpeechService";
 import Spline from '@splinetool/react-spline';
 import { useToast } from "@/hooks/use-toast";
 import { mapDisplayToDbCategory } from "@/utils/categoryMapping";
@@ -62,9 +62,10 @@ const CategoryProcessingPage: FC = () => {
         console.log("=====================================\n");
         setMeditationResponse(result.content);
 
-        // Generate audio from the meditation content
-        console.log("🎵 Generating meditation audio...");
+        // Generate audio using OpenAI's text-to-speech
+        console.log("🎵 Generating meditation audio with OpenAI...");
         const audioBlob = await generateSpeech(result.content);
+        
         if (audioBlob) {
           console.log("✨ Audio generated successfully!");
           // Convert blob to base64 for storage
