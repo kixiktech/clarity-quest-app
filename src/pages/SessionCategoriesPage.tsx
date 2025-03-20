@@ -337,13 +337,25 @@ const SessionCategoriesPage: FC = () => {
           {categories.map((category, index) => (
             <div
               key={category.id}
-              className="flex items-center gap-2 sm:gap-3 cursor-pointer hover:text-[#6AF0A0] transition-colors"
+              className="flex items-center gap-2 sm:gap-3 cursor-pointer hover:text-[#FFD700] transition-colors"
               onClick={() => setSelectedNumber(category.id)}
             >
-              <span className={`text-[#4ADE80] text-base sm:text-xl font-arcade ${selectedNumber === category.id ? "text-[#6AF0A0]" : ""}`}>
+              <span 
+                className={`text-[#4ADE80] text-base sm:text-xl font-arcade transition-all duration-300 ${
+                  selectedNumber === category.id 
+                    ? "text-[#FFD700] [text-shadow:_0_0_10px_#FFD700,_0_0_20px_#B8860B] scale-105" 
+                    : ""
+                }`}
+              >
                 {category.id}.
               </span>
-              <span className={`text-[#4ADE80] text-base sm:text-xl font-arcade ${selectedNumber === category.id ? "text-[#6AF0A0]" : ""}`}>
+              <span 
+                className={`text-[#4ADE80] text-base sm:text-xl font-arcade transition-all duration-300 ${
+                  selectedNumber === category.id 
+                    ? "text-[#FFD700] [text-shadow:_0_0_10px_#FFD700,_0_0_20px_#B8860B] scale-105" 
+                    : ""
+                }`}
+              >
                 {category.title}
               </span>
             </div>
