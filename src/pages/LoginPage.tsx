@@ -46,20 +46,53 @@ const LoginPage: FC = () => {
     const searchParams = new URLSearchParams(location.search);
     const mode = searchParams.get("mode");
     const ref = searchParams.get("ref");
+    
     if (mode === "signup") setIsSignUp(true);
+    
+    // Check for referral code in URL parameters
     if (ref) {
       setReferralCode(ref);
-      console.log("Referral code detected:", ref);
+      console.log("Referral code detected in URL:", ref);
+      // Auto-switch to signup mode if referral code is present
+      setIsSignUp(true);
+      // Add visual feedback
+      toast({
+        title: "Referral Link Detected",
+        description: "Sign up to get your free sessions!",
+      });
     }
-  }, [location]);
+
+    // Also check for hash fragment in URL for direct access compatibility
+    const hash = location.hash;
+    if (hash) {
+      // Format could be like /#/login?ref=12345
+      const hashRef = new URLSearchParams(hash.split('?')[1])?.get("ref");
+      if (hashRef) {
+        setReferralCode(hashRef);
+        console.log("Referral code detected in hash fragment:", hashRef);
+        setIsSignUp(true);
+        toast({
+          title: "Referral Link Detected",
+          description: "Sign up to get your free sessions!",
+        });
+      }
+    }
+  }, [location, toast]);
 
   const processReferral = async (userId: string) => {
     if (!referralCode) return;
     try {
+      console.log("Processing referral with code:", referralCode);
+      
       const { data, error } = await supabase.functions.invoke("process-referral", {
         body: { referralCode, newUserId: userId },
       });
-      if (error) throw error;
+      
+      if (error) {
+        console.error("Error in referral function:", error);
+        throw error;
+      }
+      
       console.log("Referral processed successfully:", data);
       toast({
         title: "Bonus Sessions Added!",
@@ -67,6 +100,7 @@ const LoginPage: FC = () => {
       });
     } catch (err) {
       console.error("Error in referral processing:", err);
+      // Still allow the user to continue even if referral processing fails
     }
   };
 

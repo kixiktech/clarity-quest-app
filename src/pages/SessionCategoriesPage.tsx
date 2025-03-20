@@ -1,4 +1,4 @@
-import { FC, useState, useEffect, useRef } from "react";
+import { FC, useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,16 +47,34 @@ const keyButtonStyles = {
   },
 } as const;
 
+type State = {
+  selectedCategory: number | null;
+  spline: any;
+  user: {
+    initial: string;
+    name: string;
+  };
+  sessions: {
+    available: boolean;
+  };
+};
+
+interface SplineInstance {
+  emitEvent: (event: string, objectId: string) => void;
+  // other methods/properties
+}
+
 const SessionCategoriesPage: FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { triggerHaptic } = useHapticFeedback();
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
-  const [spline, setSpline] = useState<any>(null);
+  const [spline, setSpline] = useState<SplineInstance | null>(null);
   const splineContainerRef = useRef<HTMLDivElement>(null);
   const [userInitial, setUserInitial] = useState<string>("U");
   const [userName, setUserName] = useState<string>("User");
   const [hasAvailableSession, setHasAvailableSession] = useState<boolean>(true);
+  const isInitializedRef = useRef(false);
 
   const keyIds = {
     "2b6639a2-d5fc-4cfc-95ea-a054d3231441": "Key1",
@@ -68,9 +86,39 @@ const SessionCategoriesPage: FC = () => {
     "66530cf3-5a25-4b74-af3a-799f0c29476d": "KeyEnter"
   };
 
+  // Use all categories since no filtering condition is provided
+  const filteredCategories = useMemo(() => categories, []);
+
+  // Handle visibility changes to prevent unnecessary reloads
   useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Page became visible again, no need to reload
+        console.log('Page visibility restored, preventing reload');
+        
+        // Re-focus the keyboard container if needed
+        if (splineContainerRef.current) {
+          splineContainerRef.current.focus();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Prevent multiple initialization on quick minimize/maximize
+    if (isInitializedRef.current) {
+      return;
+    }
+
     const getUserData = async () => {
       try {
+        isInitializedRef.current = true;
         const { data: { user }, error: userError } = await supabase.auth.getUser();
         
         if (userError) {
@@ -153,7 +201,7 @@ const SessionCategoriesPage: FC = () => {
     setSpline(splineApp);
   }
 
-  const handleKeyClick = (num: number) => {
+  const handleKeyClick = useCallback((num: number) => {
     triggerHaptic();
     console.log(`Key ${num} clicked`);
     setSelectedNumber(num);
@@ -162,7 +210,7 @@ const SessionCategoriesPage: FC = () => {
     if (keyUUID && spline) {
       spline.emitEvent('mouseDown', keyUUID);
     }
-  };
+  }, [triggerHaptic, spline, setSelectedNumber]);
 
   const handleEnterClick = async () => {
     triggerHaptic();
@@ -260,8 +308,10 @@ const SessionCategoriesPage: FC = () => {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key >= "1" && event.key <= "6") {
           const num = parseInt(event.key);
+          triggerHaptic();
           handleKeyClick(num);
         } else if (event.key === "Enter") {
+          triggerHaptic();
           handleEnterClick();
         }
       };
@@ -272,7 +322,7 @@ const SessionCategoriesPage: FC = () => {
 
       return () => container.removeEventListener("keydown", handleKeyDown);
     }
-  }, [selectedNumber]);
+  }, [selectedNumber, handleKeyClick, handleEnterClick, triggerHaptic]);
 
   return (
     <div className="h-screen w-full bg-[#221737] flex flex-col items-center justify-between p-4 sm:p-6 relative overflow-hidden">
@@ -334,26 +384,30 @@ const SessionCategoriesPage: FC = () => {
         </h1>
 
         <div className="space-y-1 sm:space-y-2 text-left mb-4 sm:mb-6 w-full max-w-md px-4">
-          {categories.map((category, index) => (
+          {filteredCategories.map((category, index) => (
             <div
               key={category.id}
               className="flex items-center gap-2 sm:gap-3 cursor-pointer hover:text-[#FFD700] transition-colors"
               onClick={() => setSelectedNumber(category.id)}
             >
               <span 
-                className={`text-[#4ADE80] text-base sm:text-xl font-arcade transition-all duration-300 ${
-                  selectedNumber === category.id 
-                    ? "text-[#FFD700] [text-shadow:_0_0_10px_#FFD700,_0_0_20px_#B8860B] scale-105" 
-                    : ""
+                className={`text-base sm:text-xl font-arcade transition-all duration-300 ${
+                  selectedNumber === null 
+                    ? "text-[#4ADE80]" 
+                    : selectedNumber === category.id
+                      ? "text-[#FFD700] [text-shadow:_0_0_10px_#FFD700,_0_0_20px_#B8860B] scale-105" 
+                      : "text-gray-400"
                 }`}
               >
                 {category.id}.
               </span>
               <span 
-                className={`text-[#4ADE80] text-base sm:text-xl font-arcade transition-all duration-300 ${
-                  selectedNumber === category.id 
-                    ? "text-[#FFD700] [text-shadow:_0_0_10px_#FFD700,_0_0_20px_#B8860B] scale-105" 
-                    : ""
+                className={`text-base sm:text-xl font-arcade transition-all duration-300 ${
+                  selectedNumber === null 
+                    ? "text-[#4ADE80]" 
+                    : selectedNumber === category.id
+                      ? "text-[#FFD700] [text-shadow:_0_0_10px_#FFD700,_0_0_20px_#B8860B] scale-105" 
+                      : "text-gray-400"
                 }`}
               >
                 {category.title}

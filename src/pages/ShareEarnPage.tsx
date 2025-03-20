@@ -19,6 +19,7 @@ const ShareEarnPage: FC = () => {
     totalReferrals: 0,
     sessionsEarned: 0
   });
+  const [referralLinkInputRef, setReferralLinkInputRef] = useState<HTMLInputElement | null>(null);
 
   useEffect(() => {
     generateReferralLink();
@@ -40,9 +41,12 @@ const ShareEarnPage: FC = () => {
         return;
       }
       
+      // Use hash-based routing to ensure the link works on all hosting providers
       const baseUrl = window.location.origin;
       const referralCode = user.id.substring(0, 8); // Using part of the user ID
-      const fullReferralLink = `${baseUrl}/login?ref=${referralCode}`;
+      
+      // Create the full URL with hash routing to avoid 404 errors
+      const fullReferralLink = `${baseUrl}/#/login?ref=${referralCode}`;
       
       setReferralLink(fullReferralLink);
     } catch (error) {
@@ -100,6 +104,31 @@ const ShareEarnPage: FC = () => {
     triggerHaptic();
     
     try {
+      // iOS-specific handling for clipboard
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        // For iOS, we need to use a different approach
+        // First try to select and copy using the input element reference
+        if (referralLinkInputRef) {
+          referralLinkInputRef.select();
+          referralLinkInputRef.setSelectionRange(0, 99999);
+          
+          // Try the document.execCommand method first (works in most iOS browsers)
+          const successful = document.execCommand('copy');
+          
+          if (successful) {
+            setIsCopied(true);
+            toast({
+              title: "Link copied!",
+              description: "Referral link copied to clipboard",
+            });
+            
+            setTimeout(() => setIsCopied(false), 2000);
+            return;
+          }
+        }
+      }
+      
+      // For non-iOS devices or as fallback, try the Clipboard API
       await navigator.clipboard.writeText(referralLink);
       setIsCopied(true);
       toast({
@@ -110,6 +139,27 @@ const ShareEarnPage: FC = () => {
       setTimeout(() => setIsCopied(false), 2000);
     } catch (error) {
       console.error("Error copying to clipboard:", error);
+      
+      // Try one more fallback method for iOS
+      if (/iPhone|iPad|iPod/i.test(navigator.userAgent) && referralLinkInputRef) {
+        try {
+          // Alert the user they need to copy manually
+          toast({
+            title: "Please copy manually",
+            description: "Tap and hold on the link to copy it",
+            variant: "default",
+          });
+          
+          // Focus and select the text to make it easier for manual copying
+          referralLinkInputRef.focus();
+          referralLinkInputRef.select();
+          referralLinkInputRef.setSelectionRange(0, 99999);
+          return;
+        } catch (fallbackError) {
+          console.error("Even fallback failed:", fallbackError);
+        }
+      }
+      
       toast({
         title: "Error",
         description: "Could not copy link to clipboard",
@@ -147,11 +197,15 @@ const ShareEarnPage: FC = () => {
         break;
         
       case 'email':
-        window.open(`mailto:?subject=Join me on ClarityQuest&body=${encodeURIComponent(shareMessage + " " + referralLink)}`);
+        // Add the base URL as fallback in case the link breaks
+        const emailBody = `${shareMessage} ${referralLink}\n\nIf the link doesn't work, visit ${window.location.origin} and use my referral code: ${referralLink.split('ref=')[1]}`;
+        window.open(`mailto:?subject=Join me on ClarityQuest&body=${encodeURIComponent(emailBody)}`);
         break;
         
       case 'sms':
-        window.open(`sms:?body=${encodeURIComponent(shareMessage + " " + referralLink)}`);
+        // Add the base URL as fallback in case the link breaks
+        const smsBody = `${shareMessage} ${referralLink}\n\nIf the link doesn't work, visit ${window.location.origin} and use my referral code: ${referralLink.split('ref=')[1]}`;
+        window.open(`sms:?body=${encodeURIComponent(smsBody)}`);
         break;
         
       case 'facebook':
@@ -213,7 +267,12 @@ const ShareEarnPage: FC = () => {
               <Input 
                 value={referralLink} 
                 readOnly 
-                className="flex-1 bg-white/10 border-white/20 text-white" 
+                className="flex-1 bg-white/10 border-white/20 text-white"
+                ref={(input) => setReferralLinkInputRef(input)}
+                onClick={(e) => {
+                  // Select all text when clicked (helps with manual copying)
+                  e.currentTarget.select();
+                }}
               />
             )}
             <Button 
