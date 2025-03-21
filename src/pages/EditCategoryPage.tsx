@@ -1,4 +1,3 @@
-
 import { FC, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -49,6 +48,8 @@ const EditCategoryPage: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [responseText, setResponseText] = useState("");
+  const [isNewResponse, setIsNewResponse] = useState(false);
+  const [userId, setUserId] = useState<string>("");
 
   // Effect to scroll to top of page on mount
   useEffect(() => {
@@ -76,12 +77,14 @@ const EditCategoryPage: FC = () => {
         return;
       }
 
+      setUserId(user.id);
+
+      // Try to find an existing response
       const { data, error } = await supabase
         .from("user_responses")
         .select("*")
         .eq("user_id", user.id)
-        .eq("category", categoryId)
-        .single();
+        .eq("category", categoryId);
 
       if (error) {
         console.error("Error fetching response:", error);
@@ -93,8 +96,29 @@ const EditCategoryPage: FC = () => {
         return;
       }
 
-      setResponse(data);
-      setResponseText(data.response);
+      // Check if we found an existing response or need to create a new one
+      if (data && data.length > 0) {
+        // Use the latest response
+        const latestResponse = data.sort((a, b) => 
+          new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+        )[0];
+        
+        setResponse(latestResponse);
+        setResponseText(latestResponse.response);
+        setIsNewResponse(false);
+      } else {
+        // No existing response - set up for creating a new one
+        setIsNewResponse(true);
+        setResponseText("");
+        // Create a placeholder response object
+        setResponse({
+          id: "new", // Will be replaced when saved
+          category: categoryId,
+          response: "",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        });
+      }
     } catch (error) {
       console.error("Error:", error);
       toast({
@@ -108,43 +132,54 @@ const EditCategoryPage: FC = () => {
   };
 
   const handleSave = async () => {
-    if (!response) return;
+    if (!response || !userId) return;
     
     try {
       setIsSaving(true);
-      const { data: { user } } = await supabase.auth.getUser();
       
-      if (!user) {
+      if (isNewResponse) {
+        // Create new response
+        const { error } = await supabase
+          .from("user_responses")
+          .insert({ 
+            user_id: userId,
+            category: response.category,
+            response: responseText,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+
         toast({
-          title: "Error",
-          description: "Please sign in to update your response",
-          variant: "destructive",
+          title: "Success",
+          description: "Your response has been saved",
         });
-        return;
+      } else {
+        // Update existing response
+        const { error } = await supabase
+          .from("user_responses")
+          .update({ 
+            response: responseText,
+            updated_at: new Date().toISOString()
+          })
+          .eq("id", response.id)
+          .eq("user_id", userId);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: "Your response has been updated",
+        });
       }
-
-      const { error } = await supabase
-        .from("user_responses")
-        .update({ 
-          response: responseText,
-          updated_at: new Date().toISOString()
-        })
-        .eq("id", response.id)
-        .eq("user_id", user.id);
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: "Your response has been updated",
-      });
       
       navigate("/settings");
     } catch (error) {
-      console.error("Error updating response:", error);
+      console.error("Error saving response:", error);
       toast({
         title: "Error",
-        description: "Failed to update your response",
+        description: "Failed to save your response",
         variant: "destructive",
       });
     } finally {
@@ -163,12 +198,14 @@ const EditCategoryPage: FC = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-2xl md:text-3xl font-bold">Edit {category && getCategoryDisplayName(category)}</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">
+            {isNewResponse ? "Add" : "Edit"} {category && getCategoryDisplayName(category)}
+          </h1>
         </div>
 
         {isLoading ? (
           <div className="flex justify-center">
-            <p className="text-muted-foreground">Loading your response...</p>
+            <p className="text-muted-foreground">Loading...</p>
           </div>
         ) : response ? (
           <div className="space-y-6">
@@ -194,17 +231,19 @@ const EditCategoryPage: FC = () => {
               <div className="flex justify-end">
                 <Button 
                   onClick={handleSave} 
-                  disabled={isSaving || responseText === response.response}
+                  disabled={isSaving || (!isNewResponse && responseText === response.response)}
                   className="gap-2"
                 >
-                  {isSaving ? "Saving..." : "Save Changes"}
+                  {isSaving ? "Saving..." : (isNewResponse ? "Save Response" : "Save Changes")}
                   <Save className="h-4 w-4" />
                 </Button>
               </div>
               
-              <p className="text-sm text-muted-foreground mt-4">
-                Last updated: {new Date(response.updated_at).toLocaleDateString()}
-              </p>
+              {!isNewResponse && (
+                <p className="text-sm text-muted-foreground mt-4">
+                  Last updated: {new Date(response.updated_at).toLocaleDateString()}
+                </p>
+              )}
             </div>
           </div>
         ) : (

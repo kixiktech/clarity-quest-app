@@ -146,7 +146,28 @@ const SettingsPage: FC = () => {
         .order("created_at", { ascending: true });
 
       if (responseError) throw responseError;
-      setResponses(responseData || []);
+      
+      // Process responses to only keep the latest for each category
+      const latestResponses: UserResponse[] = [];
+      const categoryMap: Record<string, UserResponse> = {};
+      
+      // Group responses by category and keep only the latest
+      responseData?.forEach(response => {
+        if (!categoryMap[response.category] || 
+            new Date(response.updated_at) > new Date(categoryMap[response.category].updated_at)) {
+          categoryMap[response.category] = response;
+        }
+      });
+      
+      // Convert the map to an array of latest responses
+      Object.values(categoryMap).forEach(response => {
+        latestResponses.push(response);
+      });
+      
+      // Sort by category name for consistent display
+      latestResponses.sort((a, b) => a.category.localeCompare(b.category));
+      
+      setResponses(latestResponses);
 
       const { data: sessionData, error: sessionError } = await supabase
         .from("session_feedback")
