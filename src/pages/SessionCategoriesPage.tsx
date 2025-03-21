@@ -9,11 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown, Trash2 } from "lucide-react";
+import { Settings, CreditCard, HelpCircle, LogOut, ChevronDown, Trash2, RefreshCw } from "lucide-react";
 import Spline from "@splinetool/react-spline";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useHapticFeedback } from "@/hooks/useHapticFeedback";
+import { format, addDays } from "date-fns";
 
 const categories = [
   { id: 1, title: "career + purpose" },
@@ -74,6 +75,7 @@ const SessionCategoriesPage: FC = () => {
   const [userInitial, setUserInitial] = useState<string>("U");
   const [userName, setUserName] = useState<string>("User");
   const [hasAvailableSession, setHasAvailableSession] = useState<boolean>(true);
+  const [nextResetDate, setNextResetDate] = useState<Date | null>(null);
   const isInitializedRef = useRef(false);
 
   const keyIds = {
@@ -158,27 +160,37 @@ const SessionCategoriesPage: FC = () => {
 
   const checkSessionAvailability = async (userId: string) => {
     try {
+      // Use only columns that exist in the database
       const { data, error } = await supabase
         .from('session_credits')
-        .select('credits_remaining, referral_credits')
+        .select('credits_remaining, referral_credits, last_weekly_reset')
         .eq('user_id', userId)
         .single();
 
       if (error && error.code === 'PGRST116') { // No row found
+        // Set initial reset date to 7 days from now
+        const initialResetDate = addDays(new Date(), 7);
+        
+        // Store in localStorage for this user
+        localStorage.setItem(`${userId}_next_reset_date`, initialResetDate.toISOString());
+        
         const { error: insertError } = await supabase
           .from("session_credits")
           .insert({
             user_id: userId,
             credits_remaining: 2, // Initial credits
             referral_credits: 0,
+            last_weekly_reset: new Date().toISOString()
           });
 
         if (insertError) {
           console.error("Error inserting initial credits:", insertError);
           throw insertError;
         }
+        
         setHasAvailableSession(true);
-        console.log("Initial credits inserted: 2 remaining");
+        setNextResetDate(initialResetDate);
+        console.log("Initial credits inserted: 2 remaining, next reset:", initialResetDate);
         return;
       }
 
@@ -187,9 +199,78 @@ const SessionCategoriesPage: FC = () => {
         throw error;
       }
 
+      // Get last reset date from database or localStorage
+      const lastResetDate = data?.last_weekly_reset 
+        ? new Date(data.last_weekly_reset) 
+        : null;
+      
+      // Try to get saved next reset date from localStorage
+      const savedNextResetDate = localStorage.getItem(`${userId}_next_reset_date`);
+      let nextReset = savedNextResetDate ? new Date(savedNextResetDate) : null;
+      
+      // If no saved date but we have last reset, calculate next reset (7 days later)
+      if (!nextReset && lastResetDate) {
+        nextReset = addDays(lastResetDate, 7);
+        localStorage.setItem(`${userId}_next_reset_date`, nextReset.toISOString());
+      }
+      
+      // If we found a next reset date, set it in state
+      if (nextReset) {
+        setNextResetDate(nextReset);
+      }
+      
+      const currentDate = new Date();
+      
+      // Check if we need to reset credits (if current date >= next reset date)
+      if (nextReset && currentDate >= nextReset) {
+        const newResetDate = new Date();
+        const newNextResetDate = addDays(newResetDate, 7);
+        
+        // Store new next reset date in localStorage
+        localStorage.setItem(`${userId}_next_reset_date`, newNextResetDate.toISOString());
+        
+        // Reset free credits and update last reset date
+        const { error: resetError } = await supabase
+          .from("session_credits")
+          .update({ 
+            credits_remaining: 2, // Reset to 2 free credits 
+            last_weekly_reset: newResetDate.toISOString()
+          })
+          .eq("user_id", userId);
+          
+        if (resetError) {
+          console.error("Error resetting credits:", resetError);
+        } else {
+          console.log("Credits reset successfully. Next reset:", newNextResetDate);
+          setNextResetDate(newNextResetDate);
+          setHasAvailableSession(true);
+          return;
+        }
+      }
+      
+      // If no last reset date in DB, set it now
+      if (!lastResetDate) {
+        const newResetDate = new Date();
+        const newNextResetDate = addDays(newResetDate, 7);
+        
+        // Store in localStorage
+        localStorage.setItem(`${userId}_next_reset_date`, newNextResetDate.toISOString());
+        
+        await supabase
+          .from("session_credits")
+          .update({ 
+            last_weekly_reset: newResetDate.toISOString()
+          })
+          .eq("user_id", userId);
+          
+        setNextResetDate(newNextResetDate);
+      }
+
       const totalCredits = (data?.credits_remaining || 0) + (data?.referral_credits || 0);
       setHasAvailableSession(totalCredits > 0);
+      
       console.log(`Current credits on page load: ${data?.credits_remaining} remaining, ${data?.referral_credits} referral, ${totalCredits} total`);
+      console.log(`Next reset date: ${nextResetDate ? format(nextResetDate, 'MMM dd, yyyy') : 'unknown'}`);
     } catch (error) {
       console.error("Error in session availability check:", error);
       setHasAvailableSession(true); // Fallback to true to avoid blocking the user
@@ -247,6 +328,12 @@ const SessionCategoriesPage: FC = () => {
       }
 
       const currentCredits = creditsData?.credits_remaining || 0;
+      
+      // Get next reset date from localStorage
+      const savedNextResetDate = localStorage.getItem(`${user.id}_next_reset_date`);
+      if (savedNextResetDate) {
+        setNextResetDate(new Date(savedNextResetDate));
+      }
 
       if (currentCredits <= 0) {
         setHasAvailableSession(false);
@@ -276,7 +363,6 @@ const SessionCategoriesPage: FC = () => {
           },
         });
       }, 500);
-
     } catch (error) {
       console.error("Error handling enter click:", error);
       toast({
@@ -416,10 +502,16 @@ const SessionCategoriesPage: FC = () => {
           ))}
         </div>
 
-        {!hasAvailableSession && (
-          <p className="text-amber-400 text-sm text-center mb-2">
-            You've used your free session this week
-          </p>
+        {!hasAvailableSession && nextResetDate && (
+          <div className="text-center mb-4">
+            <p className="text-amber-400 text-sm mb-1">
+              You've used your free session this week
+            </p>
+            <p className="text-white/70 text-xs flex items-center justify-center gap-1">
+              <RefreshCw className="h-3 w-3" />
+              <span>Credits reset on {format(nextResetDate, 'MMMM dd, yyyy')}</span>
+            </p>
+          </div>
         )}
 
         <div className="w-full max-w-[300px] sm:max-w-[400px] md:max-w-[480px]">
