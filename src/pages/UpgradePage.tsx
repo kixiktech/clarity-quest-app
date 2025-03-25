@@ -16,8 +16,8 @@ const UpgradePage = () => {
   const [isAnnual, setIsAnnual] = useState(true);
   
   // Stripe payment links
-  const MONTHLY_PLAN_LINK = ""; // Add the monthly plan URL when provided
-  const ANNUAL_PLAN_LINK = ""; // Add the annual plan URL when provided
+  const MONTHLY_PLAN_LINK = "https://buy.stripe.com/bIY5nBd7y2L79cQfYY";
+  const ANNUAL_PLAN_LINK = "https://buy.stripe.com/3cs6rF6Ja0CZ0Gk001";
   
   const handleBack = () => {
     triggerHaptic();
