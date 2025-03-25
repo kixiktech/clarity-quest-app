@@ -15,6 +15,10 @@ const UpgradePage = () => {
   const { toast } = useToast();
   const [isAnnual, setIsAnnual] = useState(true);
   
+  // Stripe payment links
+  const MONTHLY_PLAN_LINK = ""; // Add the monthly plan URL when provided
+  const ANNUAL_PLAN_LINK = ""; // Add the annual plan URL when provided
+  
   const handleBack = () => {
     triggerHaptic();
     navigate("/paywall");
@@ -22,12 +26,19 @@ const UpgradePage = () => {
 
   const handleUpgrade = () => {
     triggerHaptic();
-    // In a real implementation, integrate with Stripe checkout
-    // For now, we'll just show a toast
-    toast({
-      title: "Subscription Coming Soon",
-      description: "Stripe integration is under development",
-    });
+    
+    // Redirect to the appropriate Stripe payment link based on the selected plan
+    const paymentLink = isAnnual ? ANNUAL_PLAN_LINK : MONTHLY_PLAN_LINK;
+    
+    if (paymentLink) {
+      window.location.href = paymentLink;
+    } else {
+      // Fallback if no payment link is provided yet
+      toast({
+        title: "Subscription Coming Soon",
+        description: "Stripe integration is under development",
+      });
+    }
   };
 
   const monthlyPrice = 25;
