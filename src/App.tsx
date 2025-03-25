@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -31,6 +32,7 @@ import TermsOfServicePage from "./pages/TermsOfServicePage";
 import PaywallPage from "./pages/PaywallPage";
 import ShareEarnPage from "./pages/ShareEarnPage";
 import UpgradePage from "./pages/UpgradePage";
+import SubscriptionSuccessPage from "./pages/SubscriptionSuccessPage";
 import CookieConsent from "./components/CookieConsent";
 
 const queryClient = new QueryClient();
@@ -128,6 +130,7 @@ const App = () => {
               <Route path="/paywall" element={<ProtectedRoute><PaywallPage /></ProtectedRoute>} />
               <Route path="/share-earn" element={<ProtectedRoute><ShareEarnPage /></ProtectedRoute>} />
               <Route path="/upgrade" element={<ProtectedRoute><UpgradePage /></ProtectedRoute>} />
+              <Route path="/subscription-success" element={<SubscriptionSuccessPage />} />
               
               <Route path="/intro-questions" element={<ProtectedRoute isIntroRoute={true}><IntroQuestionsPage /></ProtectedRoute>} />
               <Route path="/finances" element={<ProtectedRoute><FinancesPage /></ProtectedRoute>} />
